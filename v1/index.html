@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Benable SMS Console v1</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="../" style="font-size:12px;font-weight:700;color:#6F6F73;text-decoration:none;margin-right:2px;">← all</a>
+  <div class="brandmark">Benable <span>· SMS</span> <em class="proto">v1 prototype</em></div>
+  <div class="filters">
+    <select id="f-brand"><option value="">Brand: All</option></select>
+    <select id="f-sender">
+      <option value="">Sender: All</option>
+      <option value="agent">Agent</option>
+      <option value="auto">Automation</option>
+      <option value="katie">Team</option>
+      <option value="creator">Creator</option>
+      <option value="line:tony">Tony's line</option>
+    </select>
+    <input id="f-search" type="search" placeholder="Search texts or creators">
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="feed">All texts</button>
+  <button class="tab" data-tab="flags">Needs you <span class="count" id="flagcount">0</span></button>
+  <button class="tab" data-tab="ladders">Ladders</button>
+  <button class="tab" data-tab="matrix">Automations</button>
+  <button class="tab" data-tab="digest">Digest</button>
+</nav>
+
+<main>
+  <section id="view-feed" class="view active">
+    <div id="feedlist" class="feedlist"></div>
+  </section>
+
+  <section id="view-flags" class="view">
+    <div id="flaglist" class="flaglist"></div>
+    <div id="flagempty" class="empty" hidden>
+      <div class="empty-tick">✓</div>
+      <div><b>All clear.</b> Nothing is waiting on you. Flags land here when the agent holds a send or spots something it will not answer alone.</div>
+    </div>
+  </section>
+
+  <section id="view-ladders" class="view">
+    <div class="ladder-head">
+      <div class="seg">
+        <button class="segbtn active" data-ladder="product">Product collab</button>
+        <button class="segbtn" data-ladder="local">Local collab</button>
+      </div>
+      <a class="btn ghost" href="map.html" style="text-decoration:none;">Flow map · v2 preview</a>
+      <a class="btn ghost" href="missing.html" style="text-decoration:none;">Missing texts study</a>
+      <a class="btn ghost" href="review.html" style="text-decoration:none;">Copy deck · Tony</a>
+      <button id="addmsg" class="btn primary">+ Add message</button>
+    </div>
+    <p class="ladder-note">Generated from the master copy doc. Click a row to read the full copy. New messages save as drafts until Julia and Brian wire them up.</p>
+    <div id="addform" class="addform" hidden>
+      <div class="af-title">New message <span id="af-id" class="msgid"></span></div>
+      <div class="af-grid">
+        <label>Name<input id="af-name" type="text" placeholder="e.g. Thank you + affiliate nudge"></label>
+        <label>Fires<input id="af-when" type="text" placeholder="e.g. final link submitted · +1d"></label>
+        <label>Insert after<select id="af-after"></select></label>
+      </div>
+      <label class="af-copy">Copy<textarea id="af-copy" rows="3" placeholder="Write it like Katie would text it. Use {name}, {brand}, {date}."></textarea></label>
+      <div class="af-actions">
+        <button id="af-save" class="btn primary">Save as draft</button>
+        <button id="af-cancel" class="btn ghost">Cancel</button>
+      </div>
+    </div>
+    <div id="ladderlist" class="ladderlist"></div>
+  </section>
+  <section id="view-matrix" class="view">
+    <p class="ladder-note">Every product-collab automation, per brand (the local ladder joins in v2). Click a live/paused cell to toggle. <span class="cellkey"><span class="mcell live">●</span> live <span class="mcell paused">◐</span> paused <span class="mcell off">○</span> off <span class="mcell err">!</span> live but zero sends in 7 days</span></p>
+    <div class="tablewrap"><table class="matrixtable" id="matrixtable"></table></div>
+  </section>
+
+  <section id="view-digest" class="view">
+    <div id="digestcard" class="digest"></div>
+  </section>
+</main>
+
+<aside id="drawer" class="drawer" hidden>
+  <div class="d-head">
+    <div>
+      <div class="d-name" id="d-name"></div>
+      <div class="d-sub" id="d-sub"></div>
+    </div>
+    <button id="d-close" class="btn ghost">Close</button>
+  </div>
+  <div class="d-lines" id="d-lines" hidden>
+    <button class="linetab active" data-line="main">Katie's line</button>
+    <button class="linetab" data-line="tony">Tony's line</button>
+  </div>
+  <div class="d-body" id="d-body"></div>
+  <div class="d-compose">
+    <input id="d-input" type="text" placeholder="Reply as Katie">
+    <button id="d-send" class="btn primary">Send</button>
+  </div>
+</aside>
+<div id="scrim" class="scrim" hidden></div>
+
+<footer class="demo-bar">
+  <span>Demo controls:</span>
+  <button id="demo-inbound" class="btn ghost small">Simulate inbound + flag</button>
+  <button id="demo-reset" class="btn ghost small">Reset demo data</button>
+  <span class="demo-note">v1 = MVP + automations matrix, digest, trust metrics, checker highlights · <a href="https://juliabenable.github.io/katie-command-center-ui-study-1/mvp.html" target="_blank">spec</a> · <a href="map.html">flow map v2</a> · <a href="missing.html">missing texts</a> · <a href="review.html">copy deck</a></span>
+</footer>
+
+<div id="toasts" class="toasts"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

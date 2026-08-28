@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The missing texts · Benable SMS</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+:root {
+  --accent: #7C5CFA; --accent-soft: #EBE4FF; --accent-bg: #F9F7FF;
+  --ink: #1A1A1A; --ink-med: #6F6F73; --ink-subtle: #B0B0B4;
+  --line: #E5E5E8; --card: #FFFFFF;
+  --green: #2BAF87; --green-bg: #EFFBF7; --green-ink: #1a7a44;
+  --amber: #E88E2C; --amber-bg: #FFF9F0; --amber-ink: #9a4a15;
+  --red: #E82C3F; --red-bg: #FFF1F1;
+  --tony: #1A1D21;
+}
+body { font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color: var(--ink); background: #F7F7FA; }
+.topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 14px; padding: 12px 22px; background: rgba(255,255,255,.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.back { font-size: 12.5px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
+.back:hover { color: var(--accent); }
+.brandmark { font-weight: 800; font-size: 15px; letter-spacing: -.2px; }
+.brandmark span { color: var(--accent); }
+.chip { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: #5B3FD1; background: var(--accent-soft); border-radius: 5px; padding: 2px 7px; }
+.toplinks { margin-left: auto; display: flex; gap: 12px; font-size: 12.5px; font-weight: 700; }
+.toplinks a { color: var(--ink-med); text-decoration: none; }
+.toplinks a:hover { color: var(--accent); }
+
+.wrap { max-width: 880px; margin: 0 auto; padding: 34px 20px 100px; }
+h1 { font-size: 26px; font-weight: 800; letter-spacing: -.4px; margin-bottom: 6px; }
+.subtitle { color: var(--ink-med); font-size: 14.5px; max-width: 720px; margin-bottom: 26px; }
+h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2px; }
+.secsub { font-size: 13px; color: var(--ink-med); margin-bottom: 14px; max-width: 700px; }
+
+.panelbox { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin-bottom: 10px; }
+.voicegrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px; }
+.specimens { min-width: 0; }
+.specimens .sms { background: var(--tony); color: #fff; border-radius: 14px; border-bottom-left-radius: 4px; padding: 7px 12px; font-size: 12.5px; line-height: 1.45; margin-bottom: 8px; width: fit-content; max-width: 100%; overflow-wrap: anywhere; }
+.specimens .cap { font-size: 10.5px; color: var(--ink-subtle); margin: -4px 0 10px 2px; }
+.rules { font-size: 13px; }
+.rules li { margin: 0 0 9px 16px; line-height: 1.55; }
+.rules b { color: var(--ink); }
+.statline { background: var(--accent-bg); border: 1px solid var(--accent-soft); border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-top: 12px; }
+.statline b { color: #5B3FD1; }
+
+.fork { margin-bottom: 8px; }
+.strip { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+.noderow { display: flex; align-items: center; gap: 10px; padding: 8px 16px; border-bottom: 1px solid #f5f5f6; font-size: 12.5px; }
+.noderow:last-child { border-bottom: none; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.dot.live { background: var(--green); }
+.dot.progress { background: var(--amber); }
+.noderow .nm { font-weight: 700; }
+.noderow .why { color: var(--ink-med); }
+.noderow .st { margin-left: auto; font-size: 9.5px; font-weight: 800; text-transform: uppercase; border-radius: 4px; padding: 2px 7px; flex: 0 0 auto; }
+.st.live { background: var(--green-bg); color: var(--green-ink); }
+.st.progress { background: var(--amber-bg); color: var(--amber-ink); }
+
+.missing { border-bottom: 1px solid #f5f5f6; padding: 14px 16px; background: linear-gradient(0deg, #fff, #FFFBFB); }
+.missing:last-child { border-bottom: none; }
+.m-top { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 3px; }
+.m-dot { width: 9px; height: 9px; border-radius: 50%; border: 2px dashed var(--red); flex: 0 0 auto; }
+.m-name { font-weight: 800; font-size: 13.5px; }
+.m-missingchip { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--red); background: var(--red-bg); border-radius: 4px; padding: 2px 7px; }
+.m-pri { font-size: 10px; font-weight: 800; color: var(--amber-ink); background: var(--amber-bg); border-radius: 999px; padding: 2px 8px; }
+.m-when { font-size: 11.5px; color: var(--ink-med); margin-bottom: 8px; }
+.m-copy { background: var(--tony); color: #fff; border-radius: 14px; border-bottom-right-radius: 4px; padding: 8px 12px; font-size: 13px; line-height: 1.5; max-width: 560px; width: fit-content; margin-left: auto; }
+.m-copyrow { display: flex; }
+.m-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.m-note { font-size: 11px; color: var(--ink-med); flex: 1; min-width: 180px; }
+.addbtn { font: inherit; font-size: 11.5px; font-weight: 800; border: none; border-radius: 8px; padding: 6px 12px; cursor: pointer; background: var(--accent); color: #fff; flex: 0 0 auto; }
+.addbtn:disabled { background: var(--green-bg); color: var(--green-ink); cursor: default; }
+.addbtn.nolane { background: #f0f0f2; color: var(--ink-med); cursor: default; }
+
+.prio { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+.prio ol { margin-left: 18px; font-size: 13.5px; }
+.prio li { margin-bottom: 9px; line-height: 1.55; }
+.prio b { color: var(--ink); }
+.prio .ev { color: var(--ink-med); }
+
+.lean { background: #fff; border: 1.5px dashed var(--accent); border-radius: 14px; padding: 15px 18px; font-size: 13.5px; margin-top: 26px; line-height: 1.6; }
+.lean b { color: var(--accent); }
+
+.toasts { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); z-index: 60; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.toast { background: #1A1D21; color: #fff; font-size: 12.5px; font-weight: 600; border-radius: 10px; padding: 9px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="../">← All</a>
+  <a class="back" href="index.html">Console</a>
+  <div class="brandmark">Benable <span>· SMS</span></div>
+  <span class="chip">study · the missing texts</span>
+  <div class="toplinks"><a href="review.html">Copy deck</a><a href="map.html">Flow map</a><a href="index.html">Ladders</a></div>
+</header>
+
+<div class="wrap">
+  <h1>The missing texts</h1>
+  <p class="subtitle">The full logic tree (product and local, gift card and paid, fulfillment, brand review, Collective) walked against everything that texts today. Green sends already, amber is being written this week, dashed red does not exist. Every missing text comes with drafted copy in Tony's voice, and an "Add to ladder" that drops it straight into the console as a draft.</p>
+
+  <h2>Tony's voice, measured from his real texts</h2>
+  <p class="secsub">76 Tony messages in the Aug 25 export. In the channel audit, his outreach pulled roughly 25x the response rate of the standard invite blast. The mechanics are consistent:</p>
+  <div class="panelbox">
+    <div class="voicegrid">
+      <div class="specimens">
+        <div class="sms">no prob!! video can be short. can you get the application in today?</div>
+        <div class="cap">the ask, with a today-deadline, as a question</div>
+        <div class="sms">amazing!! to request to join the Beauty Collab Collective pls fill out the quick application here: [link] if you can get it in today, i'll make sure our team reviews your app!</div>
+        <div class="cap">the reciprocity move: your action today, my action for you</div>
+        <div class="sms">when do you think you'll be able to apply? i'll let the team know!</div>
+        <div class="cap">reply-bait plus the personal relay</div>
+        <div class="sms">omg i'm so sorry i missed your reply last week!! i just checked and i don't think your application went through!</div>
+        <div class="cap">owns mistakes loudly, then re-asks</div>
+      </div>
+      <ul class="rules">
+        <li><b>End on a question.</b> Almost every Tony text demands a reply ("what do you think?", "can you get it in today?").</li>
+        <li><b>Reciprocity, always.</b> "if you can X today, i'll make sure the team Y". The creator's action buys Tony's action.</li>
+        <li><b>Today-framing.</b> Deadlines are "today", "asap", "any time today", never dates when he can help it.</li>
+        <li><b>Personal relay.</b> "i'll let the team know", "i'll make sure we review it". He is a person passing your name along, not a system.</li>
+        <li><b>Lowercase energy.</b> "amazing!!", "no prob!", "ty!!", "pls". Double exclamation is the engine. No emoji (that's Katie).</li>
+        <li><b>Benefit attached to every ask.</b> "creators in our Collective get first dibs..."</li>
+        <li><b>Links inline, resent freely.</b> "need me to resend link?"</li>
+      </ul>
+    </div>
+    <div class="statline"><b>Volume knob rule:</b> the drafts below run Tony's voice at full energy for good news and asks, and turn the "!!" down for money problems and shipping problems. Tony-excited about a bounced payment reads wrong.</div>
+  </div>
+
+  <h2>Invite and accept · all forks</h2>
+  <div class="strip" id="fork-invite"></div>
+
+  <h2>Product collab · shipping and content</h2>
+  <div class="strip" id="fork-product"></div>
+
+  <h2>Rewards and money · gift card and paid</h2>
+  <p class="secsub">No ladder exists for this lane at all yet. These five texts are the lane.</p>
+  <div class="strip" id="fork-money"></div>
+
+  <h2>Local collab · visits</h2>
+  <div class="strip" id="fork-local"></div>
+
+  <h2>Brand-review fork and Collective</h2>
+  <div class="strip" id="fork-other"></div>
+
+  <h2>If we only add five</h2>
+  <div class="prio"><ol>
+    <li><b>Draft received.</b> <span class="ev">The "I can't see my submitted draft" support-call cluster (Letty, Chiara, Marina, Nia-Emani) is this exact missing confirmation.</span></li>
+    <li><b>Payment failed.</b> <span class="ev">The unwatched failed-payout pile from the payments audit; the one message where silence costs real money and trust.</span></li>
+    <li><b>Accepted confirmation.</b> <span class="ev">Katie's highest-volume manual text; pure automation win.</span></li>
+    <li><b>Affiliate link + first sale.</b> <span class="ev">The Aug 6 share-incentives decision ($50 first tracked sale) has no SMS carrying it; this is the link-sharing workstream's voice.</span></li>
+    <li><b>Visit day-before reminder.</b> <span class="ev">The local fork's worst hole; today it is a 10-email thread Katie runs by hand.</span></li>
+  </ol></div>
+
+  <div class="lean"><b>How to use this page.</b> "Add to ladder" writes the draft into the console's ladder (and the flow map) as a new-draft row, same as if Katie typed it, so you can walk Brian through the ladder with the gaps already filled. Copy lives in Tony's register; when a text should sound like Katie instead (the caring ones: product problems, feedback delivery), say so and I'll do a Katie-voice pass. Nothing here fires anywhere; these are drafts for the master copy doc.</div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="data.js"></script>
+<script>
+const LS_KEY = 'katie-sms-console-v1-app';
+const $ = s => document.querySelector(s);
+const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function toast(msg) { const t = document.createElement('div'); t.className = 'toast'; t.innerHTML = msg; $('#toasts').appendChild(t); setTimeout(() => t.remove(), 3400); }
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_KEY));
+    if (s && s.v === 1 && s.gen === SEED.gen && s.matrix && s.sends7d && s.stats) return s;
+  } catch (e) {}
+  return {
+    v: 1, gen: SEED.gen,
+    messages: JSON.parse(JSON.stringify(SEED.messages)),
+    flags: JSON.parse(JSON.stringify(SEED.flags)),
+    ladders: JSON.parse(JSON.stringify(SEED.ladders)),
+    matrix: JSON.parse(JSON.stringify(SEED.matrix)),
+    sends7d: JSON.parse(JSON.stringify(SEED.sends7d)),
+    stats: JSON.parse(JSON.stringify(SEED.stats)),
+    simCount: 0,
+  };
+}
+function nextMsgId(S, lane) {
+  const local = lane === 'local';
+  let max = 0;
+  for (const k of ['product', 'local']) for (const r of S.ladders[k]) {
+    const m = (local ? /^MSG-L(\d+)/ : /^MSG-(\d+)/).exec(r.id);
+    if (m) max = Math.max(max, parseInt(m[1], 10));
+  }
+  return (local ? 'MSG-L' : 'MSG-') + (max + 1);
+}
+
+/* status: live | progress | missing. lane: product | local | null (no ladder yet). */
+const TREE = {
+  invite: [
+    { st: 'live', nm: 'Portal invite', why: 'MSG-01, fires on brand invite' },
+    { st: 'live', nm: 'New collab invite, 24h window', why: 'MSG-02' },
+    { st: 'missing', key: 'accept-confirm', lane: 'product', after: 'MSG-02', nm: 'Accepted confirmation', when: 'on accept · instant', pri: 'top 5',
+      copy: "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
+      note: "Katie's highest-volume manual text today. Reciprocity close." },
+    { st: 'missing', key: 'invite-expiry', lane: 'product', after: 'MSG-02', nm: 'Invite expiry warning', when: 'invite window minus 6h, no response',
+      copy: "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
+      note: 'Scarcity is real here (over-invite + expiry exists), so Tony-style urgency is honest.' },
+    { st: 'missing', key: 'spot-opened', lane: 'product', after: 'MSG-02', nm: 'Spot opened re-offer', when: 'waitlisted creator, spot frees up',
+      copy: "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
+      note: "Pairs with the rolling-invite workstream (Des's manual routine)." },
+    { st: 'missing', key: 'decline-ack', lane: 'product', after: 'MSG-02', nm: 'Decline acknowledgment', when: 'on decline, portal or by text',
+      copy: "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
+      note: 'Also the reply for the decline-by-text flag. Reply-bait keeps the relationship warm.' },
+  ],
+  product: [
+    { st: 'live', nm: 'Choose your product', why: 'MSG-03' },
+    { st: 'missing', key: 'order-placed', lane: 'product', after: 'MSG-03', nm: 'Order placed', when: 'on order creation, before fulfillment', pri: 'top 5',
+      copy: "your {brand} order is in!! i'll text you the tracking the second it ships. excited for this one",
+      note: 'The MDSolarSciences auto-order lesson: confirm the order, catch wrong variants before a wrong "shipped".' },
+    { st: 'live', nm: 'Shipped + Delivered', why: 'MSG-04, MSG-05' },
+    { st: 'missing', key: 'shipping-problem', lane: 'product', after: 'MSG-04', nm: 'Shipping problem', when: 'carrier exception or no scan movement in 4d',
+      copy: "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
+      note: 'Volume knob down. The promise is Tony; the calm is deliberate.' },
+    { st: 'live', nm: 'Draft reminders', why: 'MSG-06, due minus 3d / 1d / due day' },
+    { st: 'progress', nm: 'Missed deadline + overdue ladder', why: 'MSG-08, MSG-13, Katie drafting this week' },
+    { st: 'missing', key: 'draft-received', lane: 'product', after: 'MSG-06', nm: 'Draft received', when: 'on draft upload · instant', pri: 'top 5',
+      copy: "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
+      note: 'Kills the "I can\'t see my submitted draft" call cluster. The single highest-trust text we can add.' },
+    { st: 'progress', nm: 'Approved / feedback branch', why: 'MSG-11a, MSG-11b, being wired this week' },
+    { st: 'missing', key: 'resubmit-clock', lane: 'product', after: 'MSG-11b', nm: 'Revised draft reminder', when: 'feedback given, no resubmit in 2d',
+      copy: "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
+      note: 'The reciprocity move applied to revisions.' },
+    { st: 'missing', key: 'final-link', lane: 'product', after: 'MSG-11a', nm: 'Final link nudge', when: 'posted, link not submitted, +1d',
+      copy: "last step for {brand}: drop your posted link in the portal so i can wrap you up! takes 30 sec, can you do it today?",
+      note: 'The Samantha case: posted but never submitted.' },
+    { st: 'missing', key: 'wrap-up', lane: 'product', after: 'MSG-13', nm: 'Wrap-up thank you', when: 'all deliverables in and approved',
+      copy: "that's a wrap on {brand}!! everything's in and approved, you crushed it. your next collab is already brewing, i'll text you when it's ready",
+      note: 'Sets up the banked-campaign re-invite. Celebration is the retention move.' },
+  ],
+  money: [
+    { st: 'missing', key: 'gift-card-sent', lane: null, nm: 'Gift card sent', when: 'gift-card reward campaigns, on send',
+      copy: "your {amount} {brand} gift card just landed in your email!! check spam if you don't see it. lmk when you've got it?",
+      note: 'Katie texts this by hand today (the Target gift-card thread).' },
+    { st: 'missing', key: 'payment-sent', lane: null, nm: 'Payment sent', when: 'paid campaigns, on payout',
+      copy: "just sent your {amount} to your paypal!! should land any minute. lmk if it doesn't and i'll chase it",
+      note: 'Replaces the manual Venmo/PayPal back-and-forth in Ana\'s thread.' },
+    { st: 'missing', key: 'payment-failed', lane: null, nm: 'Payment failed', when: 'payout enters failed state', pri: 'top 5',
+      copy: "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
+      note: 'Volume knob down, but keep the today-promise. Closes the unwatched failed-payout loop.' },
+    { st: 'missing', key: 'affiliate-link', lane: null, nm: 'Affiliate link delivery', when: 'on content approval', pri: 'top 5',
+      copy: "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
+      note: 'The link-sharing workstream\'s missing voice. Benefit first, then the placement coaching.' },
+    { st: 'missing', key: 'first-sale', lane: null, nm: 'First tracked sale', when: 'first attributed sale lands',
+      copy: "{name}!! your first sale just came through your link, that's $50 to you. keep it pinned, it keeps paying. congrats!!",
+      note: 'The Aug 6 decision ($50 first tracked sale), finally with a delivery mechanism.' },
+  ],
+  local: [
+    { st: 'live', nm: 'Visit invite + follow-up', why: 'MSG-L1, MSG-L2' },
+    { st: 'missing', key: 'visit-booked', lane: 'local', after: 'MSG-L2', nm: 'Visit confirmed', when: 'visit date recorded',
+      copy: "locked in!! your {brand} visit is {date} at {time}. i'll remind you the day before. they're excited to have you",
+      note: 'The booking study\'s one-tap confirm, as a text.' },
+    { st: 'missing', key: 'visit-tomorrow', lane: 'local', after: 'MSG-L2', nm: 'Day-before reminder', when: 'visit date minus 1d', pri: 'top 5',
+      copy: "your {brand} visit is tomorrow at {time}!! they're expecting you. content is due {date} after, i'll remind you. have fun!",
+      note: 'The local fork\'s worst hole; kills the 10-email thread.' },
+    { st: 'missing', key: 'visit-reschedule', lane: 'local', after: 'MSG-L2', nm: 'No-show / reschedule', when: 'visit date passed, no visit logged',
+      copy: "looks like the {brand} visit didn't happen, all good, life happens!! when works this week? i'll reset your dates",
+      note: 'Madeleine\'s travel case as a template: forgiving, then a scheduling question.' },
+    { st: 'progress', nm: 'Post-visit content reminder', why: 'MSG-L3, draft' },
+  ],
+  other: [
+    { st: 'missing', key: 'brand-reviewing', lane: 'product', after: 'MSG-06', nm: 'Brand is reviewing', when: 'brand-review fork, on submit',
+      copy: "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
+      note: 'The new fork\'s status text; the same promise pattern as draft-received.' },
+    { st: 'missing', key: 'moderated-feedback', lane: 'product', after: 'MSG-11b', nm: 'Moderated brand feedback', when: 'after Benable rewrites harsh notes',
+      copy: "{brand} loved it!! two small asks before it goes live: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
+      note: 'Leads with the love, then the asks. The moderation fork made audible.' },
+    { st: 'missing', key: 'collective-accepted', lane: null, nm: 'Collective accepted', when: 'application approved',
+      copy: "you're IN the collective!! collabs start hitting your portal this week, first dibs goes fast so keep an eye out. so excited to have you",
+      note: 'Tony sends versions of this by hand today; his register, verbatim energy.' },
+    { st: 'missing', key: 'banked-reinvite', lane: null, nm: 'Banked campaign re-invite', when: 'wrap-up +2 weeks, campaign held',
+      copy: "we're holding your next campaign for you {name}!! want me to line it up for {month}? just say the word",
+      note: 'The "we hold one campaign for you" model, as one text with a yes-able question.' },
+  ],
+};
+
+let extraCopyCache = {};
+(function () { try { extraCopyCache = loadState().extraCopy || {}; } catch (e) {} })();
+function effectiveCopy(n) { return extraCopyCache[n.key] || n.copy; }
+function rowHTML(n) {
+  if (n.st !== 'missing') {
+    return `<div class="noderow"><span class="dot ${n.st}"></span><span class="nm">${esc(n.nm)}</span><span class="why">· ${esc(n.why)}</span><span class="st ${n.st}">${n.st === 'live' ? 'live' : 'this week'}</span></div>`;
+  }
+  const added = addedKeys.has(n.key);
+  const btn = n.lane
+    ? `<button class="addbtn" data-add="${esc(n.key)}" ${added ? 'disabled' : ''}>${added ? 'added to ladder ✓' : 'Add to ladder'}</button>`
+    : `<button class="addbtn nolane" disabled>needs a new ladder</button>`;
+  return `<div class="missing">
+    <div class="m-top"><span class="m-dot"></span><span class="m-name">${esc(n.nm)}</span><span class="m-missingchip">missing</span>${n.pri ? `<span class="m-pri">★ ${esc(n.pri)}</span>` : ''}</div>
+    <div class="m-when">${esc(n.when)}</div>
+    <div class="m-copyrow"><div class="m-copy">${esc(effectiveCopy(n))}</div></div>
+    <div class="m-meta"><span class="m-note">${esc(n.note)}</span>${btn}</div>
+  </div>`;
+}
+
+let addedKeys = new Set();
+(function initAdded() {
+  const S = loadState();
+  for (const k of ['product', 'local']) S.ladders[k].forEach(r => { if (r.srcKey) addedKeys.add(r.srcKey); });
+})();
+
+function render() {
+  for (const [fork, nodes] of Object.entries(TREE)) {
+    document.getElementById('fork-' + fork).innerHTML = nodes.map(rowHTML).join('');
+  }
+  document.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => {
+    const key = b.dataset.add;
+    let node = null;
+    for (const nodes of Object.values(TREE)) for (const n of nodes) if (n.key === key) node = n;
+    if (!node || addedKeys.has(key)) return;
+    const S = loadState();
+    const arr = S.ladders[node.lane];
+    const id = nextMsgId(S, node.lane);
+    let idx = arr.findIndex(r => r.id === node.after);
+    if (idx < 0) idx = arr.length - 1;
+    const indent = arr[idx] ? arr[idx].indent : 0;
+    if (indent === 0) { while (arr[idx + 1] && (arr[idx + 1].status === 'branch' || arr[idx + 1].indent > 0)) idx++; }
+    arr.splice(idx + 1, 0, { id, name: node.nm, when: node.when, copy: (S.extraCopy || {})[key] || node.copy, status: 'new', indent, srcKey: key });
+    localStorage.setItem(LS_KEY, JSON.stringify(S));
+    addedKeys.add(key);
+    render();
+    toast(`${id} · ${esc(node.nm)} added to the ${node.lane} ladder as a draft.`);
+  }));
+}
+render();
+window.addEventListener('storage', e => { if (e.key === LS_KEY) { try { extraCopyCache = loadState().extraCopy || {}; } catch (er) {} addedKeys = new Set(); (function () { const S = loadState(); for (const k of ['product', 'local']) S.ladders[k].forEach(r => { if (r.srcKey) addedKeys.add(r.srcKey); }); })(); render(); } });
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Copy deck · Benable SMS</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+:root {
+  --accent: #7C5CFA; --accent-soft: #EBE4FF; --accent-bg: #F9F7FF;
+  --ink: #1A1A1A; --ink-med: #6F6F73; --ink-subtle: #B0B0B4;
+  --line: #E5E5E8; --card: #FFFFFF;
+  --green: #2BAF87; --green-bg: #EFFBF7; --green-ink: #1a7a44;
+  --amber: #E88E2C; --amber-bg: #FFF9F0; --amber-ink: #9a4a15;
+  --red: #E82C3F; --red-bg: #FFF1F1;
+}
+body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color: var(--ink); background: #F2F2F6; }
+.topbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.back { font-size: 12px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
+.tb-title { font-weight: 800; font-size: 14.5px; letter-spacing: -.2px; }
+.tb-chip { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: #5B3FD1; background: var(--accent-soft); border-radius: 5px; padding: 2px 6px; }
+.tb-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.changes { font-size: 11.5px; font-weight: 800; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-soft); border-radius: 999px; padding: 3px 10px; }
+.sendbtn { font: inherit; font-size: 12px; font-weight: 800; border: none; border-radius: 9px; padding: 7px 13px; cursor: pointer; background: var(--accent); color: #fff; }
+
+.deck { max-width: 520px; margin: 0 auto; padding: 18px 14px 90px; }
+.intro { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.55; }
+.intro b { font-weight: 800; }
+.legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 9px; font-size: 10.5px; color: var(--ink-med); }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; }
+
+.sect { margin: 26px 0 10px; display: flex; align-items: baseline; gap: 8px; }
+.sect h2 { font-size: 15px; font-weight: 800; letter-spacing: -.2px; }
+.sect .sub { font-size: 11px; color: var(--ink-med); }
+.branchlbl { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--amber-ink); margin: 12px 0 4px; }
+
+.item { margin-bottom: 14px; }
+.meta { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; padding: 0 2px; flex-wrap: wrap; }
+.mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
+.mname { font-size: 11.5px; font-weight: 700; color: var(--ink-med); }
+.st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
+.st.live { background: var(--green-bg); color: var(--green-ink); }
+.st.draft, .st.new { background: #ECECEF; color: #7F7F7F; }
+.st.missing { background: var(--red-bg); color: var(--red); }
+.st.rewritten { background: var(--accent-soft); color: #5B3FD1; }
+.bubblewrap { display: flex; justify-content: flex-end; }
+.bubble { background: var(--green); color: #fff; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14.5px; line-height: 1.45; max-width: 92%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; overflow-wrap: anywhere; }
+.bubble:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(43,175,135,.3); }
+.bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--red); }
+.bubble.rewrittenb { background: var(--accent); }
+.bubble.rewrittenb.missingb { background: var(--accent-bg); color: var(--ink); border-color: var(--accent); }
+.when { font-size: 10.5px; color: var(--ink-subtle); text-align: right; margin: 3px 4px 0 0; }
+
+.editor { width: 100%; }
+.editor textarea { width: 100%; font: inherit; font-size: 14.5px; line-height: 1.45; border: 2px solid var(--accent); border-radius: 14px; padding: 10px 12px; background: #fff; resize: vertical; min-height: 74px; }
+.editor textarea:focus-visible { outline: none; }
+.edmeta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.seg { font-size: 10.5px; color: var(--ink-med); }
+.seg.over { color: var(--amber-ink); font-weight: 700; }
+.edbtns { margin-left: auto; display: flex; gap: 6px; }
+.btn { font: inherit; font-size: 12px; font-weight: 800; border-radius: 8px; padding: 6px 13px; border: none; cursor: pointer; }
+.btn.save { background: var(--accent); color: #fff; }
+.btn.cancel { background: #ECECEF; color: var(--ink-med); }
+
+.overlay { position: fixed; inset: 0; background: rgba(20,20,24,.4); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 18px; }
+.sheet { background: #fff; border-radius: 18px; padding: 20px; width: min(560px, 100%); max-height: 84vh; display: flex; flex-direction: column; gap: 12px; }
+.sheet h3 { font-size: 15.5px; font-weight: 800; }
+.sheet textarea { width: 100%; flex: 1; min-height: 240px; font: 12.5px/1.55 ui-monospace, SFMono-Regular, monospace; border: 1px solid var(--line); border-radius: 10px; padding: 10px; resize: none; }
+.sheet .row { display: flex; gap: 8px; justify-content: flex-end; }
+
+.toasts { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.toast { background: #1A1D21; color: #fff; font-size: 12.5px; font-weight: 600; border-radius: 10px; padding: 9px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="../">←</a>
+  <span class="tb-title">Copy deck</span>
+  <span class="tb-chip">Tony's cut</span>
+  <div class="tb-right">
+    <span class="changes" id="changecount">0 changes</span>
+    <button class="sendbtn" id="sendpass">Send pass</button>
+  </div>
+</header>
+
+<div class="deck">
+  <div class="intro">
+    <b>Tony: scroll it like a thread.</b> Every text we send (or should send), in the order a creator lives it. Tap any bubble that reads weak, retype it, save. Your changes collect at the top; hit Send pass when you're done. Five minutes, whole system.
+    <div class="legend">
+      <span><i style="background:var(--green);"></i>sends today</span>
+      <span><i style="background:#C9C9CE;"></i>draft, this week</span>
+      <span><i style="background:#fff;border:1.5px dashed var(--red);"></i>missing, proposed</span>
+      <span><i style="background:var(--accent);"></i>your rewrite</span>
+    </div>
+  </div>
+  <div id="deckbody"></div>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet">
+    <h3 id="sheettitle">Tony's pass</h3>
+    <textarea id="sheettext" readonly></textarea>
+    <div class="row">
+      <button class="btn cancel" id="sheetclose">Close</button>
+      <button class="btn save" id="sheetcopy">Copy for Julia</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="data.js"></script>
+<script>
+const LS_KEY = "katie-sms-console-v1-app";
+const MISSING = [
+ {
+  "key": "accept-confirm",
+  "fork": "invite",
+  "lane": "product",
+  "after": "MSG-02",
+  "nm": "Accepted confirmation",
+  "when": "on accept · instant",
+  "copy": "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
+  "pri": "top 5"
+ },
+ {
+  "key": "invite-expiry",
+  "fork": "invite",
+  "lane": "product",
+  "after": "MSG-02",
+  "nm": "Invite expiry warning",
+  "when": "invite window minus 6h, no response",
+  "copy": "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
+  "pri": null
+ },
+ {
+  "key": "spot-opened",
+  "fork": "invite",
+  "lane": "product",
+  "after": "MSG-02",
+  "nm": "Spot opened re-offer",
+  "when": "waitlisted creator, spot frees up",
+  "copy": "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
+  "pri": null
+ },
+ {
+  "key": "decline-ack",
+  "fork": "invite",
+  "lane": "product",
+  "after": "MSG-02",
+  "nm": "Decline acknowledgment",
+  "when": "on decline, portal or by text",
+  "copy": "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
+  "pri": null
+ },
+ {
+  "key": "order-placed",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-03",
+  "nm": "Order placed",
+  "when": "on order creation, before fulfillment",
+  "copy": "your {brand} order is in!! i'll text you the tracking the second it ships. excited for this one",
+  "pri": "top 5"
+ },
+ {
+  "key": "shipping-problem",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-04",
+  "nm": "Shipping problem",
+  "when": "carrier exception or no scan movement in 4d",
+  "copy": "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
+  "pri": null
+ },
+ {
+  "key": "draft-received",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-06",
+  "nm": "Draft received",
+  "when": "on draft upload · instant",
+  "copy": "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
+  "pri": "top 5"
+ },
+ {
+  "key": "resubmit-clock",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-11b",
+  "nm": "Revised draft reminder",
+  "when": "feedback given, no resubmit in 2d",
+  "copy": "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
+  "pri": null
+ },
+ {
+  "key": "final-link",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-11a",
+  "nm": "Final link nudge",
+  "when": "posted, link not submitted, +1d",
+  "copy": "last step for {brand}: drop your posted link in the portal so i can wrap you up! takes 30 sec, can you do it today?",
+  "pri": null
+ },
+ {
+  "key": "wrap-up",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-13",
+  "nm": "Wrap-up thank you",
+  "when": "all deliverables in and approved",
+  "copy": "that's a wrap on {brand}!! everything's in and approved, you crushed it. your next collab is already brewing, i'll text you when it's ready",
+  "pri": null
+ },
+ {
+  "key": "gift-card-sent",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "Gift card sent",
+  "when": "gift-card reward campaigns, on send",
+  "copy": "your {amount} {brand} gift card just landed in your email!! check spam if you don't see it. lmk when you've got it?",
+  "pri": null
+ },
+ {
+  "key": "payment-sent",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "Payment sent",
+  "when": "paid campaigns, on payout",
+  "copy": "just sent your {amount} to your paypal!! should land any minute. lmk if it doesn't and i'll chase it",
+  "pri": null
+ },
+ {
+  "key": "payment-failed",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "Payment failed",
+  "when": "payout enters failed state",
+  "copy": "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
+  "pri": "top 5"
+ },
+ {
+  "key": "affiliate-link",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "Affiliate link delivery",
+  "when": "on content approval",
+  "copy": "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
+  "pri": "top 5"
+ },
+ {
+  "key": "first-sale",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "First tracked sale",
+  "when": "first attributed sale lands",
+  "copy": "{name}!! your first sale just came through your link, that's $50 to you. keep it pinned, it keeps paying. congrats!!",
+  "pri": null
+ },
+ {
+  "key": "visit-booked",
+  "fork": "local",
+  "lane": "local",
+  "after": "MSG-L2",
+  "nm": "Visit confirmed",
+  "when": "visit date recorded",
+  "copy": "locked in!! your {brand} visit is {date} at {time}. i'll remind you the day before. they're excited to have you",
+  "pri": null
+ },
+ {
+  "key": "visit-tomorrow",
+  "fork": "local",
+  "lane": "local",
+  "after": "MSG-L2",
+  "nm": "Day-before reminder",
+  "when": "visit date minus 1d",
+  "copy": "your {brand} visit is tomorrow at {time}!! they're expecting you. content is due {date} after, i'll remind you. have fun!",
+  "pri": "top 5"
+ },
+ {
+  "key": "visit-reschedule",
+  "fork": "local",
+  "lane": "local",
+  "after": "MSG-L2",
+  "nm": "No-show / reschedule",
+  "when": "visit date passed, no visit logged",
+  "copy": "looks like the {brand} visit didn't happen, all good, life happens!! when works this week? i'll reset your dates",
+  "pri": null
+ },
+ {
+  "key": "brand-reviewing",
+  "fork": "other",
+  "lane": "product",
+  "after": "MSG-06",
+  "nm": "Brand is reviewing",
+  "when": "brand-review fork, on submit",
+  "copy": "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
+  "pri": null
+ },
+ {
+  "key": "moderated-feedback",
+  "fork": "other",
+  "lane": "product",
+  "after": "MSG-11b",
+  "nm": "Moderated brand feedback",
+  "when": "after Benable rewrites harsh notes",
+  "copy": "{brand} loved it!! two small asks before it goes live: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
+  "pri": null
+ },
+ {
+  "key": "collective-accepted",
+  "fork": "other",
+  "lane": null,
+  "after": null,
+  "nm": "Collective accepted",
+  "when": "application approved",
+  "copy": "you're IN the collective!! collabs start hitting your portal this week, first dibs goes fast so keep an eye out. so excited to have you",
+  "pri": null
+ },
+ {
+  "key": "banked-reinvite",
+  "fork": "other",
+  "lane": null,
+  "after": null,
+  "nm": "Banked campaign re-invite",
+  "when": "wrap-up +2 weeks, campaign held",
+  "copy": "we're holding your next campaign for you {name}!! want me to line it up for {month}? just say the word",
+  "pri": null
+ }
+];
+const $ = s => document.querySelector(s);
+const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; $("#toasts").appendChild(t); setTimeout(() => t.remove(), 3200); }
+
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_KEY));
+    if (s && s.v === 1 && s.gen === SEED.gen && s.matrix && s.sends7d && s.stats) return s;
+  } catch (e) {}
+  return {
+    v: 1, gen: SEED.gen,
+    messages: JSON.parse(JSON.stringify(SEED.messages)),
+    flags: JSON.parse(JSON.stringify(SEED.flags)),
+    ladders: JSON.parse(JSON.stringify(SEED.ladders)),
+    matrix: JSON.parse(JSON.stringify(SEED.matrix)),
+    sends7d: JSON.parse(JSON.stringify(SEED.sends7d)),
+    stats: JSON.parse(JSON.stringify(SEED.stats)),
+    simCount: 0,
+  };
+}
+let S = loadState();
+S.extraCopy = S.extraCopy || {};
+S.reviewEdits = S.reviewEdits || {};
+const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
+
+function segInfo(text) {
+  const n = text.length;
+  const segs = n <= 160 ? 1 : Math.ceil(n / 153);
+  return { n, segs };
+}
+
+/* Build the deck: ladder rows with not-yet-added missing texts interleaved, then no-lane sections. */
+function buildDeck() {
+  const items = [];
+  const laneTitles = { product: ["Product collabs", "invite through wrap-up"], local: ["Local collabs", "visits"] };
+  for (const lane of ["product", "local"]) {
+    items.push({ kind: "sect", title: laneTitles[lane][0], sub: laneTitles[lane][1] });
+    const rows = S.ladders[lane];
+    const added = new Set(rows.map(r => r.srcKey).filter(Boolean));
+    const pendingByAfter = {};
+    for (const m of MISSING) {
+      if (m.lane === lane && !added.has(m.key)) (pendingByAfter[m.after] = pendingByAfter[m.after] || []).push(m);
+    }
+    for (const r of rows) {
+      if (r.status === "branch") { items.push({ kind: "branch", label: r.name }); continue; }
+      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status });
+      for (const m of (pendingByAfter[r.id] || [])) {
+        items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+      }
+    }
+    for (const [after, ms] of Object.entries(pendingByAfter)) {
+      if (!rows.some(r => r.id === after)) for (const m of ms) items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+    }
+  }
+  items.push({ kind: "sect", title: "Rewards and money", sub: "no ladder exists yet, these five are the lane" });
+  for (const m of MISSING.filter(x => x.fork === "money")) {
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+  }
+  items.push({ kind: "sect", title: "Collective and beyond", sub: "no ladder yet" });
+  for (const m of MISSING.filter(x => x.fork === "other" && !x.lane)) {
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+  }
+  return items;
+}
+
+let editingRef = null;
+
+function render() {
+  const body = $("#deckbody");
+  const items = buildDeck();
+  let html = "";
+  for (const it of items) {
+    if (it.kind === "sect") { html += `<div class="sect"><h2>${esc(it.title)}</h2><span class="sub">${esc(it.sub)}</span></div>`; continue; }
+    if (it.kind === "branch") { html += `<div class="branchlbl">${esc(it.label)}</div>`; continue; }
+    const ref = it.kind === "ladder" ? it.id : it.key;
+    const rewritten = !!S.reviewEdits[ref];
+    const stLabel = rewritten ? "rewritten" : (it.status === "live" ? "live" : it.status === "missing" ? "missing" : it.status === "new" ? "new draft" : "draft");
+    const stCls = rewritten ? "rewritten" : (it.status === "live" ? "live" : it.status === "missing" ? "missing" : "draft");
+    const idLabel = it.kind === "ladder" ? it.id : "proposed";
+    const editingHere = editingRef === ref;
+    html += `<div class="item" data-ref="${esc(ref)}">
+      <div class="meta"><span class="mid">${esc(idLabel)}</span><span class="mname">${esc(it.name)}</span><span class="st ${stCls}">${stLabel}</span></div>`;
+    if (editingHere) {
+      html += `<div class="editor"><textarea id="edta">${esc(it.copy)}</textarea>
+        <div class="edmeta"><span class="seg" id="segline"></span>
+        <div class="edbtns"><button class="btn cancel" data-cancel>Cancel</button><button class="btn save" data-save="${esc(ref)}">Save</button></div></div></div>`;
+    } else {
+      const bcls = ["bubble"]; if (it.status === "missing") bcls.push("missingb"); if (rewritten) bcls.push("rewrittenb");
+      html += `<div class="bubblewrap"><div class="${bcls.join(" ")}" data-edit="${esc(ref)}" role="button" tabindex="0">${esc(it.copy)}</div></div>`;
+    }
+    html += `<div class="when">${esc(it.when)}</div></div>`;
+  }
+  body.innerHTML = html;
+  const count = Object.keys(S.reviewEdits).length;
+  $("#changecount").textContent = count + (count === 1 ? " change" : " changes");
+
+  body.querySelectorAll("[data-edit]").forEach(b => {
+    const open = () => { editingRef = b.dataset.edit; render(); const ta = $("#edta"); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); updateSeg(); };
+    b.addEventListener("click", open);
+    b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  });
+  const ta = $("#edta");
+  if (ta) ta.addEventListener("input", updateSeg);
+  body.querySelectorAll("[data-cancel]").forEach(b => b.addEventListener("click", () => { editingRef = null; render(); }));
+  body.querySelectorAll("[data-save]").forEach(b => b.addEventListener("click", () => saveEdit(b.dataset.save)));
+}
+
+function updateSeg() {
+  const ta = $("#edta"); if (!ta) return;
+  const { n, segs } = segInfo(ta.value);
+  const s = $("#segline");
+  s.textContent = n + " chars · " + segs + (segs === 1 ? " segment" : " segments");
+  s.classList.toggle("over", segs > 1);
+}
+
+function findItem(ref) {
+  for (const lane of ["product", "local"]) {
+    const r = S.ladders[lane].find(x => x.id === ref);
+    if (r) return { kind: "ladder", lane, row: r };
+  }
+  const m = MISSING.find(x => x.key === ref);
+  if (m) return { kind: "extra", m };
+  return null;
+}
+
+function saveEdit(ref) {
+  const ta = $("#edta"); if (!ta) return;
+  const text = ta.value.trim();
+  if (!text) { toast("Empty text, nothing saved."); return; }
+  const target = findItem(ref);
+  if (!target) return;
+  const before = target.kind === "ladder" ? target.row.copy : (S.extraCopy[ref] || target.m.copy);
+  if (text === before) { editingRef = null; render(); return; }
+  if (!S.reviewEdits[ref]) {
+    S.reviewEdits[ref] = { name: target.kind === "ladder" ? target.row.name : target.m.nm, before };
+  }
+  S.reviewEdits[ref].after = text;
+  S.reviewEdits[ref].at = new Date().toISOString();
+  if (target.kind === "ladder") { target.row.copy = text; target.row.edited = true; target.row.editedAt = S.reviewEdits[ref].at; }
+  else { S.extraCopy[ref] = text; }
+  editingRef = null;
+  save(); render();
+  toast("Saved. It shows as your rewrite everywhere.");
+}
+
+$("#sendpass").addEventListener("click", () => {
+  const edits = Object.entries(S.reviewEdits);
+  let text;
+  if (!edits.length) { text = "No changes yet. Tap a bubble to rewrite it."; }
+  else {
+    text = "Tony's copy pass · " + edits.length + " changes\n\n" +
+      edits.map(([ref, e]) => ref.toUpperCase() + " · " + e.name + "\nWAS: " + e.before + "\nNOW: " + e.after).join("\n\n");
+  }
+  $("#sheettext").value = text;
+  $("#overlay").hidden = false;
+});
+$("#sheetclose").addEventListener("click", () => { $("#overlay").hidden = true; });
+$("#sheetcopy").addEventListener("click", () => {
+  const ta = $("#sheettext"); ta.select();
+  try { document.execCommand("copy"); toast("Copied. Paste it to Julia."); } catch (e) { toast("Select and copy the text above."); }
+  if (navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(() => {});
+});
+$("#overlay").addEventListener("click", e => { if (e.target === $("#overlay")) $("#overlay").hidden = true; });
+
+window.addEventListener("storage", e => { if (e.key === LS_KEY) { S = loadState(); S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || {}; editingRef = null; render(); } });
+render();
+</script>
+</body>
+</html>

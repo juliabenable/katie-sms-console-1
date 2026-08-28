@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Katie's SMS console · prototypes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #7C5CFA; --accent-soft: #EBE4FF; --accent-bg: #F9F7FF;
+  --ink: #1A1A1A; --ink-med: #6F6F73; --ink-subtle: #B0B0B4;
+  --line: #E5E5E8; --card: #FFFFFF;
+  --green: #2BAF87; --green-bg: #EFFBF7; --green-ink: #1a7a44;
+  --amber-bg: #FFF9F0; --amber-ink: #9a4a15;
+}
+body { font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color: var(--ink); background: #F5F5F7; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 44px 20px 90px; }
+.crumb { font-size: 11.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+h1 { font-size: 30px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 8px; }
+.sub { color: var(--ink-med); font-size: 15px; max-width: 620px; margin-bottom: 30px; }
+.card { display: block; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px; margin-bottom: 14px; text-decoration: none; color: inherit; transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(26,26,26,.09); border-color: var(--accent); }
+.card h2 { font-size: 17px; font-weight: 800; letter-spacing: -.2px; display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
+.tag { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; border-radius: 5px; padding: 2px 7px; }
+.tag.mvp { background: var(--green-bg); color: var(--green-ink); }
+.tag.v1 { background: var(--accent-soft); color: #5B3FD1; }
+.tag.study { background: var(--amber-bg); color: var(--amber-ink); }
+.card p { font-size: 13.5px; color: var(--ink-med); }
+.card .go { font-size: 12.5px; font-weight: 800; color: var(--accent); margin-top: 9px; display: inline-block; }
+.sect { font-size: 11.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-subtle); margin: 28px 0 12px; }
+.sub-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.sub-cards .card { margin-bottom: 0; padding: 16px 18px; }
+.sub-cards h2 { font-size: 15px; }
+.note { background: #fff; border: 1.5px dashed var(--accent); border-radius: 14px; padding: 15px 18px; font-size: 13px; color: var(--ink-med); margin-top: 26px; line-height: 1.6; }
+.note b { color: var(--ink); }
+.foot { font-size: 12px; color: var(--ink-subtle); margin-top: 26px; }
+.foot a { color: var(--accent); text-decoration: none; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumb">Benable · messaging intelligence · Aug 2026</div>
+  <h1>Katie's SMS console</h1>
+  <p class="sub">Clickable prototypes of the ops console for the intelligent communication system, fed with curated threads from the real SMS export. MVP and v1 are kept as separate builds so the MVP scope stays honest.</p>
+
+  <div class="sect">Start here for a copy review</div>
+  <a class="card" href="v1/review.html">
+    <h2>Copy deck <span class="tag v1">Tony's cut</span></h2>
+    <p>Every text we send or should send, in the order a creator lives it. Tap a bubble, rewrite it, hit Send pass. Phone-first, five minutes end to end.</p>
+    <span class="go">Open the deck →</span>
+  </a>
+
+  <div class="sect">The two builds</div>
+  <a class="card" href="mvp/">
+    <h2>MVP console <span class="tag mvp">ship first</span></h2>
+    <p>All texts feed with author chips, the Needs-you flag queue with approve / edit / dismiss, per-creator threads with Katie's and Tony's lines, and the editable ladder. Nothing else.</p>
+    <span class="go">Open MVP →</span>
+  </a>
+  <a class="card" href="v1/">
+    <h2>v1 console <span class="tag v1">next</span></h2>
+    <p>Everything in the MVP plus the automations matrix (pause per brand, catches silently dead automations), the morning digest, graduation stats, and checker highlights on drafts.</p>
+    <span class="go">Open v1 →</span>
+  </a>
+
+  <div class="sect">Inside v1</div>
+  <div class="sub-cards">
+    <a class="card" href="v1/map.html">
+      <h2>Flow map <span class="tag study">v2</span></h2>
+      <p>The ladder as a canvas: live counts on nodes, branch fan, click a node for its last real sends.</p>
+    </a>
+    <a class="card" href="v1/missing.html">
+      <h2>Missing texts <span class="tag study">study</span></h2>
+      <p>The full logic tree walked. 22 texts we do not send yet, drafted in Tony's voice, addable to the ladder.</p>
+    </a>
+  </div>
+
+  <div class="note">
+    <b>Demo data.</b> Threads are curated from the Aug 25 SMS export, not one-to-one with production, with personal details removed. Every prototype stores your clicks locally in your own browser only; the MVP has a Reset button in its demo bar. Nothing here sends a real message.
+  </div>
+
+  <p class="foot">Companion research: <a href="https://juliabenable.github.io/katie-command-center-ui-study-1/">the UI field study</a> (Part 1 supervision inbox, Part 2 scheduled and conditional, Part 3 the MVP spec).</p>
+</div>
+</body>
+</html>

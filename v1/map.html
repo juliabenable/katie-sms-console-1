@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Flow map · Benable SMS</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #7C5CFA; --accent-soft: #EBE4FF; --accent-bg: #F9F7FF;
+  --ink: #1A1A1A; --ink-med: #6F6F73; --ink-subtle: #B0B0B4;
+  --line: #E5E5E8; --card: #FFFFFF;
+  --green: #2BAF87; --green-bg: #EFFBF7; --green-ink: #1a7a44;
+  --amber: #E88E2C; --amber-bg: #FFF9F0; --amber-ink: #9a4a15;
+  --red: #E82C3F;
+  --wire: #C9C2E8;
+}
+body {
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+  color: var(--ink);
+  background: #F7F7FA;
+  background-image: radial-gradient(circle, #E2E1EA 1px, transparent 1px);
+  background-size: 22px 22px;
+  min-height: 100vh;
+}
+.topbar { position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 14px; padding: 12px 22px; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.back { font-size: 12.5px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
+.back:hover { color: var(--accent); }
+.brandmark { font-weight: 800; font-size: 15px; letter-spacing: -.2px; }
+.brandmark span { color: var(--accent); }
+.v2chip { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: #5B3FD1; background: var(--accent-soft); border-radius: 5px; padding: 2px 7px; }
+.seg { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: #fff; margin-left: auto; }
+.segbtn { font: inherit; font-size: 12.5px; font-weight: 700; border: none; background: none; padding: 7px 14px; cursor: pointer; color: var(--ink-med); }
+.segbtn.active { background: var(--accent); color: #fff; }
+.legend { display: flex; gap: 14px; font-size: 11px; color: var(--ink-med); flex-wrap: wrap; }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 4px; vertical-align: -1px; }
+
+.canvas { max-width: 980px; margin: 0 auto; padding: 44px 20px 120px; }
+.trunk { display: flex; flex-direction: column; align-items: center; }
+
+/* trigger capsule */
+.trigger {
+  background: linear-gradient(135deg, #1A1D21, #33313e);
+  color: #fff; border-radius: 999px; padding: 10px 22px;
+  font-weight: 700; font-size: 13px; box-shadow: 0 12px 30px rgba(26,29,33,.25);
+  display: flex; gap: 8px; align-items: center;
+}
+.trigger .zap { color: #FFD166; }
+
+/* wires */
+.wire { width: 2.5px; height: 44px; background: linear-gradient(var(--wire), var(--accent)); position: relative; border-radius: 2px; }
+.wire::after { content: ""; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--accent); }
+.wire .elabel {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  background: #fff; border: 1px solid var(--line); border-radius: 999px;
+  font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-med); padding: 3px 10px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.wire.long { height: 58px; }
+
+/* node cards */
+.node {
+  width: min(420px, 92vw); background: var(--card); border: 1px solid var(--line);
+  border-radius: 16px; box-shadow: 0 10px 28px rgba(26,26,26,.08);
+  padding: 13px 16px 12px 18px; position: relative; cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease;
+  border-left: 4px solid var(--accent);
+}
+.node:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(26,26,26,.13); }
+.node.selected { outline: 2px solid var(--accent); }
+.node.draftnode { border-left-color: #C9C9CE; }
+.node.edited { background: var(--accent-bg); border-color: var(--accent-soft); }
+.node.silent { border-left-color: var(--red); }
+.node .n-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.msgid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10.5px; font-weight: 700; color: var(--accent); }
+.n-name { font-weight: 800; font-size: 14px; }
+.n-status { margin-left: auto; font-size: 9.5px; font-weight: 800; text-transform: uppercase; border-radius: 4px; padding: 2px 7px; }
+.n-status.live { background: var(--green-bg); color: var(--green-ink); }
+.n-status.draft, .n-status.new { background: #f0f0f2; color: #7F7F7F; }
+.n-when { font-size: 11.5px; color: var(--ink-med); margin-bottom: 8px; }
+.n-copy { background: var(--green); color: #fff; border-radius: 12px; border-bottom-right-radius: 4px; padding: 6px 11px; font-size: 12px; line-height: 1.4; max-width: 95%; width: fit-content; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.node.draftnode .n-copy { background: #B9B9BF; }
+.n-stats { display: flex; gap: 12px; margin-top: 9px; font-size: 10.5px; color: var(--ink-med); align-items: center; flex-wrap: wrap; }
+.n-stats b { color: var(--ink); font-weight: 800; }
+.n-stats .held { color: var(--amber-ink); font-weight: 700; }
+.n-stats .silentchip { color: var(--red); font-weight: 800; }
+.n-stats .trustchip { background: var(--green-bg); color: var(--green-ink); font-weight: 800; border-radius: 999px; padding: 1px 8px; }
+.editedtag { position: absolute; top: -9px; right: 12px; background: var(--accent); color: #fff; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 999px; padding: 2px 8px; box-shadow: 0 4px 10px rgba(124,92,250,.4); }
+
+/* branch */
+.branchpoint { background: var(--amber-bg); border: 1px solid #f0d9bd; color: var(--amber-ink); font-weight: 800; font-size: 11px; text-transform: uppercase; letter-spacing: .05em; border-radius: 999px; padding: 6px 16px; }
+.fan { position: relative; width: 100%; max-width: 900px; }
+.fan svg { display: block; width: 100%; height: 56px; }
+.fan path { fill: none; stroke: var(--wire); stroke-width: 2.5; }
+.fan .flabel { position: absolute; font-size: 9.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--amber-ink); background: #fff; border: 1px solid #f0d9bd; border-radius: 999px; padding: 2px 9px; }
+.branches { display: flex; gap: 26px; justify-content: center; align-items: flex-start; width: 100%; }
+.branchcol { display: flex; flex-direction: column; align-items: center; flex: 0 1 auto; }
+.branchcol .node { width: min(340px, 44vw); }
+.branches:has(.branchcol:nth-child(3)) .branchcol .node { width: min(280px, 30vw); }
+.merge svg { display: block; width: 100%; height: 44px; }
+.merge path { fill: none; stroke: var(--wire); stroke-width: 2.5; }
+
+/* side panel */
+.panel { position: fixed; top: 0; right: 0; bottom: 0; width: min(420px, 100vw); background: #fff; border-left: 1px solid var(--line); box-shadow: -12px 0 40px rgba(0,0,0,.12); z-index: 50; display: flex; flex-direction: column; }
+.p-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.p-title { font-weight: 800; }
+.p-title .msgid { margin-right: 6px; }
+.p-close { font: inherit; font-size: 12.5px; font-weight: 700; border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+.p-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
+.p-sec { font-size: 10.5px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-med); margin: 16px 0 8px; }
+.p-sec:first-child { margin-top: 0; }
+.p-copy { background: var(--green); color: #fff; border-radius: 14px; border-bottom-right-radius: 4px; padding: 8px 12px; font-size: 13px; line-height: 1.45; }
+.p-when { font-size: 12.5px; color: var(--ink-med); margin-top: 6px; }
+.p-brands table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+.p-brands td { padding: 5px 4px; border-bottom: 1px solid #f4f4f5; }
+.p-brands td:last-child { text-align: right; font-weight: 700; }
+.p-brands .cell-live { color: var(--green-ink); } .p-brands .cell-paused { color: var(--amber-ink); } .p-brands .cell-off { color: var(--ink-subtle); } .p-brands .cell-err { color: var(--red); font-weight: 800; }
+.p-send { border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; margin-bottom: 8px; }
+.p-send .who { font-size: 11px; font-weight: 700; color: var(--ink-med); margin-bottom: 2px; }
+.p-send .body { font-size: 12.5px; }
+.p-none { font-size: 12.5px; color: var(--ink-med); }
+.scrim { position: fixed; inset: 0; background: rgba(20,20,24,.2); z-index: 40; }
+[hidden] { display: none !important; }
+
+@media (max-width: 720px) {
+  .fan, .merge { display: none; }
+  .branches { flex-direction: column; align-items: center; gap: 12px; }
+  .branchcol .node { width: min(420px, 92vw); }
+  .branchpoint { margin-bottom: 12px; }
+}
+
+/* entrance */
+@media (prefers-reduced-motion: no-preference) {
+  .trunk > *, .branches .node { animation: drop .5s ease backwards; }
+  .trunk > *:nth-child(1) { animation-delay: .03s; } .trunk > *:nth-child(2) { animation-delay: .07s; }
+  .trunk > *:nth-child(3) { animation-delay: .11s; } .trunk > *:nth-child(4) { animation-delay: .15s; }
+  .trunk > *:nth-child(5) { animation-delay: .19s; } .trunk > *:nth-child(6) { animation-delay: .23s; }
+  .trunk > *:nth-child(7) { animation-delay: .27s; } .trunk > *:nth-child(8) { animation-delay: .31s; }
+  .trunk > *:nth-child(9) { animation-delay: .35s; } .trunk > *:nth-child(10) { animation-delay: .39s; }
+  .trunk > *:nth-child(n+11) { animation-delay: .43s; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-8px); } }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="back" href="../">← All</a>
+  <a class="back" href="index.html">Console</a>
+  <div class="brandmark">Benable <span>· SMS</span></div>
+  <span class="v2chip">flow map · v2 preview</span>
+  <div class="legend">
+    <span><i style="background:var(--accent);"></i>live message</span>
+    <span><i style="background:#C9C9CE;"></i>draft</span>
+    <span><i style="background:var(--accent-soft);border:1px solid var(--accent);"></i>edited by Katie</span>
+    <span><i style="background:var(--red);"></i>live but silent 7d</span>
+  </div>
+  <div class="seg">
+    <button class="segbtn active" data-lane="product">Product collab</button>
+    <button class="segbtn" data-lane="local">Local collab</button>
+  </div>
+</header>
+
+<div class="canvas"><div class="trunk" id="trunk"></div></div>
+
+<aside class="panel" id="panel" hidden>
+  <div class="p-head"><div class="p-title" id="p-title"></div><button class="p-close" id="p-close">Close</button></div>
+  <div class="p-body" id="p-body"></div>
+</aside>
+<div class="scrim" id="scrim" hidden></div>
+
+<script src="data.js"></script>
+<script>
+const LS_KEY = 'katie-sms-console-v1-app';
+function loadState() {
+  try {
+    const s = JSON.parse(localStorage.getItem(LS_KEY));
+    if (s && s.v === 1 && s.gen === SEED.gen && s.matrix && s.sends7d && s.stats && s.ladders) return s;
+  } catch (e) {}
+  return { messages: SEED.messages, flags: SEED.flags, ladders: SEED.ladders, matrix: SEED.matrix, sends7d: SEED.sends7d, stats: SEED.stats };
+}
+let S = loadState();
+const LANE_BRANDS = {
+  product: ['MD Solar Sciences', 'Celeste Naturals', '28 Litsea', 'Pecan Moon', 'Mojo Fun'],
+  local: ['Blow Me Away'],
+};
+window.addEventListener('pageshow', e => { if (e.persisted) { S = loadState(); closePanel(); render(); } });
+window.addEventListener('storage', e => { if (e.key === LS_KEY) { S = loadState(); closePanel(); render(); } });
+const $ = s => document.querySelector(s);
+const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+let lane = 'product';
+
+const EDGE = { // label on the wire ABOVE each node
+  'MSG-01': 'brand invites · +2h', 'MSG-02': 'campaign invite', 'MSG-03': 'accepted · no product +1d',
+  'MSG-04': 'when fulfillment scans', 'MSG-05': 'when delivery scans', 'MSG-06': 'wait · until due minus 3d',
+  'MSG-08': 'if no draft · due +1d', 'MSG-13': 'if still nothing · +2d',
+  'MSG-11a': 'approved clean', 'MSG-11b': 'notes given',
+  'MSG-L1': 'campaign invite', 'MSG-L2': 'accepted · no visit +3d', 'MSG-L3': 'visit date +3d',
+};
+
+function laneBrands() { return LANE_BRANDS[lane]; }
+function intentSends(id) { let n = 0; for (const b of laneBrands()) n += (S.sends7d[`${id}|${b}`] || 0); return n; }
+function intentHeld(id) { return S.flags.filter(f => f.status === 'open' && f.heldIntent && f.heldIntent.startsWith(id)).length; }
+function intentSilent(id) { return laneBrands().some(b => S.matrix[`${id}|${b}`] === 'live' && S.sends7d[`${id}|${b}`] === 0); }
+function trustOf(id) {
+  const st = S.stats[id]; if (!st) return null;
+  const n = st.unedited + st.edited; if (!n) return null;
+  return { pct: Math.round(100 * st.unedited / n), n };
+}
+
+function nodeHTML(r) {
+  const sends = intentSends(r.id), held = intentHeld(r.id), silent = intentSilent(r.id), tr = trustOf(r.id);
+  const cls = ['node']; if (r.status !== 'live') cls.push('draftnode'); if (r.edited) cls.push('edited'); if (silent) cls.push('silent');
+  return `<div class="${cls.join(' ')}" data-node="${esc(r.id)}" role="button" tabindex="0">
+    ${r.edited ? '<span class="editedtag">edited by Katie</span>' : ''}
+    <div class="n-top"><span class="msgid">${esc(r.id)}</span><span class="n-name">${esc(r.name)}</span><span class="n-status ${r.status}">${r.status === 'new' ? 'new draft' : r.status}</span></div>
+    <div class="n-when">${esc(r.when)}</div>
+    <div class="n-copy">${esc(r.copy || 'No copy yet')}</div>
+    <div class="n-stats">
+      ${r.status === 'live' ? `<span><b>${sends}</b> sends · 7d</span>` : '<span>not firing yet</span>'}
+      ${held ? `<span class="held">◐ ${held} held</span>` : ''}
+      ${silent ? '<span class="silentchip">! silent for an active brand</span>' : ''}
+      ${tr ? `<span class="trustchip">${tr.pct}% unedited</span>` : ''}
+    </div>
+  </div>`;
+}
+const wireHTML = label => `<div class="wire ${label && label.length > 18 ? 'long' : ''}">${label ? `<span class="elabel">${esc(label)}</span>` : ''}</div>`;
+
+function render() {
+  const rows = S.ladders[lane];
+  const trunk = $('#trunk');
+  let html = `<div class="trigger"><span class="zap">⚡</span>${lane === 'product' ? 'Creator enters a product collab' : 'Creator enters a local collab'}</div>`;
+  let i = 0;
+  while (i < rows.length) {
+    const r = rows[i];
+    if (r.status === 'branch') {
+      // branch point -> collect the indent-2 rows that follow
+      const branches = [];
+      let j = i + 1;
+      while (j < rows.length && rows[j].indent === 2) { branches.push(rows[j]); j++; }
+      html += wireHTML('content submitted · review');
+      html += `<div class="branchpoint">${esc(r.name.replace(':', ''))}</div>`;
+      const N = branches.length || 1;
+      const xs = branches.map((_, k) => Math.round(900 * (k + 1) / (N + 1)));
+      html += `<div class="fan"><svg viewBox="0 0 900 56" preserveAspectRatio="none">${xs.map(x => `<path d="M450,0 C450,34 ${x},22 ${x},56"/>`).join('')}</svg>
+        ${branches.map((b, k) => `<span class="flabel" style="left:${Math.round(100 * (k + 1) / (N + 1))}%; transform:translateX(-50%); top:18px;">${esc(EDGE[b.id] || b.when || 'path')}</span>`).join('')}</div>`;
+      html += `<div class="branches">${branches.map(b => `<div class="branchcol">${nodeHTML(b)}</div>`).join('')}</div>`;
+      html += `<div class="merge" style="width:100%;max-width:900px;"><svg viewBox="0 0 900 44" preserveAspectRatio="none">${xs.map(x => `<path d="M${x},0 C${x},28 450,16 450,44"/>`).join('')}</svg></div>`;
+      i = j;
+      continue;
+    }
+    html += wireHTML(EDGE[r.id] || (r.when ? r.when.split('·')[0].trim() : ''));
+    html += nodeHTML(r);
+    i++;
+  }
+  html += wireHTML('') + `<div class="trigger" style="background:linear-gradient(135deg,var(--green),#1f8a68);">✓ collab complete · wrap-up</div>`;
+  trunk.innerHTML = html;
+  trunk.querySelectorAll('[data-node]').forEach(n => {
+    n.addEventListener('click', () => openPanel(n.dataset.node));
+    n.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(n.dataset.node); } });
+  });
+}
+
+function openPanel(id) {
+  const r = S.ladders[lane].find(x => x.id === id); if (!r) return;
+  document.querySelectorAll('.node').forEach(n => n.classList.toggle('selected', n.dataset.node === id));
+  $('#p-title').innerHTML = `<span class="msgid">${esc(r.id)}</span>${esc(r.name)}`;
+  const sends = S.messages.filter(m => m.intent === id).sort((a, b) => b.ts.localeCompare(a.ts)).slice(0, 3);
+  const brandRows = laneBrands().map(b => {
+    const key = `${id}|${b}`; const st = S.matrix[key] || 'off'; const n = S.sends7d[key];
+    const silent = st === 'live' && n === 0;
+    const label = silent ? '! silent' : st;
+    return `<tr><td>${esc(b)}</td><td class="cell-${silent ? 'err' : st}">${label}${(st === 'live' && n) ? ' · ' + n : ''}</td></tr>`;
+  }).join('');
+  $('#p-body').innerHTML = `
+    <div class="p-sec">Copy</div><div class="p-copy">${esc(r.copy || 'No copy yet')}</div>
+    <div class="p-when">${esc(r.when)}${r.edited ? ' · <b style="color:var(--accent);">edited by Katie</b>' : ''}</div>
+    <div class="p-sec">Per brand · 7 days</div><div class="p-brands"><table>${brandRows}</table></div>
+    <div class="p-sec">Last sends through this node</div>
+    ${sends.length ? sends.map(m => {
+      const c = SEED.creators.find(x => x.id === m.creatorId);
+      return `<div class="p-send"><div class="who">${esc(c ? c.name : m.creatorId)} · ${esc(m.t)}${m.meta ? ' · ' + esc(m.meta) : ''}</div><div class="body">${esc(m.body)}</div></div>`;
+    }).join('') : '<div class="p-none">No sends of this message in the demo data yet.</div>'}
+    <div class="p-sec">Change it</div>
+    <div class="p-none">Copy edits and pauses happen in the <a href="index.html" style="color:var(--accent);font-weight:700;">console</a>; the map re-draws from the same data.</div>`;
+  $('#panel').hidden = false; $('#scrim').hidden = false;
+}
+function closePanel() { $('#panel').hidden = true; $('#scrim').hidden = true; document.querySelectorAll('.node.selected').forEach(n => n.classList.remove('selected')); }
+
+document.querySelectorAll('.segbtn').forEach(b => b.addEventListener('click', () => {
+  lane = b.dataset.lane;
+  document.querySelectorAll('.segbtn').forEach(x => x.classList.toggle('active', x === b));
+  closePanel(); render();
+}));
+$('#p-close').addEventListener('click', closePanel);
+$('#scrim').addEventListener('click', closePanel);
+render();
+</script>
+</body>
+</html>
