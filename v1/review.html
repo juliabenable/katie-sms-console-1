@@ -210,7 +210,7 @@ const MISSING = [
   "key": "accept-confirm",
   "fork": "invite",
   "lane": "product",
-  "after": "MSG-02",
+  "after": "MSG-02b",
   "nm": "Accepted confirmation",
   "when": "on accept · instant",
   "copy": "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
@@ -220,7 +220,7 @@ const MISSING = [
   "key": "invite-expiry",
   "fork": "invite",
   "lane": "product",
-  "after": "MSG-02",
+  "after": "MSG-02b",
   "nm": "Invite expiry warning",
   "when": "invite window minus 6h, no response",
   "copy": "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
@@ -230,7 +230,7 @@ const MISSING = [
   "key": "spot-opened",
   "fork": "invite",
   "lane": "product",
-  "after": "MSG-02",
+  "after": "MSG-02b",
   "nm": "Spot opened re-offer",
   "when": "waitlisted creator, spot frees up",
   "copy": "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
@@ -240,7 +240,7 @@ const MISSING = [
   "key": "decline-ack",
   "fork": "invite",
   "lane": "product",
-  "after": "MSG-02",
+  "after": "MSG-02b",
   "nm": "Decline acknowledgment",
   "when": "on decline, portal or by text",
   "copy": "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
@@ -265,16 +265,6 @@ const MISSING = [
   "when": "carrier exception or no scan movement in 4d",
   "copy": "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
   "pri": null
- },
- {
-  "key": "due-today",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-06",
-  "nm": "Draft due today",
-  "when": "draft due date, morning of",
-  "copy": "today's the day {name}! your {brand} draft is due tonight. drop it in the portal and i'll get it reviewed fast, need anything from me?",
-  "pri": "asked for"
  },
  {
   "key": "overdue-d1",
@@ -330,7 +320,7 @@ const MISSING = [
   "key": "draft-received",
   "fork": "product",
   "lane": "product",
-  "after": "MSG-06",
+  "after": "MSG-06c",
   "nm": "Draft received",
   "when": "on draft upload · instant",
   "copy": "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
@@ -437,6 +427,17 @@ const MISSING = [
   "pri": null
  },
  {
+  "key": "payment-method-missing",
+  "fork": "money",
+  "lane": null,
+  "after": null,
+  "nm": "Payment blocked, no PayPal or Venmo",
+  "when": "paid campaign ready to pay, no method on file · stops once they add one",
+  "copy": "Hey {name}! Your {amount} payment for the {brand} collab is ready. Can you add your Venmo or PayPal using this link? Thanks! We'll get it paid once it's added. {link}",
+  "pri": null,
+  "status": "live"
+ },
+ {
   "key": "gift-card-sent",
   "fork": "money",
   "lane": null,
@@ -452,9 +453,10 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Payment sent",
-  "when": "paid campaigns, on payout",
-  "copy": "just sent your {amount} to your paypal!! should land any minute. lmk if it doesn't and i'll chase it",
-  "pri": null
+  "when": "on payout sent via PayPal or Venmo",
+  "copy": "Hey {name}, your {amount} payment for the {brand} collab was just sent to your {method}! It can take a few minutes to show up. Thank you for working with us — reply here if anything looks off.",
+  "pri": null,
+  "status": "live"
  },
  {
   "key": "payment-failed",
@@ -520,7 +522,7 @@ const MISSING = [
   "key": "brand-reviewing",
   "fork": "other",
   "lane": "product",
-  "after": "MSG-06",
+  "after": "MSG-06c",
   "nm": "Brand is reviewing",
   "when": "brand-review fork, on submit",
   "copy": "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
@@ -570,7 +572,8 @@ const NOTES = {
  "final-link": "The posted-but-never-submitted case.",
  "wrap-up": "Sets up the banked-campaign re-invite. Celebration is the retention move.",
  "gift-card-sent": "Katie texts this by hand today (the gift-card thread).",
- "payment-sent": "Replaces the manual Venmo/PayPal back-and-forth.",
+ "payment-sent": "Already sends, in the production wording. Note the long dash, which is ours to fix.",
+ "payment-method-missing": "Already sends. It was missing from this study, not from the product.",
  "payment-failed": "Volume knob down, keep the today-promise. Closes the failed-payout loop.",
  "affiliate-link": "The link-sharing workstream's missing voice. Benefit first, then the placement coaching.",
  "first-sale": "The Aug 6 decision ($50 first tracked sale), finally with a delivery mechanism.",
@@ -581,7 +584,6 @@ const NOTES = {
  "moderated-feedback": "Notes go out in creator-friendly language. The translation fork made audible.",
  "collective-accepted": "Tony sends versions of this by hand today; his register, verbatim energy.",
  "banked-reinvite": "The \"we hold one campaign for you\" model, as one text with a yes-able question.",
- "due-today": "MSG-06 is one row covering minus 3d, minus 1d and the due day, so on the day itself it reads \"due in 0 days\". This is the day-of text.",
  "overdue-d1": "Step one of a real ladder. Assumes something got in the way, and pays for the same-day fix.",
  "overdue-d2": "A yes-or-no question, not a third nudge. Repeating \"your content is overdue\" is exactly what makes creators angry.",
  "overdue-d4": "First step that names a consequence, and the first that goes out on two channels.",
@@ -653,7 +655,7 @@ function buildDeck() {
     for (const m of MISSING) {
       if (m.lane === lane && !added.has(m.key)) (pendingByAfter[m.after] = pendingByAfter[m.after] || []).push(m);
     }
-    const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
+    const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
     for (const r of rows) {
       if (r.status === "branch") { items.push({ kind: "branch", label: r.name }); continue; }
       items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status, note: null, pri: null });
@@ -664,14 +666,14 @@ function buildDeck() {
     }
     items.push(...customFor(lane));
   }
-  items.push({ kind: "sect", title: "Rewards and money", sub: "no ladder exists yet, these five are the lane", section: "money" });
+  items.push({ kind: "sect", title: "Rewards and money", sub: "two of these send today, the rest do not exist", section: "money" });
   for (const m of MISSING.filter(x => x.fork === "money")) {
-    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
   }
   items.push(...customFor("money"));
   items.push({ kind: "sect", title: "Collective and beyond", sub: "no ladder yet", section: "other" });
   for (const m of MISSING.filter(x => x.fork === "other" && !x.lane)) {
-    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
   }
   items.push(...customFor("other"));
   return items;

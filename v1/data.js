@@ -893,23 +893,31 @@ const SEED = {
    {
     "id": "MSG-01",
     "name": "Portal invite",
-    "when": "on brand invite · +2h delay · link in 2nd text",
-    "copy": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions!",
+    "when": "program invite +24h, if not in program yet",
+    "copy": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions! https://benable.com/brand-collabs/invite",
     "status": "live",
     "indent": 0
    },
    {
     "id": "MSG-02",
     "name": "New collab invite",
-    "when": "on campaign invite · 24h response window",
-    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward!",
+    "when": "campaign invite released +2h, if no response",
+    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward! https://benable.com/brand-collabs/invite",
+    "status": "live",
+    "indent": 0
+   },
+   {
+    "id": "MSG-02b",
+    "name": "Campaign invite, final warning",
+    "when": "campaign invite released +26h, still no response",
+    "copy": "Hi {name}, it's Katie from Benable! We sent you a new collab opportunity on Benable but haven't heard back from you. If you don't accept or reject the campaign in the next 12 hours using the link below, we will have to give your spot to someone else. The brand hand-picked you and is super excited to have you participate so we hope you consider! https://benable.com/brand-collabs/invite",
     "status": "live",
     "indent": 0
    },
    {
     "id": "MSG-03",
     "name": "Choose your product",
-    "when": "on accept, if product not chosen · +1d nudge",
+    "when": "on accept, if product not chosen · no automation rule, drafted by hand",
     "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks!",
     "status": "live",
     "indent": 0
@@ -917,24 +925,40 @@ const SEED = {
    {
     "id": "MSG-04",
     "name": "Shipped",
-    "when": "on fulfillment scan",
-    "copy": "Your {brand} package is on its way! 🎉 I will text you as soon as it is delivered.",
+    "when": "on fulfillment marked shipped",
+    "copy": "Hi {name}, it's Katie from Benable! Quick update: your gifted product from {brand} has shipped and will arrive very soon! Keep an eye out for when the package arrives and let me know once it does. Thanks! Can't wait for you to try out the product.",
     "status": "live",
     "indent": 0
    },
    {
     "id": "MSG-05",
     "name": "Delivered",
-    "when": "on delivery scan · draft clock starts (10d)",
-    "copy": "Your {brand} package was delivered! 🎉 You have 10 days to upload your draft to the portal. Due {date}.",
+    "when": "on fulfillment marked delivered · draft clock starts (1 week)",
+    "copy": "Hi {name}, it's Katie from Benable! Exciting news, your {brand} gifted product was delivered! Please start creating your content, and submit it for review in the portal within a week! Thanks and lmk if you have any questions. https://benable.com/brand-collabs/invite",
     "status": "live",
     "indent": 0
    },
    {
     "id": "MSG-06",
-    "name": "Draft reminders",
-    "when": "draft due minus 3d, minus 1d, due day",
-    "copy": "Hi {name}, friendly nudge! Your {brand} draft is due in {n} days. Need anything from us?",
+    "name": "Content due in 3 days",
+    "when": "content due minus 3d, if not submitted",
+    "copy": "Hey {name}, hope you're doing well! Quick reminder that your {brand} content is due {date}. Please submit it in the Benable Portal as soon as you can so it can be reviewed prior to you posting on your socials. Can you respond/like this message so I know you've seen it? Thanks, and let me know if you have any questions about the content! https://benable.com/brand-collabs/invite",
+    "status": "live",
+    "indent": 0
+   },
+   {
+    "id": "MSG-06b",
+    "name": "Content due tomorrow",
+    "when": "content due minus 1d, if not submitted",
+    "copy": "Hey {name}, checking in! Your content for {brand} must be submitted to the portal for review by tomorrow at the latest! After it's reviewed, you'll also need to post to your socials by the deadline. Can you respond/like this message so I know you've seen it? Thanks, and let me know if you have any questions about the content! https://benable.com/brand-collabs/invite",
+    "status": "live",
+    "indent": 0
+   },
+   {
+    "id": "MSG-06c",
+    "name": "Content due today",
+    "when": "content due date, if not submitted",
+    "copy": "Hey {name}, your content for {brand} must be submitted to the portal for review TODAY. It still needs to be reviewed by our team so please submit ASAP so that we can make sure you go live on your socials today as well. Please respond to this text once you get it with an update. https://benable.com/brand-collabs/invite",
     "status": "live",
     "indent": 0
    },
@@ -965,7 +989,7 @@ const SEED = {
    {
     "id": "MSG-11b",
     "name": "Feedback given",
-    "when": "folds reviewer notes into the text",
+    "when": "folds reviewer notes into the text · no automation rule, drafted by hand",
     "copy": "Hi {name}! Following up on your {brand} collab. We sent feedback and still need your final posted link submitted in the Benable Portal. Can you please post and submit the final link today? Let me know if you're running into any issues.",
     "status": "live",
     "indent": 2
@@ -983,7 +1007,7 @@ const SEED = {
    {
     "id": "MSG-L1",
     "name": "Visit invite",
-    "when": "on campaign invite",
+    "when": "on campaign invite · no automation rule, drafted by hand",
     "copy": "Hey {name}! You have a new local collab with {brand}. Accept in the portal and email them to set up your visit date.",
     "status": "live",
     "indent": 0
@@ -991,7 +1015,7 @@ const SEED = {
    {
     "id": "MSG-L2",
     "name": "Visit follow-up",
-    "when": "accepted, no visit booked · +3d",
+    "when": "accepted, no visit booked · +3d · no automation rule, drafted by hand",
     "copy": "Hi {name}! Following up, did you get a chance to email {brand} to set up your visit?",
     "status": "live",
     "indent": 0

@@ -135,7 +135,7 @@ h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2p
   <div class="strip" id="fork-product"></div>
 
   <h2>Rewards and money · gift card and paid</h2>
-  <p class="secsub">No ladder exists for this lane at all yet. These five texts are the lane.</p>
+  <p class="secsub">Two of these already send today. The other four do not exist.</p>
   <div class="strip" id="fork-money"></div>
 
   <h2>Local collab · visits</h2>
@@ -152,7 +152,7 @@ h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2p
     <li><b>Affiliate link + first sale.</b> <span class="ev">The Aug 6 share-incentives decision ($50 first tracked sale) has no SMS carrying it; this is the link-sharing workstream's voice.</span></li>
     <li><b>Visit day-before reminder.</b> <span class="ev">The local fork's worst hole; today it is a 10-email thread Katie runs by hand.</span></li>
   </ol>
-  <p class="secsub" style="margin-top:10px;">Separate from the five: the thirteen texts marked <b>★ asked for</b> are the deadline ladders, and there are two clocks, not one. <b>The draft clock</b> has MSG-06 as a single row covering minus 3d, minus 1d and the due day (so on the day it reads "due in 0 days"), then MSG-08 as one overdue text, then MSG-13, which is still a placeholder reading "escalating sequence". <b>The live-post clock</b> has nothing at all: the approval text lands up to three days before the post is due and then silence, including when a creator we already approved never goes live. Each clock now runs the same shape: a day-before nudge where one is missing, a day-of text, then day 1, 2, 4, 6 and a close-out at day 9. A creator can be late on either clock independently, and being late on the second one is worse, because the work is done and passed review.</p></div>
+  <p class="secsub" style="margin-top:10px;">Separate from the five: the twelve texts marked <b>★ asked for</b> are the deadline ladders, and there are two clocks, not one. <b>The draft clock</b> is covered right up to the deadline (three separate rules at minus 3d, minus 1d and the due day, all with real copy), and then it stops: MSG-08 is one overdue text and MSG-13 is still a placeholder reading "escalating sequence". <b>The live-post clock</b> has nothing at all: the approval text lands up to three days before the post is due and then silence, including when a creator we already approved never goes live. Each clock now runs the same shape past the deadline: day 1, 2, 4, 6 and a close-out at day 9, with the live-post clock also getting the day-before and day-of texts it never had. A creator can be late on either clock independently, and being late on the second one is worse, because the work is done and passed review.</p></div>
 
   <div class="lean"><b>How to use this page.</b> "Add to ladder" writes the draft into the console's ladder (and the flow map) as a new-draft row, same as if Katie typed it, so you can walk Brian through the ladder with the gaps already filled. Copy lives in Tony's register; when a text should sound like Katie instead (the caring ones: product problems, feedback delivery), say so and I'll do a Katie-voice pass. Nothing here fires anywhere; these are drafts for the master copy doc.</div>
 </div>
@@ -197,16 +197,16 @@ const TREE = {
   invite: [
     { st: 'live', nm: 'Portal invite', why: 'MSG-01, fires on brand invite' },
     { st: 'live', nm: 'New collab invite, 24h window', why: 'MSG-02' },
-    { st: 'missing', key: 'accept-confirm', lane: 'product', after: 'MSG-02', nm: 'Accepted confirmation', when: 'on accept · instant', pri: 'top 5',
+    { st: 'missing', key: 'accept-confirm', lane: 'product', after: 'MSG-02b', nm: 'Accepted confirmation', when: 'on accept · instant', pri: 'top 5',
       copy: "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
       note: "Katie's highest-volume manual text today. Reciprocity close." },
-    { st: 'missing', key: 'invite-expiry', lane: 'product', after: 'MSG-02', nm: 'Invite expiry warning', when: 'invite window minus 6h, no response',
+    { st: 'missing', key: 'invite-expiry', lane: 'product', after: 'MSG-02b', nm: 'Invite expiry warning', when: 'invite window minus 6h, no response',
       copy: "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
       note: 'Expiry is real here, so the urgency is honest.' },
-    { st: 'missing', key: 'spot-opened', lane: 'product', after: 'MSG-02', nm: 'Spot opened re-offer', when: 'waitlisted creator, spot frees up',
+    { st: 'missing', key: 'spot-opened', lane: 'product', after: 'MSG-02b', nm: 'Spot opened re-offer', when: 'waitlisted creator, spot frees up',
       copy: "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
       note: "Pairs with the rolling-invite workstream (Des's manual routine)." },
-    { st: 'missing', key: 'decline-ack', lane: 'product', after: 'MSG-02', nm: 'Decline acknowledgment', when: 'on decline, portal or by text',
+    { st: 'missing', key: 'decline-ack', lane: 'product', after: 'MSG-02b', nm: 'Decline acknowledgment', when: 'on decline, portal or by text',
       copy: "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
       note: 'Also the reply for the decline-by-text flag. Reply-bait keeps the relationship warm.' },
   ],
@@ -220,9 +220,6 @@ const TREE = {
       copy: "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
       note: 'Volume knob down. The promise is Tony; the calm is deliberate.' },
     { st: 'live', nm: 'Draft reminders', why: 'MSG-06, due minus 3d / 1d / due day' },
-    { st: 'missing', key: 'due-today', lane: 'product', after: 'MSG-06', nm: 'Draft due today', when: 'draft due date, morning of', pri: 'asked for',
-      copy: "today's the day {name}! your {brand} draft is due tonight. drop it in the portal and i'll get it reviewed fast, need anything from me?",
-      note: 'MSG-06 is one row covering minus 3d, minus 1d and the due day, so on the day itself it reads "due in 0 days". This is the day-of text.' },
     { st: 'progress', nm: 'Missed deadline + overdue ladder', why: 'MSG-08, MSG-13, Katie drafting this week' },
     { st: 'missing', key: 'overdue-d1', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 1', when: 'draft due +1d · text', pri: 'asked for',
       copy: "hey {name}, your {brand} draft was due yesterday! no stress, things come up. can you get it in today? if you send it today i'll push it to the front of the review queue",
@@ -239,7 +236,7 @@ const TREE = {
     { st: 'missing', key: 'overdue-final', lane: 'product', after: 'MSG-08', nm: 'Closed out', when: 'draft due +9d, nothing received · text and email', pri: 'asked for',
       copy: "closing out your {brand} collab today {name}, no hard feelings at all! if you want back in on the next round just reply and i'll keep you on the list",
       note: 'Ends the ladder instead of letting it run forever. This is what the MSG-13 placeholder becomes, and the hand-off into the ghosting flow.' },
-    { st: 'missing', key: 'draft-received', lane: 'product', after: 'MSG-06', nm: 'Draft received', when: 'on draft upload · instant', pri: 'top 5',
+    { st: 'missing', key: 'draft-received', lane: 'product', after: 'MSG-06c', nm: 'Draft received', when: 'on draft upload · instant', pri: 'top 5',
       copy: "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
       note: 'Kills the "I can\'t see my submitted draft" call cluster. The single highest-trust text we can add.' },
     { st: 'progress', nm: 'Approved / feedback branch', why: 'MSG-11a, MSG-11b, being wired this week' },
@@ -275,12 +272,15 @@ const TREE = {
       note: 'Sets up the banked-campaign re-invite. Celebration is the retention move.' },
   ],
   money: [
+    { st: 'missing', live: true, key: 'payment-method-missing', lane: null, nm: 'Payment blocked, no PayPal or Venmo', when: 'paid campaign ready to pay, no method on file · stops once they add one',
+      copy: "Hey {name}! Your {amount} payment for the {brand} collab is ready. Can you add your Venmo or PayPal using this link? Thanks! We'll get it paid once it's added. {link}",
+      note: 'Already sends. It was missing from this study, not from the product.' },
     { st: 'missing', key: 'gift-card-sent', lane: null, nm: 'Gift card sent', when: 'gift-card reward campaigns, on send',
       copy: "your {amount} {brand} gift card just landed in your email!! check spam if you don't see it. lmk when you've got it?",
       note: 'Katie texts this by hand today (the Target gift-card thread).' },
-    { st: 'missing', key: 'payment-sent', lane: null, nm: 'Payment sent', when: 'paid campaigns, on payout',
-      copy: "just sent your {amount} to your paypal!! should land any minute. lmk if it doesn't and i'll chase it",
-      note: 'Replaces the manual Venmo/PayPal back-and-forth in Ana\'s thread.' },
+    { st: 'missing', live: true, key: 'payment-sent', lane: null, nm: 'Payment sent', when: 'on payout sent via PayPal or Venmo',
+      copy: "Hey {name}, your {amount} payment for the {brand} collab was just sent to your {method}! It can take a few minutes to show up. Thank you for working with us — reply here if anything looks off.",
+      note: 'Already sends, in the production wording. Note the long dash, which is ours to fix.' },
     { st: 'missing', key: 'payment-failed', lane: null, nm: 'Payment failed', when: 'payout enters failed state', pri: 'top 5',
       copy: "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
       note: 'Volume knob down, but keep the today-promise. Closes the failed-payout loop.' },
@@ -305,7 +305,7 @@ const TREE = {
     { st: 'progress', nm: 'Post-visit content reminder', why: 'MSG-L3, draft' },
   ],
   other: [
-    { st: 'missing', key: 'brand-reviewing', lane: 'product', after: 'MSG-06', nm: 'Brand is reviewing', when: 'brand-review fork, on submit',
+    { st: 'missing', key: 'brand-reviewing', lane: 'product', after: 'MSG-06c', nm: 'Brand is reviewing', when: 'brand-review fork, on submit',
       copy: "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
       note: 'The new fork\'s status text; the same promise pattern as draft-received.' },
     { st: 'missing', key: 'moderated-feedback', lane: 'product', after: 'MSG-11b', nm: 'Brand feedback, translated', when: 'brand notes returned · put into creator-friendly language',
