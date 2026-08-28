@@ -152,7 +152,7 @@ h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2p
     <li><b>Affiliate link + first sale.</b> <span class="ev">The Aug 6 share-incentives decision ($50 first tracked sale) has no SMS carrying it; this is the link-sharing workstream's voice.</span></li>
     <li><b>Visit day-before reminder.</b> <span class="ev">The local fork's worst hole; today it is a 10-email thread Katie runs by hand.</span></li>
   </ol>
-  <p class="secsub" style="margin-top:10px;">Separate from the five: the seven texts marked <b>★ asked for</b> are the past-deadline ladder Julia called out. Today MSG-08 is one overdue text and MSG-13 is a placeholder reading "escalating sequence", so a creator who misses the draft date gets nudged once and then nothing. Those seven turn it into day 1, 2, 4, 6 and a close-out, plus the day-of text and the approved-but-never-posted chase on the second clock.</p></div>
+  <p class="secsub" style="margin-top:10px;">Separate from the five: the thirteen texts marked <b>★ asked for</b> are the deadline ladders, and there are two clocks, not one. <b>The draft clock</b> has MSG-06 as a single row covering minus 3d, minus 1d and the due day (so on the day it reads "due in 0 days"), then MSG-08 as one overdue text, then MSG-13, which is still a placeholder reading "escalating sequence". <b>The live-post clock</b> has nothing at all: the approval text lands up to three days before the post is due and then silence, including when a creator we already approved never goes live. Each clock now runs the same shape: a day-before nudge where one is missing, a day-of text, then day 1, 2, 4, 6 and a close-out at day 9. A creator can be late on either clock independently, and being late on the second one is worse, because the work is done and passed review.</p></div>
 
   <div class="lean"><b>How to use this page.</b> "Add to ladder" writes the draft into the console's ladder (and the flow map) as a new-draft row, same as if Katie typed it, so you can walk Brian through the ladder with the gaps already filled. Copy lives in Tony's register; when a text should sound like Katie instead (the caring ones: product problems, feedback delivery), say so and I'll do a Katie-voice pass. Nothing here fires anywhere; these are drafts for the master copy doc.</div>
 </div>
@@ -243,9 +243,27 @@ const TREE = {
       copy: "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
       note: 'Kills the "I can\'t see my submitted draft" call cluster. The single highest-trust text we can add.' },
     { st: 'progress', nm: 'Approved / feedback branch', why: 'MSG-11a, MSG-11b, being wired this week' },
-    { st: 'missing', key: 'post-overdue', lane: 'product', after: 'MSG-11a', nm: 'Approved but not posted', when: 'post due +2d, nothing live · text', pri: 'asked for',
-      copy: "hey {name}! your {brand} content is approved and just needs to go live. can you post today and drop the link in the portal? that's the last step and then you're wrapped",
-      note: 'The second clock has no chase at all. Approved-but-never-posted is a different failure from never-submitted.' },
+    { st: 'missing', key: 'post-tomorrow', lane: 'product', after: 'MSG-11a', nm: 'Post due tomorrow', when: 'post due minus 1d', pri: 'asked for',
+      copy: "heads up {name}, your {brand} post is due tomorrow! everything's approved so it's ready to go up. want me to resend the caption and tags?",
+      note: 'The approval text goes out up to three days earlier and then nothing reminds them. Offers the assets instead of just nudging.' },
+    { st: 'missing', key: 'post-today', lane: 'product', after: 'MSG-11a', nm: 'Post due today', when: 'post due date, morning of', pri: 'asked for',
+      copy: "today's the day {name}! your {brand} post goes live today. post it and drop the link in the portal, takes 30 seconds and then you're wrapped",
+      note: 'The day-of text on the second clock, the twin of draft due today.' },
+    { st: 'missing', key: 'post-overdue-d1', lane: 'product', after: 'MSG-11a', nm: 'Post overdue, day 1', when: 'post due +1d · text', pri: 'asked for',
+      copy: "hey {name}, your {brand} post was due yesterday! all good, it happens. can you get it up today? the link goes in the portal and that's you finished",
+      note: 'Same forgiving open as the draft ladder, and it names the one action left.' },
+    { st: 'missing', key: 'post-overdue-d2', lane: 'product', after: 'MSG-11a', nm: 'Post overdue, day 2', when: 'post due +2d · text', pri: 'asked for',
+      copy: "{name} is the post still happening? just need a yes or no! if you need a new date say the word and i'll move it, and if it's going up today even better",
+      note: 'Yes-or-no, not a repeat. Offers to move the date, which is the thing that actually unblocks people.' },
+    { st: 'missing', key: 'post-overdue-d4', lane: 'product', after: 'MSG-11a', nm: 'Post overdue, day 4', when: 'post due +4d · text and email', pri: 'asked for',
+      copy: "hi {name}, {brand} is watching for your post to go live. can you get it up by {date}? i'll let them know it's coming",
+      note: 'Names the brand and goes out on two channels. The brand really is waiting here, the content already passed review.' },
+    { st: 'missing', key: 'post-overdue-d6', lane: 'product', after: 'MSG-11a', nm: 'Post overdue, day 6', when: 'post due +6d · whichever channel they answer on', pri: 'asked for',
+      copy: "{name}, i need your {brand} post live by {date} to count it for the campaign. after that i have to close it out. if life got in the way tell me and i'll get you on the next one",
+      note: 'The real cut-off. Unlike the draft ladder the work is already done, so losing it at this step is the most wasteful outcome we have.' },
+    { st: 'missing', key: 'post-overdue-final', lane: 'product', after: 'MSG-11a', nm: 'Post never went live', when: 'post due +9d, nothing live · text and email', pri: 'asked for',
+      copy: "closing out your {brand} collab today {name}. your content was approved and we loved it so it's a shame to end here! reply any time and i'll get you on the next round",
+      note: 'Close-out for approved-but-never-live, which is a different ending from never-submitted: the content exists and passed review.' },
     { st: 'missing', key: 'resubmit-clock', lane: 'product', after: 'MSG-11b', nm: 'Revised draft reminder', when: 'feedback given, no resubmit in 2d',
       copy: "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
       note: 'The reciprocity move applied to revisions.' },
