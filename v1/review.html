@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Copy deck · Benable SMS</title>
+<title>SMS review · Benable</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
@@ -14,47 +14,73 @@
   --line: #E5E5E8; --card: #FFFFFF;
   --green: #2BAF87; --green-bg: #EFFBF7; --green-ink: #1a7a44;
   --amber: #E88E2C; --amber-bg: #FFF9F0; --amber-ink: #9a4a15;
-  --red: #E82C3F; --red-bg: #FFF1F1;
+  --red: #E82C3F; --red-bg: #FFF1F1; --red-ink: #a51524;
 }
 body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color: var(--ink); background: #F2F2F6; }
-.topbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-.back { font-size: 12px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
-.tb-title { font-weight: 800; font-size: 14.5px; letter-spacing: -.2px; }
-.tb-chip { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: #5B3FD1; background: var(--accent-soft); border-radius: 5px; padding: 2px 6px; }
+
+/* ---------- shell ---------- */
+.topbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 9px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.back { font-size: 13px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
+.tb-title { font-weight: 800; font-size: 14.5px; letter-spacing: -.2px; white-space: nowrap; }
 .tb-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-.changes { font-size: 11.5px; font-weight: 800; color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-soft); border-radius: 999px; padding: 3px 10px; }
-.sendbtn { font: inherit; font-size: 12px; font-weight: 800; border: none; border-radius: 9px; padding: 7px 13px; cursor: pointer; background: var(--accent); color: #fff; }
+.count { font-size: 11.5px; font-weight: 800; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+.count.decided { color: var(--green-ink); background: var(--green-bg); border: 1px solid #CBEEE0; }
+.count.rewrites { color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-soft); }
+.sendbtn { font: inherit; font-size: 12px; font-weight: 800; border: none; border-radius: 9px; padding: 7px 13px; cursor: pointer; background: var(--accent); color: #fff; white-space: nowrap; }
+.ghostbtn { font: inherit; font-size: 12px; font-weight: 800; border: 1px solid var(--line); border-radius: 9px; padding: 6px 12px; cursor: pointer; background: #fff; color: var(--ink-med); white-space: nowrap; }
+.ghostbtn:hover { border-color: var(--accent); color: var(--accent); }
 
-.deck { max-width: 520px; margin: 0 auto; padding: 18px 14px 90px; }
-.intro { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px; margin-bottom: 18px; font-size: 13.5px; line-height: 1.55; }
+.deck { max-width: 1040px; margin: 0 auto; padding: 16px 16px 100px; }
+.intro { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px; margin-bottom: 16px; font-size: 13.5px; line-height: 1.55; }
 .intro b { font-weight: 800; }
-.legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 9px; font-size: 10.5px; color: var(--ink-med); }
-.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; }
+.intro p + p { margin-top: 8px; }
+.introrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 11px; }
+.legend { display: flex; gap: 10px; flex-wrap: wrap; font-size: 10.5px; color: var(--ink-med); align-items: center; }
+.legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; vertical-align: -1px; }
+.chk { font-size: 11.5px; color: var(--ink-med); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-left: auto; }
 
-.sect { margin: 26px 0 10px; display: flex; align-items: baseline; gap: 8px; }
+.sect { margin: 24px 0 8px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .sect h2 { font-size: 15px; font-weight: 800; letter-spacing: -.2px; }
 .sect .sub { font-size: 11px; color: var(--ink-med); }
-.branchlbl { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--amber-ink); margin: 12px 0 4px; }
+.sect .addhere { margin-left: auto; font: inherit; font-size: 11px; font-weight: 800; border: 1px dashed var(--ink-subtle); background: none; color: var(--ink-med); border-radius: 8px; padding: 3px 10px; cursor: pointer; }
+.sect .addhere:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
+.branchlbl { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--amber-ink); margin: 12px 0 6px; }
 
-.item { margin-bottom: 14px; }
-.meta { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; padding: 0 2px; flex-wrap: wrap; }
+/* ---------- row ---------- */
+.item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 11px 13px 11px; margin-bottom: 9px; }
+.item.iscut { opacity: .5; }
+.item.isin { border-left: 3px solid var(--green); }
+.meta { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; flex-wrap: wrap; }
 .mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
-.mname { font-size: 11.5px; font-weight: 700; color: var(--ink-med); }
+.mname { font-size: 12.5px; font-weight: 800; }
+.whenl { font-size: 10.5px; color: var(--ink-subtle); cursor: text; border-bottom: 1px dotted var(--ink-subtle); }
+.whenl:hover { color: var(--accent); border-color: var(--accent); }
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
-.st.draft, .st.new { background: #ECECEF; color: #7F7F7F; }
+.st.draft { background: #ECECEF; color: #7F7F7F; }
 .st.missing { background: var(--red-bg); color: var(--red); }
-.st.rewritten { background: var(--accent-soft); color: #5B3FD1; }
-.bubblewrap { display: flex; justify-content: flex-end; }
-.bubble { background: var(--green); color: #fff; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14.5px; line-height: 1.45; max-width: 92%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; overflow-wrap: anywhere; }
-.bubble:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(43,175,135,.3); }
-.bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--red); }
-.bubble.rewrittenb { background: var(--accent); }
-.bubble.rewrittenb.missingb { background: var(--accent-bg); color: var(--ink); border-color: var(--accent); }
-.when { font-size: 10.5px; color: var(--ink-subtle); text-align: right; margin: 3px 4px 0 0; }
+.st.yours { background: var(--amber-bg); color: var(--amber-ink); }
+.pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 
-.editor { width: 100%; }
-.editor textarea { width: 100%; font: inherit; font-size: 14.5px; line-height: 1.45; border: 2px solid var(--accent); border-radius: 14px; padding: 10px 12px; background: #fff; resize: vertical; min-height: 74px; }
+/* ---------- the two columns ---------- */
+.colhead { position: sticky; top: 53px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: #F2F2F6; padding: 9px 15px 8px; margin-bottom: 2px; }
+.colhead span { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-med); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.cell { min-width: 0; }
+.cap { display: none; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-subtle); margin-bottom: 4px; }
+.bubble { background: var(--green); color: #fff; border-radius: 15px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--red); }
+.bubble.was { opacity: .45; }
+.rw { background: var(--accent); color: #fff; border-radius: 15px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.ghostcell { width: 100%; text-align: left; font: inherit; font-size: 13px; color: var(--ink-subtle); background: #FBFBFD; border: 1.5px dashed var(--line); border-radius: 15px; padding: 10px 13px; cursor: pointer; }
+.ghostcell:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+.ghostcell.flat { cursor: default; }
+.ghostcell.flat:hover { border-color: var(--line); color: var(--ink-subtle); background: #FBFBFD; }
+.cellbtns { display: flex; gap: 10px; margin-top: 6px; }
+.mini { font: inherit; font-size: 11px; font-weight: 800; border: none; background: none; color: var(--ink-med); cursor: pointer; padding: 2px 0; }
+.mini:hover { color: var(--accent); text-decoration: underline; }
+.mini.danger:hover { color: var(--red); }
+.editor textarea { width: 100%; font: inherit; font-size: 14px; line-height: 1.45; border: 2px solid var(--accent); border-radius: 14px; padding: 9px 12px; background: #fff; resize: vertical; min-height: 92px; }
 .editor textarea:focus-visible { outline: none; }
 .edmeta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .seg { font-size: 10.5px; color: var(--ink-med); }
@@ -64,48 +90,109 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .btn.save { background: var(--accent); color: #fff; }
 .btn.cancel { background: #ECECEF; color: var(--ink-med); }
 
+/* ---------- keep / cut strip under the row ---------- */
+.foot { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+.why { font-size: 11.5px; color: var(--ink-med); flex: 1 1 200px; min-width: 0; }
+.why em { font-style: normal; color: var(--ink-subtle); }
+.verdict { display: flex; gap: 4px; margin-left: auto; }
+.verdict button { font: inherit; font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #fff; color: var(--ink-med); border-radius: 8px; padding: 5px 14px; cursor: pointer; }
+.verdict button:hover { border-color: var(--ink-subtle); }
+.verdict button.on.in { background: var(--green-bg); border-color: var(--green); color: var(--green-ink); }
+.verdict button.on.later { background: var(--amber-bg); border-color: var(--amber); color: var(--amber-ink); }
+.verdict button.on.cut { background: var(--red-bg); border-color: var(--red); color: var(--red-ink); }
+.kn { width: 100%; font: inherit; font-size: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; margin-top: 8px; background: #fff; color: var(--ink); }
+.kn::placeholder { color: var(--ink-subtle); }
+.kn:focus-visible { outline: none; border-color: var(--accent); }
+
+/* ---------- sheets ---------- */
 .overlay { position: fixed; inset: 0; background: rgba(20,20,24,.4); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 18px; }
-.sheet { background: #fff; border-radius: 18px; padding: 20px; width: min(560px, 100%); max-height: 84vh; display: flex; flex-direction: column; gap: 12px; }
+.sheet { background: #fff; border-radius: 18px; padding: 20px; width: min(560px, 100%); max-height: 86vh; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
 .sheet h3 { font-size: 15.5px; font-weight: 800; }
-.sheet textarea { width: 100%; flex: 1; min-height: 240px; font: 12.5px/1.55 ui-monospace, SFMono-Regular, monospace; border: 1px solid var(--line); border-radius: 10px; padding: 10px; resize: none; }
+.sheet .hint { font-size: 12px; color: var(--ink-med); margin-top: -6px; }
+.sheet textarea#sheettext { width: 100%; flex: 1; min-height: 280px; font: 12.5px/1.55 ui-monospace, SFMono-Regular, monospace; border: 1px solid var(--line); border-radius: 10px; padding: 10px; resize: none; }
 .sheet .row { display: flex; gap: 8px; justify-content: flex-end; }
+.field { display: flex; flex-direction: column; gap: 4px; }
+.field label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-med); }
+.field input, .field select, .field textarea { font: inherit; font-size: 14px; border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; background: #fff; color: var(--ink); }
+.field textarea { min-height: 88px; resize: vertical; line-height: 1.45; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: none; border-color: var(--accent); }
 
 .toasts { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 70; display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .toast { background: #1A1D21; color: #fff; font-size: 12.5px; font-weight: 600; border-radius: 10px; padding: 9px 16px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+
+@media (max-width: 780px) {
+  .tb-title, .count.decided { display: none; }
+  .colhead { display: none; }
+  .cols { grid-template-columns: 1fr; gap: 8px; }
+  .cap { display: block; }
+  .verdict { margin-left: 0; width: 100%; }
+  .verdict button { flex: 1; }
+  .deck { padding: 14px 12px 100px; }
+}
 </style>
 </head>
 <body>
 
 <header class="topbar">
   <a class="back" href="../">←</a>
-  <span class="tb-title">Copy deck</span>
-  <span class="tb-chip">Tony's cut</span>
+  <span class="tb-title">SMS review</span>
   <div class="tb-right">
-    <span class="changes" id="changecount">0 changes</span>
+    <span class="count decided" id="kcount">0 of 35 decided</span>
+    <span class="count rewrites" id="tcount">0 rewrites</span>
+    <button class="ghostbtn" id="addtext">+ Add a text</button>
     <button class="sendbtn" id="sendpass">Send pass</button>
   </div>
 </header>
 
 <div class="deck">
   <div class="intro">
-    <b>Tony: scroll it like a thread.</b> Every text we send (or should send), in the order a creator lives it. Tap any bubble that reads weak, retype it, save. Your changes collect at the top; hit Send pass when you're done. Five minutes, whole system.
-    <div class="legend">
-      <span><i style="background:var(--green);"></i>sends today</span>
-      <span><i style="background:#C9C9CE;"></i>draft, this week</span>
-      <span><i style="background:#fff;border:1.5px dashed var(--red);"></i>missing, proposed</span>
-      <span><i style="background:var(--accent);"></i>your rewrite</span>
+    <p><b>Tony: left is what it says now, right is your version.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. The original stays put so you can see the swap.</p>
+    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey trigger line to fix when it fires. Anything we never thought of, add it with <b>+ Add a text</b>.</p>
+    <div class="introrow">
+      <div class="legend">
+        <span><i style="background:var(--green);"></i>sends today</span>
+        <span><i style="background:#C9C9CE;"></i>draft, this week</span>
+        <span><i style="background:#fff;border:1.5px dashed var(--red);"></i>missing, proposed</span>
+        <span><i style="background:var(--accent);"></i>rewritten</span>
+        <span><i style="background:var(--amber);"></i>added by you</span>
+      </div>
+      <label class="chk"><input type="checkbox" id="hidecut"> hide the cut ones</label>
+    </div>
+    <div class="introrow">
+      <button class="ghostbtn" id="keepall">Mark everything live as “in”</button>
     </div>
   </div>
+  <div class="colhead"><span>What it says now</span><span>Your version</span></div>
   <div id="deckbody"></div>
 </div>
 
 <div class="overlay" id="overlay" hidden>
   <div class="sheet">
-    <h3 id="sheettitle">Tony's pass</h3>
+    <h3 id="sheettitle">The pass</h3>
     <textarea id="sheettext" readonly></textarea>
     <div class="row">
       <button class="btn cancel" id="sheetclose">Close</button>
       <button class="btn save" id="sheetcopy">Copy for Julia</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="addoverlay" hidden>
+  <div class="sheet">
+    <h3 id="addtitle">Add a text</h3>
+    <p class="hint">A text we should be sending that is not on the list yet.</p>
+    <div class="field"><label for="f-nm">What is it called</label><input id="f-nm" placeholder="Wrong item shipped"></div>
+    <div class="field"><label for="f-when">When it fires</label><input id="f-when" placeholder="wrong variant flagged · same day"></div>
+    <div class="field"><label for="f-sect">Where it belongs</label><select id="f-sect">
+      <option value="product">Product collabs</option>
+      <option value="local">Local collabs</option>
+      <option value="money">Rewards and money</option>
+      <option value="other">Collective and beyond</option>
+    </select></div>
+    <div class="field"><label for="f-copy">Draft copy (optional)</label><textarea id="f-copy" placeholder="Leave it blank if you only know that the text should exist."></textarea></div>
+    <div class="row">
+      <button class="btn cancel" id="addcancel">Cancel</button>
+      <button class="btn save" id="addsave">Add it</button>
     </div>
   </div>
 </div>
@@ -337,6 +424,32 @@ const MISSING = [
   "pri": null
  }
 ];
+/* Why each proposed text exists. Shown under the row, next to the keep/cut call. */
+const NOTES = {
+ "accept-confirm": "Katie's highest-volume manual text today. Pure automation win.",
+ "invite-expiry": "Expiry is real here, so the urgency is honest.",
+ "spot-opened": "Pairs with the rolling-invite workstream (Des's manual routine).",
+ "decline-ack": "Also the reply for the decline-by-text flag. Keeps the relationship warm.",
+ "order-placed": "The duplicate-order lesson: confirm the order, catch wrong variants before a wrong \"shipped\".",
+ "shipping-problem": "Volume knob down. The promise is Tony; the calm is deliberate.",
+ "draft-received": "Kills the \"I can't see my submitted draft\" call cluster. The single highest-trust text we can add.",
+ "resubmit-clock": "The reciprocity move applied to revisions.",
+ "final-link": "The posted-but-never-submitted case.",
+ "wrap-up": "Sets up the banked-campaign re-invite. Celebration is the retention move.",
+ "gift-card-sent": "Katie texts this by hand today (the gift-card thread).",
+ "payment-sent": "Replaces the manual Venmo/PayPal back-and-forth.",
+ "payment-failed": "Volume knob down, keep the today-promise. Closes the failed-payout loop.",
+ "affiliate-link": "The link-sharing workstream's missing voice. Benefit first, then the placement coaching.",
+ "first-sale": "The Aug 6 decision ($50 first tracked sale), finally with a delivery mechanism.",
+ "visit-booked": "The booking study's one-tap confirm, as a text.",
+ "visit-tomorrow": "The local fork's worst hole; kills the 10-email thread.",
+ "visit-reschedule": "The travel-conflict case as a template: forgiving, then a scheduling question.",
+ "brand-reviewing": "The new fork's status text; the same promise pattern as draft-received.",
+ "moderated-feedback": "Notes go out in creator-friendly language. The translation fork made audible.",
+ "collective-accepted": "Tony sends versions of this by hand today; his register, verbatim energy.",
+ "banked-reinvite": "The \"we hold one campaign for you\" model, as one text with a yes-able question.",
+};
+
 const $ = s => document.querySelector(s);
 const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; $("#toasts").appendChild(t); setTimeout(() => t.remove(), 3200); }
@@ -358,90 +471,199 @@ function loadState() {
   };
 }
 let S = loadState();
-S.extraCopy = S.extraCopy || {};
-S.reviewEdits = S.reviewEdits || {};
+S.extraCopy = S.extraCopy || {};      // edited copy for proposed texts
+S.reviewEdits = S.reviewEdits || {};  // rewrites: { ref: {name, before, after, at} }
+S.verdicts = S.verdicts || {};        // keep/cut call: { ref: "in" | "later" | "cut" }
+S.katieNotes = S.katieNotes || {};    // note per text
+S.whenEdits = S.whenEdits || {};      // corrected trigger line
+S.customTexts = S.customTexts || [];  // texts added in this tool
 const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
+
+let editingRef = null;
 
 function segInfo(text) {
   const n = text.length;
-  const segs = n <= 160 ? 1 : Math.ceil(n / 153);
-  return { n, segs };
+  return { n, segs: n <= 160 ? 1 : Math.ceil(n / 153) };
 }
 
-/* Build the deck: ladder rows with not-yet-added missing texts interleaved, then no-lane sections. */
+/* ---------------------------------------------------------------
+   Every text in the order a creator lives it: the ladder rows,
+   the proposed texts slotted in where they would fire, the lanes
+   that have no ladder at all, then anything added in here.
+---------------------------------------------------------------- */
+function customFor(section) {
+  return S.customTexts.filter(c => c.section === section).map(c => ({
+    kind: "custom", key: c.key, name: c.nm, when: c.when, copy: c.copy, status: "yours", note: null, pri: null,
+  }));
+}
 function buildDeck() {
   const items = [];
   const laneTitles = { product: ["Product collabs", "invite through wrap-up"], local: ["Local collabs", "visits"] };
   for (const lane of ["product", "local"]) {
-    items.push({ kind: "sect", title: laneTitles[lane][0], sub: laneTitles[lane][1] });
+    items.push({ kind: "sect", title: laneTitles[lane][0], sub: laneTitles[lane][1], section: lane });
     const rows = S.ladders[lane];
     const added = new Set(rows.map(r => r.srcKey).filter(Boolean));
     const pendingByAfter = {};
     for (const m of MISSING) {
       if (m.lane === lane && !added.has(m.key)) (pendingByAfter[m.after] = pendingByAfter[m.after] || []).push(m);
     }
+    const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
     for (const r of rows) {
       if (r.status === "branch") { items.push({ kind: "branch", label: r.name }); continue; }
-      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status });
-      for (const m of (pendingByAfter[r.id] || [])) {
-        items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
-      }
+      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status, note: null, pri: null });
+      for (const m of (pendingByAfter[r.id] || [])) items.push(extra(m));
     }
     for (const [after, ms] of Object.entries(pendingByAfter)) {
-      if (!rows.some(r => r.id === after)) for (const m of ms) items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+      if (!rows.some(r => r.id === after)) for (const m of ms) items.push(extra(m));
     }
+    items.push(...customFor(lane));
   }
-  items.push({ kind: "sect", title: "Rewards and money", sub: "no ladder exists yet, these five are the lane" });
+  items.push({ kind: "sect", title: "Rewards and money", sub: "no ladder exists yet, these five are the lane", section: "money" });
   for (const m of MISSING.filter(x => x.fork === "money")) {
-    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
   }
-  items.push({ kind: "sect", title: "Collective and beyond", sub: "no ladder yet" });
+  items.push(...customFor("money"));
+  items.push({ kind: "sect", title: "Collective and beyond", sub: "no ladder yet", section: "other" });
   for (const m of MISSING.filter(x => x.fork === "other" && !x.lane)) {
-    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing" });
+    items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: "missing", note: NOTES[m.key], pri: m.pri });
   }
+  items.push(...customFor("other"));
   return items;
 }
 
-let editingRef = null;
+const refOf = it => it.kind === "ladder" ? it.id : it.key;
+const whenOf = it => S.whenEdits[refOf(it)] || it.when;
+const stLabel = st => st === "live" ? "live" : st === "missing" ? "missing" : st === "yours" ? "added by you" : "draft";
+const stClass = st => st === "live" ? "live" : st === "missing" ? "missing" : st === "yours" ? "yours" : "draft";
+const textRows = () => buildDeck().filter(i => i.kind === "ladder" || i.kind === "extra" || i.kind === "custom");
 
 function render() {
-  const body = $("#deckbody");
-  const items = buildDeck();
+  const hideCut = !!S.hideCut;
   let html = "";
-  for (const it of items) {
-    if (it.kind === "sect") { html += `<div class="sect"><h2>${esc(it.title)}</h2><span class="sub">${esc(it.sub)}</span></div>`; continue; }
-    if (it.kind === "branch") { html += `<div class="branchlbl">${esc(it.label)}</div>`; continue; }
-    const ref = it.kind === "ladder" ? it.id : it.key;
-    const rewritten = !!S.reviewEdits[ref];
-    const stLabel = rewritten ? "rewritten" : (it.status === "live" ? "live" : it.status === "missing" ? "missing" : it.status === "new" ? "new draft" : "draft");
-    const stCls = rewritten ? "rewritten" : (it.status === "live" ? "live" : it.status === "missing" ? "missing" : "draft");
-    const idLabel = it.kind === "ladder" ? it.id : "proposed";
-    const editingHere = editingRef === ref;
-    html += `<div class="item" data-ref="${esc(ref)}">
-      <div class="meta"><span class="mid">${esc(idLabel)}</span><span class="mname">${esc(it.name)}</span><span class="st ${stCls}">${stLabel}</span></div>`;
-    if (editingHere) {
-      html += `<div class="editor"><textarea id="edta">${esc(it.copy)}</textarea>
+  let pendingSect = null;
+  for (const it of buildDeck()) {
+    if (it.kind === "sect") { pendingSect = it; continue; }
+    if (it.kind === "branch") {
+      if (pendingSect) { html += sectHTML(pendingSect); pendingSect = null; }
+      html += `<div class="branchlbl">${esc(it.label)}</div>`;
+      continue;
+    }
+    const ref = refOf(it);
+    const v = S.verdicts[ref] || "";
+    if (v === "cut" && hideCut) continue;
+    if (pendingSect) { html += sectHTML(pendingSect); pendingSect = null; }
+
+    const edit = S.reviewEdits[ref];
+    const now = edit ? edit.before : it.copy;
+    const idLabel = it.kind === "ladder" ? it.id : it.kind === "custom" ? "yours" : "proposed";
+    const bcls = ["bubble"];
+    if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
+    if (edit) bcls.push("was");
+
+    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v === "in" ? "isin" : ""}" data-ref="${esc(ref)}">
+      <div class="meta">
+        <span class="mid">${esc(idLabel)}</span>
+        <span class="mname">${esc(it.name)}</span>
+        <span class="whenl" data-when="${esc(ref)}" title="Click to fix when it fires">${esc(whenOf(it))}</span>
+        ${it.pri ? `<span class="pri">★ ${esc(it.pri)}</span>` : ""}
+        <span class="st ${stClass(it.status)}">${stLabel(it.status)}</span>
+      </div>
+      <div class="cols">
+        <div class="cell">
+          <div class="cap">What it says now</div>
+          ${now ? `<div class="${bcls.join(" ")}">${esc(now)}</div>` : `<div class="ghostcell flat">No copy yet</div>`}
+        </div>
+        <div class="cell">
+          <div class="cap">Your version</div>`;
+    if (editingRef === ref) {
+      html += `<div class="editor"><textarea id="edta">${esc(edit ? edit.after : it.copy || "")}</textarea>
         <div class="edmeta"><span class="seg" id="segline"></span>
         <div class="edbtns"><button class="btn cancel" data-cancel>Cancel</button><button class="btn save" data-save="${esc(ref)}">Save</button></div></div></div>`;
+    } else if (edit) {
+      html += `<div class="rw">${esc(edit.after)}</div>
+        <div class="cellbtns"><button class="mini" data-edit="${esc(ref)}">Edit</button><button class="mini danger" data-revert="${esc(ref)}">Put the original back</button></div>`;
     } else {
-      const bcls = ["bubble"]; if (it.status === "missing") bcls.push("missingb"); if (rewritten) bcls.push("rewrittenb");
-      html += `<div class="bubblewrap"><div class="${bcls.join(" ")}" data-edit="${esc(ref)}" role="button" tabindex="0">${esc(it.copy)}</div></div>`;
+      html += `<button class="ghostcell" data-edit="${esc(ref)}">Rewrite this →</button>`;
     }
-    html += `<div class="when">${esc(it.when)}</div></div>`;
+    const why = it.note ? esc(it.note) : it.kind === "custom" ? "<em>Added in this review.</em>" : it.status === "live" ? "<em>Sending today.</em>" : "<em>Drafted, not live yet.</em>";
+    html += `</div></div>
+      <div class="foot">
+        <span class="why">${why}</span>
+        ${it.kind === "custom" ? `<button class="mini danger" data-del="${esc(ref)}">Remove</button>` : ""}
+        <div class="verdict">
+          <button class="in ${v === "in" ? "on" : ""}" data-v="in" data-ref="${esc(ref)}">In</button>
+          <button class="later ${v === "later" ? "on" : ""}" data-v="later" data-ref="${esc(ref)}">Later</button>
+          <button class="cut ${v === "cut" ? "on" : ""}" data-v="cut" data-ref="${esc(ref)}">Cut</button>
+        </div>
+      </div>
+      ${(v || S.katieNotes[ref]) ? `<input class="kn" data-note="${esc(ref)}" value="${esc(S.katieNotes[ref] || "")}" placeholder="Note for Julia (optional)">` : ""}
+    </div>`;
   }
-  body.innerHTML = html;
-  const count = Object.keys(S.reviewEdits).length;
-  $("#changecount").textContent = count + (count === 1 ? " change" : " changes");
+  $("#deckbody").innerHTML = html;
 
-  body.querySelectorAll("[data-edit]").forEach(b => {
-    const open = () => { editingRef = b.dataset.edit; render(); const ta = $("#edta"); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); updateSeg(); };
-    b.addEventListener("click", open);
-    b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
-  });
+  const total = textRows().length;
+  const decided = textRows().filter(i => S.verdicts[refOf(i)]).length;
+  const changes = Object.keys(S.reviewEdits).length;
+  $("#kcount").textContent = decided + " of " + total + " decided";
+  $("#tcount").textContent = changes + (changes === 1 ? " rewrite" : " rewrites");
+  $("#hidecut").checked = !!S.hideCut;
+  wire();
+}
+function sectHTML(it) {
+  return `<div class="sect"><h2>${esc(it.title)}</h2><span class="sub">${esc(it.sub)}</span><button class="addhere" data-addhere="${esc(it.section)}">+ Add a text here</button></div>`;
+}
+
+function wire() {
+  const root = $("#deckbody");
+  root.querySelectorAll("[data-when]").forEach(el => el.addEventListener("click", () => editWhen(el)));
+  root.querySelectorAll("[data-addhere]").forEach(b => b.addEventListener("click", () => openAdd(b.dataset.addhere)));
+  root.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => {
+    const ref = b.dataset.ref;
+    if (S.verdicts[ref] === b.dataset.v) delete S.verdicts[ref];
+    else S.verdicts[ref] = b.dataset.v;
+    save(); render();
+  }));
+  root.querySelectorAll("[data-note]").forEach(t => t.addEventListener("input", () => {
+    const ref = t.dataset.note;
+    if (t.value.trim()) S.katieNotes[ref] = t.value.trim(); else delete S.katieNotes[ref];
+    save();
+  }));
+  root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeCustom(b.dataset.del)));
+  root.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => {
+    editingRef = b.dataset.edit; render();
+    const ta = $("#edta"); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); updateSeg();
+  }));
   const ta = $("#edta");
   if (ta) ta.addEventListener("input", updateSeg);
-  body.querySelectorAll("[data-cancel]").forEach(b => b.addEventListener("click", () => { editingRef = null; render(); }));
-  body.querySelectorAll("[data-save]").forEach(b => b.addEventListener("click", () => saveEdit(b.dataset.save)));
+  root.querySelectorAll("[data-cancel]").forEach(b => b.addEventListener("click", () => { editingRef = null; render(); }));
+  root.querySelectorAll("[data-save]").forEach(b => b.addEventListener("click", () => saveEdit(b.dataset.save)));
+  root.querySelectorAll("[data-revert]").forEach(b => b.addEventListener("click", () => revert(b.dataset.revert)));
+}
+
+function editWhen(el) {
+  const ref = el.dataset.when;
+  const wasSet = S.whenEdits[ref];
+  const input = document.createElement("input");
+  input.value = el.textContent;
+  input.style.cssText = "font:inherit;font-size:10.5px;border:1px solid var(--accent);border-radius:6px;padding:1px 5px;min-width:230px;";
+  el.replaceWith(input);
+  input.focus(); input.select();
+  /* persist on every keystroke, so nothing is lost if the field never blurs */
+  const commit = () => {
+    const val = input.value.trim();
+    if (val) S.whenEdits[ref] = val; else delete S.whenEdits[ref];
+    save();
+  };
+  const done = () => { commit(); render(); };
+  input.addEventListener("input", commit);
+  input.addEventListener("blur", done);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.keyCode === 13) { e.preventDefault(); done(); }
+    if (e.key === "Escape") {
+      if (wasSet) S.whenEdits[ref] = wasSet; else delete S.whenEdits[ref];
+      save(); render();
+    }
+  });
 }
 
 function updateSeg() {
@@ -459,6 +681,8 @@ function findItem(ref) {
   }
   const m = MISSING.find(x => x.key === ref);
   if (m) return { kind: "extra", m };
+  const c = S.customTexts.find(x => x.key === ref);
+  if (c) return { kind: "custom", c };
   return null;
 }
 
@@ -468,29 +692,122 @@ function saveEdit(ref) {
   if (!text) { toast("Empty text, nothing saved."); return; }
   const target = findItem(ref);
   if (!target) return;
-  const before = target.kind === "ladder" ? target.row.copy : (S.extraCopy[ref] || target.m.copy);
-  if (text === before) { editingRef = null; render(); return; }
+  const name = target.kind === "ladder" ? target.row.name : target.kind === "extra" ? target.m.nm : target.c.nm;
+  const current = target.kind === "ladder" ? target.row.copy : target.kind === "extra" ? (S.extraCopy[ref] || target.m.copy) : target.c.copy;
   if (!S.reviewEdits[ref]) {
-    S.reviewEdits[ref] = { name: target.kind === "ladder" ? target.row.name : target.m.nm, before };
+    if (text === current) { editingRef = null; render(); return; }
+    S.reviewEdits[ref] = { name, before: current };
   }
   S.reviewEdits[ref].after = text;
   S.reviewEdits[ref].at = new Date().toISOString();
   if (target.kind === "ladder") { target.row.copy = text; target.row.edited = true; target.row.editedAt = S.reviewEdits[ref].at; }
-  else { S.extraCopy[ref] = text; }
+  else if (target.kind === "extra") { S.extraCopy[ref] = text; }
+  else { target.c.copy = text; }
   editingRef = null;
   save(); render();
-  toast("Saved. It shows as your rewrite everywhere.");
+  toast("Saved. The original stays on the left.");
 }
 
-$("#sendpass").addEventListener("click", () => {
-  const edits = Object.entries(S.reviewEdits);
-  let text;
-  if (!edits.length) { text = "No changes yet. Tap a bubble to rewrite it."; }
-  else {
-    text = "Tony's copy pass · " + edits.length + " changes\n\n" +
-      edits.map(([ref, e]) => ref.toUpperCase() + " · " + e.name + "\nWAS: " + e.before + "\nNOW: " + e.after).join("\n\n");
+function revert(ref) {
+  const e = S.reviewEdits[ref]; if (!e) return;
+  const target = findItem(ref);
+  if (target) {
+    if (target.kind === "ladder") { target.row.copy = e.before; delete target.row.edited; delete target.row.editedAt; }
+    else if (target.kind === "extra") { delete S.extraCopy[ref]; }
+    else { target.c.copy = e.before; }
   }
-  $("#sheettext").value = text;
+  delete S.reviewEdits[ref];
+  save(); render();
+  toast("Original put back.");
+}
+
+/* ---------------- adding a text ---------------- */
+let addSection = "product";
+function openAdd(section) {
+  addSection = section || "product";
+  $("#f-sect").value = addSection;
+  $("#f-nm").value = ""; $("#f-when").value = ""; $("#f-copy").value = "";
+  $("#addoverlay").hidden = false;
+  $("#f-nm").focus();
+}
+function removeCustom(ref) {
+  S.customTexts = S.customTexts.filter(c => c.key !== ref);
+  delete S.verdicts[ref]; delete S.katieNotes[ref]; delete S.whenEdits[ref]; delete S.reviewEdits[ref];
+  save(); render();
+  toast("Removed.");
+}
+$("#addtext").addEventListener("click", () => openAdd(addSection));
+$("#addcancel").addEventListener("click", () => { $("#addoverlay").hidden = true; });
+$("#addoverlay").addEventListener("click", e => { if (e.target === $("#addoverlay")) $("#addoverlay").hidden = true; });
+$("#addsave").addEventListener("click", () => {
+  const nm = $("#f-nm").value.trim();
+  if (!nm) { toast("Give it a name first."); $("#f-nm").focus(); return; }
+  let n = 1; while (S.customTexts.some(c => c.key === "added-" + n)) n++;
+  S.customTexts.push({
+    key: "added-" + n, nm,
+    when: $("#f-when").value.trim() || "trigger to be decided",
+    section: $("#f-sect").value,
+    copy: $("#f-copy").value.trim(),
+  });
+  save();
+  $("#addoverlay").hidden = true;
+  render();
+  toast("Added to the list.");
+});
+
+/* ---------------- toggles and export ---------------- */
+$("#hidecut").addEventListener("change", e => { S.hideCut = e.target.checked; save(); render(); });
+$("#keepall").addEventListener("click", () => {
+  let n = 0;
+  for (const it of buildDeck()) {
+    if (it.kind !== "ladder" || it.status !== "live") continue;
+    if (!S.verdicts[it.id]) { S.verdicts[it.id] = "in"; n++; }
+  }
+  save(); render();
+  toast(n ? n + " live texts marked in." : "Already done.");
+});
+
+function exportText() {
+  const items = textRows();
+  const out = [];
+  const edits = Object.entries(S.reviewEdits);
+  out.push("SMS review pass");
+  out.push(edits.length + (edits.length === 1 ? " rewrite" : " rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
+  out.push("");
+  if (edits.length) {
+    out.push("COPY CHANGES");
+    for (const [ref, e] of edits) out.push("  " + ref.toUpperCase() + " · " + e.name + "\n  WAS: " + e.before + "\n  NOW: " + e.after + "\n");
+  }
+  for (const key of ["in", "later", "cut"]) {
+    const hits = items.filter(i => S.verdicts[refOf(i)] === key);
+    if (!hits.length) continue;
+    out.push(({ in: "IN", later: "LATER", cut: "CUT" })[key] + " (" + hits.length + ")");
+    for (const i of hits) {
+      const ref = refOf(i);
+      out.push("  · " + i.name + " [" + ref + "] · " + whenOf(i) + (S.katieNotes[ref] ? "\n      note: " + S.katieNotes[ref] : ""));
+    }
+    out.push("");
+  }
+  const undecided = items.filter(i => !S.verdicts[refOf(i)]);
+  if (undecided.length) {
+    out.push("NOT DECIDED (" + undecided.length + ")");
+    for (const i of undecided) out.push("  · " + i.name + " [" + refOf(i) + "]");
+    out.push("");
+  }
+  if (S.customTexts.length) {
+    out.push("ADDED IN REVIEW (" + S.customTexts.length + ")");
+    for (const c of S.customTexts) out.push("  · " + c.nm + " · " + (S.whenEdits[c.key] || c.when) + (c.copy ? "\n      draft: " + c.copy : "\n      no copy yet"));
+    out.push("");
+  }
+  const trig = Object.keys(S.whenEdits).filter(k => !k.startsWith("added-"));
+  if (trig.length) {
+    out.push("TRIGGERS CORRECTED (" + trig.length + ")");
+    for (const ref of trig) out.push("  · " + ref + " → " + S.whenEdits[ref]);
+  }
+  return out.join("\n").trim();
+}
+$("#sendpass").addEventListener("click", () => {
+  $("#sheettext").value = exportText();
   $("#overlay").hidden = false;
 });
 $("#sheetclose").addEventListener("click", () => { $("#overlay").hidden = true; });
@@ -500,8 +817,28 @@ $("#sheetcopy").addEventListener("click", () => {
   if (navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(() => {});
 });
 $("#overlay").addEventListener("click", e => { if (e.target === $("#overlay")) $("#overlay").hidden = true; });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if (!$("#addoverlay").hidden) $("#addoverlay").hidden = true;
+  else if (!$("#overlay").hidden) $("#overlay").hidden = true;
+});
 
-window.addEventListener("storage", e => { if (e.key === LS_KEY) { S = loadState(); S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || {}; editingRef = null; render(); } });
+window.addEventListener("storage", e => {
+  if (e.key !== LS_KEY) return;
+  S = loadState();
+  S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || {};
+  S.verdicts = S.verdicts || {}; S.katieNotes = S.katieNotes || {};
+  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || [];
+  editingRef = null; render();
+});
+
+/* keep the sticky column header clear of the topbar even if it wraps */
+function syncStickyOffset() {
+  const h = document.querySelector(".topbar").getBoundingClientRect().height;
+  document.querySelector(".colhead").style.top = Math.round(h) + "px";
+}
+window.addEventListener("resize", syncStickyOffset);
+syncStickyOffset();
 render();
 </script>
 </body>
