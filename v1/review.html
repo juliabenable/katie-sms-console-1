@@ -19,7 +19,7 @@
 body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; color: var(--ink); background: #F2F2F6; }
 
 /* ---------- shell ---------- */
-.topbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 9px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topbar { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: rgba(255,255,255,.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .back { font-size: 13px; font-weight: 700; color: var(--ink-med); text-decoration: none; }
 .tb-title { font-weight: 800; font-size: 14.5px; letter-spacing: -.2px; white-space: nowrap; }
 .tb-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
@@ -30,8 +30,8 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .ghostbtn { font: inherit; font-size: 12px; font-weight: 800; border: 1px solid var(--line); border-radius: 9px; padding: 6px 12px; cursor: pointer; background: #fff; color: var(--ink-med); white-space: nowrap; }
 .ghostbtn:hover { border-color: var(--accent); color: var(--accent); }
 
-.deck { max-width: 1040px; margin: 0 auto; padding: 16px 16px 100px; }
-.intro { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px; margin-bottom: 16px; font-size: 13.5px; line-height: 1.55; }
+.deck { max-width: 940px; margin: 0 auto; padding: 18px 16px 100px; }
+.intro { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 15px 17px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.55; }
 .intro b { font-weight: 800; }
 .intro p + p { margin-top: 8px; }
 .introrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 11px; }
@@ -39,48 +39,52 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; vertical-align: -1px; }
 .chk { font-size: 11.5px; color: var(--ink-med); display: flex; align-items: center; gap: 5px; cursor: pointer; margin-left: auto; }
 
-.sect { margin: 24px 0 8px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.sect { margin: 30px 0 12px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .sect h2 { font-size: 15px; font-weight: 800; letter-spacing: -.2px; }
 .sect .sub { font-size: 11px; color: var(--ink-med); }
 .sect .addhere { margin-left: auto; font: inherit; font-size: 11px; font-weight: 800; border: 1px dashed var(--ink-subtle); background: none; color: var(--ink-med); border-radius: 8px; padding: 3px 10px; cursor: pointer; }
 .sect .addhere:hover { border-color: var(--accent); color: var(--accent); border-style: solid; }
-.branchlbl { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--amber-ink); margin: 12px 0 6px; }
+.branchlbl { text-align: center; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--amber-ink); margin: 16px 0 8px; }
 
-/* ---------- row ---------- */
-.item { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 11px 13px 11px; margin-bottom: 9px; }
-.item.iscut { opacity: .5; }
-.item.isin { border-left: 3px solid var(--green); }
-.meta { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; flex-wrap: wrap; }
+/* ---------- one text ---------- */
+.item { margin-bottom: 20px; padding-left: 11px; border-left: 2px solid transparent; }
+.item.iscut { opacity: .42; }
+.item.v-in { border-left-color: var(--green); }
+.item.v-later { border-left-color: var(--amber); }
+.item.v-cut { border-left-color: var(--red); }
+.meta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; padding: 0 2px; flex-wrap: wrap; }
 .mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
-.mname { font-size: 12.5px; font-weight: 800; }
-.whenl { font-size: 10.5px; color: var(--ink-subtle); cursor: text; border-bottom: 1px dotted var(--ink-subtle); }
-.whenl:hover { color: var(--accent); border-color: var(--accent); }
+.mname { font-size: 11.5px; font-weight: 700; color: var(--ink-med); }
+.pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
 .st.draft { background: #ECECEF; color: #7F7F7F; }
 .st.missing { background: var(--red-bg); color: var(--red); }
 .st.yours { background: var(--amber-bg); color: var(--amber-ink); }
-.pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 
 /* ---------- the two columns ---------- */
-.colhead { position: sticky; top: 53px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; background: #F2F2F6; padding: 9px 15px 8px; margin-bottom: 2px; }
-.colhead span { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-med); }
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; }
+.colhead { position: sticky; top: 55px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; background: #F2F2F6; padding: 8px 13px 7px; }
+.colhead span { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-subtle); }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
 .cell { min-width: 0; }
 .cap { display: none; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-subtle); margin-bottom: 4px; }
-.bubble { background: var(--green); color: #fff; border-radius: 15px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.bubblewrap { display: flex; justify-content: flex-end; }
+.bubble { background: var(--green); color: #fff; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14.5px; line-height: 1.45; max-width: 94%; overflow-wrap: anywhere; }
 .bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--red); }
-.bubble.was { opacity: .45; }
-.rw { background: var(--accent); color: #fff; border-radius: 15px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
-.ghostcell { width: 100%; text-align: left; font: inherit; font-size: 13px; color: var(--ink-subtle); background: #FBFBFD; border: 1.5px dashed var(--line); border-radius: 15px; padding: 10px 13px; cursor: pointer; }
-.ghostcell:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
-.ghostcell.flat { cursor: default; }
-.ghostcell.flat:hover { border-color: var(--line); color: var(--ink-subtle); background: #FBFBFD; }
-.cellbtns { display: flex; gap: 10px; margin-top: 6px; }
-.mini { font: inherit; font-size: 11px; font-weight: 800; border: none; background: none; color: var(--ink-med); cursor: pointer; padding: 2px 0; }
-.mini:hover { color: var(--accent); text-decoration: underline; }
+.bubble.was { opacity: .4; }
+.bubble.rw { background: var(--accent); max-width: 94%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
+.bubble.rw:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124,92,250,.3); }
+.when { font-size: 10.5px; color: var(--ink-subtle); text-align: right; margin: 4px 5px 0 0; cursor: text; }
+.when span { border-bottom: 1px dotted transparent; }
+.when:hover span { color: var(--accent); border-bottom-color: var(--accent); }
+.ghostcell { display: block; margin-left: auto; width: 94%; text-align: left; font: inherit; font-size: 13.5px; color: var(--ink-subtle); background: none; border: 1.5px dashed #D7D7DC; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; cursor: pointer; transition: transform .12s ease, border-color .12s ease, color .12s ease; }
+.ghostcell:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+.ghostcell.flat, .ghostcell.flat:hover { cursor: default; transform: none; border-color: #D7D7DC; color: var(--ink-subtle); }
+.cellbtns { display: flex; gap: 12px; justify-content: flex-end; margin: 5px 5px 0 0; }
+.mini { font: inherit; font-size: 10.5px; font-weight: 700; border: none; background: none; color: var(--ink-subtle); cursor: pointer; padding: 0; }
+.mini:hover { color: var(--accent); }
 .mini.danger:hover { color: var(--red); }
-.editor textarea { width: 100%; font: inherit; font-size: 14px; line-height: 1.45; border: 2px solid var(--accent); border-radius: 14px; padding: 9px 12px; background: #fff; resize: vertical; min-height: 92px; }
+.editor textarea { width: 100%; font: inherit; font-size: 14.5px; line-height: 1.45; border: 2px solid var(--accent); border-radius: 17px; padding: 9px 13px; background: #fff; resize: vertical; min-height: 92px; }
 .editor textarea:focus-visible { outline: none; }
 .edmeta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .seg { font-size: 10.5px; color: var(--ink-med); }
@@ -90,19 +94,18 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .btn.save { background: var(--accent); color: #fff; }
 .btn.cancel { background: #ECECEF; color: var(--ink-med); }
 
-/* ---------- keep / cut strip under the row ---------- */
-.foot { display: flex; align-items: center; gap: 10px; margin-top: 10px; padding-top: 9px; border-top: 1px solid var(--line); flex-wrap: wrap; }
-.why { font-size: 11.5px; color: var(--ink-med); flex: 1 1 200px; min-width: 0; }
-.why em { font-style: normal; color: var(--ink-subtle); }
-.verdict { display: flex; gap: 4px; margin-left: auto; }
-.verdict button { font: inherit; font-size: 11px; font-weight: 800; border: 1px solid var(--line); background: #fff; color: var(--ink-med); border-radius: 8px; padding: 5px 14px; cursor: pointer; }
-.verdict button:hover { border-color: var(--ink-subtle); }
-.verdict button.on.in { background: var(--green-bg); border-color: var(--green); color: var(--green-ink); }
-.verdict button.on.later { background: var(--amber-bg); border-color: var(--amber); color: var(--amber-ink); }
-.verdict button.on.cut { background: var(--red-bg); border-color: var(--red); color: var(--red-ink); }
-.kn { width: 100%; font: inherit; font-size: 12px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 9px; margin-top: 8px; background: #fff; color: var(--ink); }
+/* ---------- keep / cut, kept quiet ---------- */
+.foot { display: flex; align-items: center; gap: 10px; margin-top: 9px; padding: 0 2px; flex-wrap: wrap; }
+.why { font-size: 11px; color: var(--ink-subtle); flex: 1 1 180px; min-width: 0; }
+.verdict { display: flex; gap: 2px; margin-left: auto; }
+.verdict button { font: inherit; font-size: 10.5px; font-weight: 800; border: none; background: none; color: var(--ink-subtle); border-radius: 7px; padding: 4px 11px; cursor: pointer; transition: background .12s ease, color .12s ease; }
+.verdict button:hover { background: #E7E7EC; color: var(--ink-med); }
+.verdict button.on.in { background: var(--green-bg); color: var(--green-ink); }
+.verdict button.on.later { background: var(--amber-bg); color: var(--amber-ink); }
+.verdict button.on.cut { background: var(--red-bg); color: var(--red-ink); }
+.kn { width: 100%; font: inherit; font-size: 12px; border: none; border-bottom: 1px solid var(--line); border-radius: 0; padding: 5px 3px; margin-top: 7px; background: none; color: var(--ink); }
 .kn::placeholder { color: var(--ink-subtle); }
-.kn:focus-visible { outline: none; border-color: var(--accent); }
+.kn:focus-visible { outline: none; border-bottom-color: var(--accent); }
 
 /* ---------- sheets ---------- */
 .overlay { position: fixed; inset: 0; background: rgba(20,20,24,.4); z-index: 60; display: flex; align-items: center; justify-content: center; padding: 18px; }
@@ -123,10 +126,10 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 @media (max-width: 780px) {
   .tb-title, .count.decided { display: none; }
   .colhead { display: none; }
-  .cols { grid-template-columns: 1fr; gap: 8px; }
+  .cols { grid-template-columns: 1fr; gap: 10px; }
   .cap { display: block; }
-  .verdict { margin-left: 0; width: 100%; }
-  .verdict button { flex: 1; }
+  .ghostcell { width: 100%; }
+  .verdict { margin-left: 0; }
   .deck { padding: 14px 12px 100px; }
 }
 </style>
@@ -560,18 +563,18 @@ function render() {
     if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
     if (edit) bcls.push("was");
 
-    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v === "in" ? "isin" : ""}" data-ref="${esc(ref)}">
+    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v ? "v-" + v : ""}" data-ref="${esc(ref)}">
       <div class="meta">
         <span class="mid">${esc(idLabel)}</span>
         <span class="mname">${esc(it.name)}</span>
-        <span class="whenl" data-when="${esc(ref)}" title="Click to fix when it fires">${esc(whenOf(it))}</span>
         ${it.pri ? `<span class="pri">★ ${esc(it.pri)}</span>` : ""}
         <span class="st ${stClass(it.status)}">${stLabel(it.status)}</span>
       </div>
       <div class="cols">
         <div class="cell">
           <div class="cap">What it says now</div>
-          ${now ? `<div class="${bcls.join(" ")}">${esc(now)}</div>` : `<div class="ghostcell flat">No copy yet</div>`}
+          ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
+          <div class="when" data-when="${esc(ref)}" title="Click to fix when it fires"><span>${esc(whenOf(it))}</span></div>
         </div>
         <div class="cell">
           <div class="cap">Your version</div>`;
@@ -580,8 +583,8 @@ function render() {
         <div class="edmeta"><span class="seg" id="segline"></span>
         <div class="edbtns"><button class="btn cancel" data-cancel>Cancel</button><button class="btn save" data-save="${esc(ref)}">Save</button></div></div></div>`;
     } else if (edit) {
-      html += `<div class="rw">${esc(edit.after)}</div>
-        <div class="cellbtns"><button class="mini" data-edit="${esc(ref)}">Edit</button><button class="mini danger" data-revert="${esc(ref)}">Put the original back</button></div>`;
+      html += `<div class="bubblewrap"><div class="bubble rw" data-edit="${esc(ref)}" role="button" tabindex="0">${esc(edit.after)}</div></div>
+        <div class="cellbtns"><button class="mini danger" data-revert="${esc(ref)}">Put the original back</button></div>`;
     } else {
       html += `<button class="ghostcell" data-edit="${esc(ref)}">Rewrite this →</button>`;
     }
@@ -629,10 +632,14 @@ function wire() {
     save();
   }));
   root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeCustom(b.dataset.del)));
-  root.querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => {
-    editingRef = b.dataset.edit; render();
-    const ta = $("#edta"); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); updateSeg();
-  }));
+  root.querySelectorAll("[data-edit]").forEach(b => {
+    const open = () => {
+      editingRef = b.dataset.edit; render();
+      const ta = $("#edta"); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length); updateSeg();
+    };
+    b.addEventListener("click", open);
+    if (b.tagName !== "BUTTON") b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+  });
   const ta = $("#edta");
   if (ta) ta.addEventListener("input", updateSeg);
   root.querySelectorAll("[data-cancel]").forEach(b => b.addEventListener("click", () => { editingRef = null; render(); }));
@@ -644,7 +651,7 @@ function editWhen(el) {
   const ref = el.dataset.when;
   const wasSet = S.whenEdits[ref];
   const input = document.createElement("input");
-  input.value = el.textContent;
+  input.value = el.textContent.trim();
   input.style.cssText = "font:inherit;font-size:10.5px;border:1px solid var(--accent);border-radius:6px;padding:1px 5px;min-width:230px;";
   el.replaceWith(input);
   input.focus(); input.select();
