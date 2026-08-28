@@ -147,7 +147,7 @@ h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2p
   <h2>If we only add five</h2>
   <div class="prio"><ol>
     <li><b>Draft received.</b> <span class="ev">The "I can't see my submitted draft" support-call cluster (Letty, Chiara, Marina, Nia-Emani) is this exact missing confirmation.</span></li>
-    <li><b>Payment failed.</b> <span class="ev">The unwatched failed-payout pile from the payments audit; the one message where silence costs real money and trust.</span></li>
+    <li><b>Payment failed.</b> <span class="ev">Failed payouts are the one place where silence costs real money and trust.</span></li>
     <li><b>Accepted confirmation.</b> <span class="ev">Katie's highest-volume manual text; pure automation win.</span></li>
     <li><b>Affiliate link + first sale.</b> <span class="ev">The Aug 6 share-incentives decision ($50 first tracked sale) has no SMS carrying it; this is the link-sharing workstream's voice.</span></li>
     <li><b>Visit day-before reminder.</b> <span class="ev">The local fork's worst hole; today it is a 10-email thread Katie runs by hand.</span></li>
@@ -201,7 +201,7 @@ const TREE = {
       note: "Katie's highest-volume manual text today. Reciprocity close." },
     { st: 'missing', key: 'invite-expiry', lane: 'product', after: 'MSG-02', nm: 'Invite expiry warning', when: 'invite window minus 6h, no response',
       copy: "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
-      note: 'Scarcity is real here (over-invite + expiry exists), so Tony-style urgency is honest.' },
+      note: 'Expiry is real here, so the urgency is honest.' },
     { st: 'missing', key: 'spot-opened', lane: 'product', after: 'MSG-02', nm: 'Spot opened re-offer', when: 'waitlisted creator, spot frees up',
       copy: "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
       note: "Pairs with the rolling-invite workstream (Des's manual routine)." },
@@ -213,7 +213,7 @@ const TREE = {
     { st: 'live', nm: 'Choose your product', why: 'MSG-03' },
     { st: 'missing', key: 'order-placed', lane: 'product', after: 'MSG-03', nm: 'Order placed', when: 'on order creation, before fulfillment', pri: 'top 5',
       copy: "your {brand} order is in!! i'll text you the tracking the second it ships. excited for this one",
-      note: 'The MDSolarSciences auto-order lesson: confirm the order, catch wrong variants before a wrong "shipped".' },
+      note: 'The duplicate-order lesson: confirm the order, catch wrong variants before a wrong "shipped".' },
     { st: 'live', nm: 'Shipped + Delivered', why: 'MSG-04, MSG-05' },
     { st: 'missing', key: 'shipping-problem', lane: 'product', after: 'MSG-04', nm: 'Shipping problem', when: 'carrier exception or no scan movement in 4d',
       copy: "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
@@ -243,7 +243,7 @@ const TREE = {
       note: 'Replaces the manual Venmo/PayPal back-and-forth in Ana\'s thread.' },
     { st: 'missing', key: 'payment-failed', lane: null, nm: 'Payment failed', when: 'payout enters failed state', pri: 'top 5',
       copy: "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
-      note: 'Volume knob down, but keep the today-promise. Closes the unwatched failed-payout loop.' },
+      note: 'Volume knob down, but keep the today-promise. Closes the failed-payout loop.' },
     { st: 'missing', key: 'affiliate-link', lane: null, nm: 'Affiliate link delivery', when: 'on content approval', pri: 'top 5',
       copy: "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
       note: 'The link-sharing workstream\'s missing voice. Benefit first, then the placement coaching.' },
@@ -268,9 +268,9 @@ const TREE = {
     { st: 'missing', key: 'brand-reviewing', lane: 'product', after: 'MSG-06', nm: 'Brand is reviewing', when: 'brand-review fork, on submit',
       copy: "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
       note: 'The new fork\'s status text; the same promise pattern as draft-received.' },
-    { st: 'missing', key: 'moderated-feedback', lane: 'product', after: 'MSG-11b', nm: 'Moderated brand feedback', when: 'after Benable rewrites harsh notes',
-      copy: "{brand} loved it!! two small asks before it goes live: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
-      note: 'Leads with the love, then the asks. The moderation fork made audible.' },
+    { st: 'missing', key: 'moderated-feedback', lane: 'product', after: 'MSG-11b', nm: 'Brand feedback, translated', when: 'brand notes returned · put into creator-friendly language',
+      copy: "{brand} sent notes on your draft: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
+      note: 'Notes go out in creator-friendly language. The translation fork made audible.' },
     { st: 'missing', key: 'collective-accepted', lane: null, nm: 'Collective accepted', when: 'application approved',
       copy: "you're IN the collective!! collabs start hitting your portal this week, first dibs goes fast so keep an eye out. so excited to have you",
       note: 'Tony sends versions of this by hand today; his register, verbatim energy.' },

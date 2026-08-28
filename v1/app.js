@@ -336,7 +336,7 @@ function renderDigest() {
       <div class="dg-stat"><b>${inbound}</b><span>creator replies in</span></div>
       <div class="dg-stat ${silent.length ? 'warn' : ''}"><b>${silent.length}</b><span>live automations with zero sends in 7d</span></div>
     </div>
-    ${silent.length ? `<div class="dg-anom"><b>Needs a look:</b> ${silent.map(([k]) => { const [i, b] = k.split('|'); return `${i} for ${b}`; }).join(' · ')} <span class="dg-why">(live, but nothing fired all week, this is how the 28 Litsea reminder bug hides)</span></div>` : ''}
+    ${silent.length ? `<div class="dg-anom"><b>Needs a look:</b> ${silent.map(([k]) => { const [i, b] = k.split('|'); return `${i} for ${b}`; }).join(' · ')} <span class="dg-why">(live, but nothing fired all week, this is how a silent reminder bug hides)</span></div>` : ''}
     ${paused.length ? `<div class="dg-anom paused"><b>Paused by you:</b> ${paused.map(([k]) => { const [i, b] = k.split('|'); return `${i} for ${b}`; }).join(' · ')}</div>` : ''}
     <div class="dg-flags">${open.map(f => { const c = byId(f.creatorId); return `<div class="dg-flagline"><span class="av small">${c.initials}</span> ${esc(c.name)} · ${esc(f.reason.toLowerCase())} · held since ${esc(f.since)}</div>`; }).join('') || '<div class="dg-flagline all-clear">Nothing waiting. Quiet morning.</div>'}</div>`;
   const btn = $('#dg-slack');

@@ -248,7 +248,7 @@ const SEED = {
    "creatorId": "samantha",
    "author": "katie",
    "senderName": "Katie Scalzo",
-   "body": "Hi Samantha! Quick update. MDSolarSciences accidentally shipped a package to you and a few other creators. It contains the same product you received during your gifted collab with them. They offered to let you keep the second product if you make another video about your experience with the product, otherwise it’ll need to be returned. We will provide a prepaid label so all you’d need to do is drop it off. Please let me know what you prefer to do!",
+   "body": "Hi Samantha! Quick update. A second package went out to you and a few other creators by mistake on our side. It contains the same product you received during your gifted collab with them. They offered to let you keep the second product if you make another video about your experience with the product, otherwise it’ll need to be returned. We will provide a prepaid label so all you’d need to do is drop it off. Please let me know what you prefer to do!",
    "t": "Aug 3, 11:32a",
    "ts": "2026-08-03 11:32:21",
    "line": "main"
@@ -268,7 +268,7 @@ const SEED = {
    "creatorId": "samantha",
    "author": "creator",
    "senderName": "",
-   "body": "It was submitted but my TikTok got banned so I made a new one",
+   "body": "It was submitted but I had to repost from a new account so the old link broke",
    "t": "Aug 4, 4:53p",
    "ts": "2026-08-04 16:53:11",
    "line": "main"
@@ -348,7 +348,7 @@ const SEED = {
    "creatorId": "ilona",
    "author": "katie",
    "senderName": "Tony Staehelin",
-   "body": "no prob! please apply to the Beauty Collective here: https://tinyurl.com/beautycollabs",
+   "body": "no prob! please apply to the Beauty Collective here: https://tinyurl.com/xxxxxxxx",
    "t": "Aug 10, 1:11p",
    "ts": "2026-08-10 13:11:53",
    "line": "tony"
@@ -548,7 +548,7 @@ const SEED = {
    "creatorId": "madeleine",
    "author": "creator",
    "senderName": "",
-   "body": "Hi!! I just responded on the app. Have you heard from bellacures? Just want to be able to do it before my trip!!",
+   "body": "Hi!! I just responded on the app. Have you heard from the salon? Just want to be able to do it before my trip!!",
    "t": "Aug 21, 1:00p",
    "ts": "2026-08-21 13:00:37",
    "line": "main"
@@ -588,7 +588,7 @@ const SEED = {
    "creatorId": "madeleine",
    "author": "creator",
    "senderName": "",
-   "body": "Second week of September 😩",
+   "body": "Second week of next month 😩",
    "t": "Aug 21, 1:05p",
    "ts": "2026-08-21 13:05:23",
    "line": "main"
@@ -598,7 +598,7 @@ const SEED = {
    "creatorId": "madeleine",
    "author": "katie",
    "senderName": "Katie Scalzo",
-   "body": "No problem! Since we haven't heard back yet let's assume you won't be able to get in before your trip (I appreciate you trying to make that happen!) and plan for once you're back. If you hear from Rianna, can you let me know? Thanks!",
+   "body": "No problem! Since we haven't heard back yet let's assume you won't be able to get in before your trip (I appreciate you trying to make that happen!) and plan for once you're back. If you hear from them, can you let me know? Thanks!",
    "t": "Aug 21, 1:06p",
    "ts": "2026-08-21 13:06:57",
    "line": "main"
@@ -758,7 +758,7 @@ const SEED = {
    "creatorId": "priya",
    "author": "creator",
    "senderName": "",
-   "body": "hey quick question, the shower steamer actually made my skin itch a little after? is that normal",
+   "body": "quick q, one of the steamers arrived cracked, is that normal or should I not film it?",
    "t": "Aug 26, 9:12a",
    "ts": "2026-08-26 09:12",
    "line": "main"
@@ -799,7 +799,7 @@ const SEED = {
    "author": "katie",
    "senderName": "Tony Staehelin",
    "line": "tony",
-   "body": "no prob! please apply to the Beauty Collective here: https://tinyurl.com/beautycollabs",
+   "body": "no prob! please apply to the Beauty Collective here: https://tinyurl.com/xxxxxxxx",
    "t": "Aug 26, 6:05p",
    "ts": "2026-08-26 18:05"
   },
@@ -819,10 +819,10 @@ const SEED = {
    "id": "f1",
    "creatorId": "priya",
    "reason": "Product problem",
-   "reasonText": "Creator mentions a possible skin reaction. Escalation topic: product issue. The 3-day draft reminder was queued; holding it.",
+   "reasonText": "Creator reports a damaged item. Escalation topic: product issue. The 3-day draft reminder was queued; holding it.",
    "heldIntent": "MSG-06 · Draft reminder",
    "heldBody": "Hi Priya, friendly nudge! Your Celeste Naturals draft is due in 3 days. Need anything from us?",
-   "draft": "So sorry to hear that! Some people rinse them off hands right after use, but I hear you and I'm flagging it to Celeste right away. No rush on content until we sort this out. Are you feeling okay?",
+   "draft": "So sorry! That's a packing issue, not you. I'm flagging it to Celeste right away and asking for a replacement. No rush on content until we sort this out.",
    "since": "9:12a",
    "status": "open",
    "line": "main"
@@ -843,10 +843,10 @@ const SEED = {
    "id": "f3",
    "creatorId": "madeleine",
    "reason": "Creator is traveling",
-   "reasonText": "Madeleine said she is away until the second week of September. The visit follow-up below was queued for today; holding it and suggesting a reschedule.",
+   "reasonText": "Madeleine is away for the next two weeks. The visit follow-up below was queued for today; holding it and suggesting a reschedule.",
    "heldIntent": "MSG-L2 · Visit follow-up",
    "heldBody": "Hi Madeleine! Following up, did you get a chance to email Blow Me Away to set up your visit?",
-   "draft": "No rush while you travel, Madeleine! I'll check back when you're home the week of Sep 8. Have an amazing trip! 🤍",
+   "draft": "No rush while you travel, Madeleine! I'll check back when you're home. Have an amazing trip! 🤍",
    "since": "8:02a",
    "status": "open",
    "line": "main"
