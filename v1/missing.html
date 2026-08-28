@@ -151,7 +151,8 @@ h2 { font-size: 18px; font-weight: 800; margin: 34px 0 4px; letter-spacing: -.2p
     <li><b>Accepted confirmation.</b> <span class="ev">Katie's highest-volume manual text; pure automation win.</span></li>
     <li><b>Affiliate link + first sale.</b> <span class="ev">The Aug 6 share-incentives decision ($50 first tracked sale) has no SMS carrying it; this is the link-sharing workstream's voice.</span></li>
     <li><b>Visit day-before reminder.</b> <span class="ev">The local fork's worst hole; today it is a 10-email thread Katie runs by hand.</span></li>
-  </ol></div>
+  </ol>
+  <p class="secsub" style="margin-top:10px;">Separate from the five: the seven texts marked <b>★ asked for</b> are the past-deadline ladder Julia called out. Today MSG-08 is one overdue text and MSG-13 is a placeholder reading "escalating sequence", so a creator who misses the draft date gets nudged once and then nothing. Those seven turn it into day 1, 2, 4, 6 and a close-out, plus the day-of text and the approved-but-never-posted chase on the second clock.</p></div>
 
   <div class="lean"><b>How to use this page.</b> "Add to ladder" writes the draft into the console's ladder (and the flow map) as a new-draft row, same as if Katie typed it, so you can walk Brian through the ladder with the gaps already filled. Copy lives in Tony's register; when a text should sound like Katie instead (the caring ones: product problems, feedback delivery), say so and I'll do a Katie-voice pass. Nothing here fires anywhere; these are drafts for the master copy doc.</div>
 </div>
@@ -219,11 +220,32 @@ const TREE = {
       copy: "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
       note: 'Volume knob down. The promise is Tony; the calm is deliberate.' },
     { st: 'live', nm: 'Draft reminders', why: 'MSG-06, due minus 3d / 1d / due day' },
+    { st: 'missing', key: 'due-today', lane: 'product', after: 'MSG-06', nm: 'Draft due today', when: 'draft due date, morning of', pri: 'asked for',
+      copy: "today's the day {name}! your {brand} draft is due tonight. drop it in the portal and i'll get it reviewed fast, need anything from me?",
+      note: 'MSG-06 is one row covering minus 3d, minus 1d and the due day, so on the day itself it reads "due in 0 days". This is the day-of text.' },
     { st: 'progress', nm: 'Missed deadline + overdue ladder', why: 'MSG-08, MSG-13, Katie drafting this week' },
+    { st: 'missing', key: 'overdue-d1', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 1', when: 'draft due +1d · text', pri: 'asked for',
+      copy: "hey {name}, your {brand} draft was due yesterday! no stress, things come up. can you get it in today? if you send it today i'll push it to the front of the review queue",
+      note: 'Step one of a real ladder. Assumes something got in the way, and pays for the same-day fix.' },
+    { st: 'missing', key: 'overdue-d2', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 2', when: 'draft due +2d · text', pri: 'asked for',
+      copy: "{name} are you still good for this one? just need a yes or no! if something changed lmk and i'll sort it out, and if you're still in, today works perfect",
+      note: 'A yes-or-no question, not a third nudge. Repeating "your content is overdue" is exactly what makes creators angry.' },
+    { st: 'missing', key: 'overdue-d4', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 4', when: 'draft due +4d · text and email', pri: 'asked for',
+      copy: "hi {name}, {brand} is asking me about your content and i'd love to tell them it's coming this week. can you get the draft in by {date}? that's all i need",
+      note: 'First step that names a consequence, and the first that goes out on two channels.' },
+    { st: 'missing', key: 'overdue-d6', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 6', when: 'draft due +6d · whichever channel they answer on', pri: 'asked for',
+      copy: "{name}, i have to close out the {brand} campaign on {date}. get me the draft before then and you're still in it. if the timing just doesn't work anymore, tell me and i'll put you first on the next one",
+      note: 'The last real chance, with the door held open. Uses the channel the creator actually responds on.' },
+    { st: 'missing', key: 'overdue-final', lane: 'product', after: 'MSG-08', nm: 'Closed out', when: 'draft due +9d, nothing received · text and email', pri: 'asked for',
+      copy: "closing out your {brand} collab today {name}, no hard feelings at all! if you want back in on the next round just reply and i'll keep you on the list",
+      note: 'Ends the ladder instead of letting it run forever. This is what the MSG-13 placeholder becomes, and the hand-off into the ghosting flow.' },
     { st: 'missing', key: 'draft-received', lane: 'product', after: 'MSG-06', nm: 'Draft received', when: 'on draft upload · instant', pri: 'top 5',
       copy: "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
       note: 'Kills the "I can\'t see my submitted draft" call cluster. The single highest-trust text we can add.' },
     { st: 'progress', nm: 'Approved / feedback branch', why: 'MSG-11a, MSG-11b, being wired this week' },
+    { st: 'missing', key: 'post-overdue', lane: 'product', after: 'MSG-11a', nm: 'Approved but not posted', when: 'post due +2d, nothing live · text', pri: 'asked for',
+      copy: "hey {name}! your {brand} content is approved and just needs to go live. can you post today and drop the link in the portal? that's the last step and then you're wrapped",
+      note: 'The second clock has no chase at all. Approved-but-never-posted is a different failure from never-submitted.' },
     { st: 'missing', key: 'resubmit-clock', lane: 'product', after: 'MSG-11b', nm: 'Revised draft reminder', when: 'feedback given, no resubmit in 2d',
       copy: "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
       note: 'The reciprocity move applied to revisions.' },

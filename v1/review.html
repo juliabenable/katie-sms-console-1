@@ -267,6 +267,66 @@ const MISSING = [
   "pri": null
  },
  {
+  "key": "due-today",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-06",
+  "nm": "Draft due today",
+  "when": "draft due date, morning of",
+  "copy": "today's the day {name}! your {brand} draft is due tonight. drop it in the portal and i'll get it reviewed fast, need anything from me?",
+  "pri": "asked for"
+ },
+ {
+  "key": "overdue-d1",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-08",
+  "nm": "Overdue, day 1",
+  "when": "draft due +1d · text",
+  "copy": "hey {name}, your {brand} draft was due yesterday! no stress, things come up. can you get it in today? if you send it today i'll push it to the front of the review queue",
+  "pri": "asked for"
+ },
+ {
+  "key": "overdue-d2",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-08",
+  "nm": "Overdue, day 2",
+  "when": "draft due +2d · text",
+  "copy": "{name} are you still good for this one? just need a yes or no! if something changed lmk and i'll sort it out, and if you're still in, today works perfect",
+  "pri": "asked for"
+ },
+ {
+  "key": "overdue-d4",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-08",
+  "nm": "Overdue, day 4",
+  "when": "draft due +4d · text and email",
+  "copy": "hi {name}, {brand} is asking me about your content and i'd love to tell them it's coming this week. can you get the draft in by {date}? that's all i need",
+  "pri": "asked for"
+ },
+ {
+  "key": "overdue-d6",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-08",
+  "nm": "Overdue, day 6",
+  "when": "draft due +6d · whichever channel they answer on",
+  "copy": "{name}, i have to close out the {brand} campaign on {date}. get me the draft before then and you're still in it. if the timing just doesn't work anymore, tell me and i'll put you first on the next one",
+  "pri": "asked for"
+ },
+ {
+  "key": "overdue-final",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-08",
+  "nm": "Closed out",
+  "when": "draft due +9d, nothing received · text and email",
+  "copy": "closing out your {brand} collab today {name}, no hard feelings at all! if you want back in on the next round just reply and i'll keep you on the list",
+  "pri": "asked for"
+ },
+ {
   "key": "draft-received",
   "fork": "product",
   "lane": "product",
@@ -275,6 +335,16 @@ const MISSING = [
   "when": "on draft upload · instant",
   "copy": "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
   "pri": "top 5"
+ },
+ {
+  "key": "post-overdue",
+  "fork": "product",
+  "lane": "product",
+  "after": "MSG-11a",
+  "nm": "Approved but not posted",
+  "when": "post due +2d, nothing live · text",
+  "copy": "hey {name}! your {brand} content is approved and just needs to go live. can you post today and drop the link in the portal? that's the last step and then you're wrapped",
+  "pri": "asked for"
  },
  {
   "key": "resubmit-clock",
@@ -451,6 +521,13 @@ const NOTES = {
  "moderated-feedback": "Notes go out in creator-friendly language. The translation fork made audible.",
  "collective-accepted": "Tony sends versions of this by hand today; his register, verbatim energy.",
  "banked-reinvite": "The \"we hold one campaign for you\" model, as one text with a yes-able question.",
+ "due-today": "MSG-06 is one row covering minus 3d, minus 1d and the due day, so on the day itself it reads \"due in 0 days\". This is the day-of text.",
+ "overdue-d1": "Step one of a real ladder. Assumes something got in the way, and pays for the same-day fix.",
+ "overdue-d2": "A yes-or-no question, not a third nudge. Repeating \"your content is overdue\" is exactly what makes creators angry.",
+ "overdue-d4": "First step that names a consequence, and the first that goes out on two channels.",
+ "overdue-d6": "The last real chance, with the door held open. Uses the channel the creator actually responds on.",
+ "overdue-final": "Ends the ladder instead of letting it run forever. This is what the MSG-13 placeholder becomes, and the hand-off into the ghosting flow.",
+ "post-overdue": "The second clock has no chase at all. Approved-but-never-posted is a different failure from never-submitted.",
 };
 
 const $ = s => document.querySelector(s);
