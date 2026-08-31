@@ -82,7 +82,9 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 /* ---------- the two columns ---------- */
 .colhead { position: sticky; top: 55px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; background: #F2F2F6; padding: 8px 13px 7px; }
-.colhead span { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-subtle); }
+.colhead span { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-subtle); display: flex; align-items: center; gap: 10px; }
+.origchk { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; letter-spacing: .08em; color: var(--ink-med); cursor: pointer; text-transform: uppercase; }
+.origchk input { accent-color: var(--accent); margin: 0; }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
 .cell { min-width: 0; }
 .cap { display: none; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-subtle); margin-bottom: 4px; }
@@ -164,7 +166,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 <div class="deck">
   <div class="intro">
-    <p><b>Tony: left is what it says now, right is your version.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. The original stays put so you can see the swap.</p>
+    <p><b>Tony: left is where Katie landed, right is yours.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. Flip <b>show originals</b> up top (or the tag under any bubble) to see what we send today.</p>
     <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey line to correct when a text sends. Anything we never thought of, add it with <b>+ Add a text</b>, and drag any text by its ⠿ handle to move it to where it belongs.</p>
     <div class="introrow">
       <div class="legend">
@@ -180,7 +182,12 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
       <button class="ghostbtn" id="keepall">Mark everything live as “in”</button>
     </div>
   </div>
-  <div class="colhead"><span>What it says now</span><span>Your version</span></div>
+  <div class="colhead">
+    <span>Katie’s version
+      <label class="origchk"><input type="checkbox" id="showorig"> show originals</label>
+    </span>
+    <span>Tony’s version</span>
+  </div>
   <div id="deckbody"></div>
 </div>
 
@@ -538,7 +545,8 @@ const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
 let editingRef = null;
 let dragRef = null;
 let lastMoved = null;
-const origShown = {};   // per-ref: left bubble flipped to the pre-Katie text
+const origShown = {};   // per-ref override of the global originals toggle
+let showOrig = false;   // global: left column shows the original/production text
 
 function segInfo(text) {
   const n = text.length;
@@ -643,7 +651,7 @@ function render() {
     const edit = S.reviewEdits[ref];
     const kv = (SEED.katie || {})[ref];
     const baseCopy = kv ? kv.copy : it.copy;
-    const flipped = kv && origShown[ref];
+    const flipped = kv && (origShown[ref] !== undefined ? origShown[ref] : showOrig);
     const now = flipped ? it.copy : (edit ? edit.before : baseCopy);
     const idLabel = it.kind === "ladder" ? it.id : it.kind === "custom" ? "yours" : "proposed";
     const bcls = ["bubble"];
@@ -663,12 +671,12 @@ function render() {
       ${(S.whenEdits[ref] && S.whenEdits[ref] !== it.when) ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.when)}</div>` : (it.wasWhen ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.wasWhen)}</div>` : "")}
       <div class="cols">
         <div class="cell">
-          <div class="cap">What it says now</div>
+          <div class="cap">${flipped ? "Original" : "Katie’s version"}</div>
           ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
-          ${kv ? `<div class="flipbar"><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s rewrite" : (it.status === "live" ? "See what we currently send" : "See original")}</button></div>` : ""}
+          ${kv ? `<div class="flipbar"><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s version" : (it.status === "live" ? "See what we currently send" : "See original")}</button></div>` : ""}
         </div>
         <div class="cell">
-          <div class="cap">Your version</div>`;
+          <div class="cap">Tony’s version</div>`;
     if (editingRef === ref) {
       html += `<div class="editor"><textarea id="edta">${esc(edit ? edit.after : baseCopy || "")}</textarea>
         <div class="edmeta"><span class="seg" id="segline"></span>
@@ -730,7 +738,7 @@ function wire() {
     save();
   }));
   root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeCustom(b.dataset.del)));
-  root.querySelectorAll("[data-flip]").forEach(b => b.addEventListener("click", () => { origShown[b.dataset.flip] = !origShown[b.dataset.flip]; render(); }));
+  root.querySelectorAll("[data-flip]").forEach(b => b.addEventListener("click", () => { const r = b.dataset.flip; const cur = origShown[r] !== undefined ? origShown[r] : showOrig; origShown[r] = !cur; render(); }));
   root.querySelectorAll("[data-edit]").forEach(b => {
     const open = () => {
       editingRef = b.dataset.edit; render();
@@ -933,6 +941,7 @@ $("#addsave").addEventListener("click", () => {
 
 /* ---------------- toggles and export ---------------- */
 $("#hidecut").addEventListener("change", e => { S.hideCut = e.target.checked; save(); render(); });
+$("#showorig").addEventListener("change", e => { showOrig = e.target.checked; for (const k in origShown) delete origShown[k]; render(); });
 $("#keepall").addEventListener("click", () => {
   let n = 0;
   for (const it of buildDeck()) {
