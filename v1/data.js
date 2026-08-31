@@ -1007,26 +1007,9 @@ const SEED = {
     "status": "live",
     "indent": 2,
     "hand": true
-   },
-   {
-    "id": "MSG-13",
-    "name": "Overdue ladder",
-    "when": "Sends once the draft is badly overdue. Placeholder, nothing written yet",
-    "copy": "{escalating sequence: SMS nudge → email → final warning}",
-    "status": "draft",
-    "indent": 0
    }
   ],
   "local": [
-   {
-    "id": "MSG-L1",
-    "name": "Visit invite",
-    "when": "Sends when the brand invites them to visit",
-    "copy": "Hey {name}! You have a new local collab with {brand}. Accept in the portal and email them to set up your visit date.",
-    "status": "live",
-    "indent": 0,
-    "hand": true
-   },
    {
     "id": "MSG-L2",
     "name": "Visit follow-up",
@@ -1168,7 +1151,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "sep1-r8",
+ "gen": "sep1-r9",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1195,7 +1178,7 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Katie's final pass. All 52 texts decided (34 in, 18 cut), her versions cover the visit and money lanes, and the affiliate text became a share-detection chase. The deck is ready for Tony.",
+ "changelog": "Applied since your last visit: the 18 cut texts are gone from the deck. What remains is the 34 Katie kept, all marked in.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
@@ -1336,25 +1319,7 @@ const SEED = {
   "gift-card-sent": "in",
   "payment-sent": "in",
   "payment-failed": "in",
-  "first-sale": "in",
-  "spot-opened": "cut",
-  "decline-ack": "cut",
-  "shipping-problem": "cut",
-  "overdue-d1": "cut",
-  "overdue-d2": "cut",
-  "overdue-final": "cut",
-  "post-tomorrow": "cut",
-  "post-today": "cut",
-  "post-overdue-d2": "cut",
-  "post-overdue-d4": "cut",
-  "post-overdue-final": "cut",
-  "final-link": "cut",
-  "MSG-13": "cut",
-  "MSG-L1": "cut",
-  "visit-booked": "cut",
-  "visit-reschedule": "cut",
-  "collective-accepted": "cut",
-  "banked-reinvite": "cut"
+  "first-sale": "in"
  },
  "moves": [
   {

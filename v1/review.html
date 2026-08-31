@@ -266,26 +266,6 @@ const MISSING = [
   "wasWhen": "Sends 6 hours before the invite expires, if they haven't answered"
  },
  {
-  "key": "spot-opened",
-  "fork": "invite",
-  "lane": "product",
-  "after": "MSG-02b",
-  "nm": "Spot opened re-offer",
-  "when": "Sends when a spot frees up and they were next in line",
-  "copy": "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
-  "pri": null
- },
- {
-  "key": "decline-ack",
-  "fork": "invite",
-  "lane": "product",
-  "after": "MSG-02b",
-  "nm": "Decline acknowledgment",
-  "when": "Sends the moment they decline, in the portal or by text",
-  "copy": "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
-  "pri": null
- },
- {
   "key": "order-placed",
   "fork": "product",
   "lane": "product",
@@ -294,36 +274,6 @@ const MISSING = [
   "when": "Sends when we place the order with the brand, before it ships",
   "copy": "your {brand} order is in!! i'll text you the tracking the second it ships. excited for this one",
   "pri": "top 5"
- },
- {
-  "key": "shipping-problem",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-04",
-  "nm": "Shipping problem",
-  "when": "Sends when the carrier reports a problem, or the package hasn't moved in 4 days",
-  "copy": "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
-  "pri": null
- },
- {
-  "key": "overdue-d1",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-08",
-  "nm": "Overdue, day 1",
-  "when": "Sends 1 day after the draft was due",
-  "copy": "hey {name}, your {brand} draft was due yesterday! no stress, things come up. can you get it in today? if you send it today i'll push it to the front of the review queue",
-  "pri": "asked for"
- },
- {
-  "key": "overdue-d2",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-08",
-  "nm": "Overdue, day 2",
-  "when": "Sends 2 days after the draft was due",
-  "copy": "{name} are you still good for this one? just need a yes or no! if something changed lmk and i'll sort it out, and if you're still in, today works perfect",
-  "pri": "asked for"
  },
  {
   "key": "overdue-d4",
@@ -347,16 +297,6 @@ const MISSING = [
   "wasWhen": "Sends 6 days after the draft was due, on whichever channel they answer"
  },
  {
-  "key": "overdue-final",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-08",
-  "nm": "Closed out",
-  "when": "Sends 9 days after the draft was due, if we still have nothing",
-  "copy": "closing out your {brand} collab today {name}, no hard feelings at all! if you want back in on the next round just reply and i'll keep you on the list",
-  "pri": "asked for"
- },
- {
   "key": "draft-received",
   "fork": "product",
   "lane": "product",
@@ -365,26 +305,6 @@ const MISSING = [
   "when": "Sends the moment they upload their draft",
   "copy": "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
   "pri": "top 5"
- },
- {
-  "key": "post-tomorrow",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Post due tomorrow",
-  "when": "Sends the day before their post is due",
-  "copy": "heads up {name}, your {brand} post is due tomorrow! everything's approved so it's ready to go up. want me to resend the caption and tags?",
-  "pri": "asked for"
- },
- {
-  "key": "post-today",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Post due today",
-  "when": "Sends on the day their post is due",
-  "copy": "today's the day {name}! your {brand} post goes live today. post it and drop the link in the portal, takes 30 seconds and then you're wrapped",
-  "pri": "asked for"
  },
  {
   "key": "post-overdue-d1",
@@ -398,26 +318,6 @@ const MISSING = [
   "wasWhen": "Sends 1 day after the post was due"
  },
  {
-  "key": "post-overdue-d2",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Post overdue, day 2",
-  "when": "Sends 2 days after the post was due",
-  "copy": "{name} is the post still happening? just need a yes or no! if you need a new date say the word and i'll move it, and if it's going up today even better",
-  "pri": "asked for"
- },
- {
-  "key": "post-overdue-d4",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Post overdue, day 4",
-  "when": "Sends 4 days after the post was due, by text and email",
-  "copy": "hi {name}, {brand} is watching for your post to go live. can you get it up by {date}? i'll let them know it's coming",
-  "pri": "asked for"
- },
- {
   "key": "post-overdue-d6",
   "fork": "product",
   "lane": "product",
@@ -429,16 +329,6 @@ const MISSING = [
   "wasWhen": "Sends 6 days after the post was due, on whichever channel they answer"
  },
  {
-  "key": "post-overdue-final",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Post never went live",
-  "when": "Sends 9 days after the post was due, if it still isn't live",
-  "copy": "closing out your {brand} collab today {name}. your content was approved and we loved it so it's a shame to end here! reply any time and i'll get you on the next round",
-  "pri": "asked for"
- },
- {
   "key": "resubmit-clock",
   "fork": "product",
   "lane": "product",
@@ -446,16 +336,6 @@ const MISSING = [
   "nm": "Revised draft reminder",
   "when": "Sends 2 days after we send notes, if no new version has come in",
   "copy": "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
-  "pri": null
- },
- {
-  "key": "final-link",
-  "fork": "product",
-  "lane": "product",
-  "after": "MSG-11a",
-  "nm": "Final link nudge",
-  "when": "Sends the day after they post, if the link isn't in the portal",
-  "copy": "last step for {brand}: drop your posted link in the portal so i can wrap you up! takes 30 sec, can you do it today?",
   "pri": null
  },
  {
@@ -532,16 +412,6 @@ const MISSING = [
   "pri": null
  },
  {
-  "key": "visit-booked",
-  "fork": "local",
-  "lane": "local",
-  "after": "MSG-L2",
-  "nm": "Visit confirmed",
-  "when": "Sends when they book their visit date",
-  "copy": "locked in!! your {brand} visit is {date} at {time}. i'll remind you the day before. they're excited to have you",
-  "pri": null
- },
- {
   "key": "visit-tomorrow",
   "fork": "local",
   "lane": "local",
@@ -550,16 +420,6 @@ const MISSING = [
   "when": "Sends the day before the visit",
   "copy": "your {brand} visit is tomorrow at {time}!! they're expecting you. content is due {date} after, i'll remind you. have fun!",
   "pri": "top 5"
- },
- {
-  "key": "visit-reschedule",
-  "fork": "local",
-  "lane": "local",
-  "after": "MSG-L2",
-  "nm": "No-show / reschedule",
-  "when": "Sends the day after a visit they didn't make",
-  "copy": "looks like the {brand} visit didn't happen, all good, life happens!! when works this week? i'll reset your dates",
-  "pri": null
  },
  {
   "key": "brand-reviewing",
@@ -579,26 +439,6 @@ const MISSING = [
   "nm": "Brand feedback, translated",
   "when": "Sends when the brand's notes come back, once we've put them in creator-friendly language",
   "copy": "{brand} sent notes on your draft: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
-  "pri": null
- },
- {
-  "key": "collective-accepted",
-  "fork": "other",
-  "lane": null,
-  "after": null,
-  "nm": "Collective accepted",
-  "when": "Sends when their Collective application is approved",
-  "copy": "you're IN the collective!! collabs start hitting your portal this week, first dibs goes fast so keep an eye out. so excited to have you",
-  "pri": null
- },
- {
-  "key": "banked-reinvite",
-  "fork": "other",
-  "lane": null,
-  "after": null,
-  "nm": "Banked campaign re-invite",
-  "when": "Sends 2 weeks after they wrap, when we're holding a campaign for them",
-  "copy": "we're holding your next campaign for you {name}!! want me to line it up for {month}? just say the word",
   "pri": null
  }
 ];
