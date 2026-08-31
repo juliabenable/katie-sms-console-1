@@ -48,8 +48,6 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 /* ---------- one text ---------- */
 .item { margin-bottom: 20px; padding-left: 11px; border-left: 2px solid transparent; }
-.item.iscut { opacity: .42; }
-.item.v-in { border-left-color: var(--green); }
 .item.v-later { border-left-color: var(--amber); }
 .item.v-cut { border-left-color: var(--red); }
 .meta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; padding: 0 2px; flex-wrap: wrap; }
@@ -72,7 +70,9 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .sendline b { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-subtle); flex: none; }
 .sendline:hover b { background: var(--accent); }
 .waswhen { font-size: 10.5px; color: var(--ink-subtle); margin: -5px 0 9px 4px; }
-.flipbar { display: flex; justify-content: flex-end; margin: 4px 5px 0 0; }
+.flipbar { display: flex; justify-content: flex-end; align-items: center; gap: 6px; margin: 4px 5px 0 0; }
+.rwtag { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #5B3FD1; background: var(--accent-soft); border-radius: 4px; padding: 1px 5px; }
+.rwtag.isorig { color: var(--green-ink); background: var(--green-bg); }
 .pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
@@ -82,9 +82,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 /* ---------- the two columns ---------- */
 .colhead { position: sticky; top: 55px; z-index: 30; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; background: #F2F2F6; padding: 8px 13px 7px; }
-.colhead span { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-subtle); display: flex; align-items: center; gap: 10px; }
-.origchk { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 800; letter-spacing: .08em; color: var(--ink-med); cursor: pointer; text-transform: uppercase; }
-.origchk input { accent-color: var(--accent); margin: 0; }
+.colhead span { font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-subtle); }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
 .cell { min-width: 0; }
 .cap { display: none; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-subtle); margin-bottom: 4px; }
@@ -157,7 +155,6 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
   <a class="back" href="../">←</a>
   <span class="tb-title">SMS review</span>
   <div class="tb-right">
-    <span class="count decided" id="kcount">0 of 35 decided</span>
     <span class="count rewrites" id="tcount">0 rewrites</span>
     <button class="ghostbtn" id="addtext">+ Add a text</button>
     <button class="sendbtn" id="sendpass">Send pass</button>
@@ -166,8 +163,8 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 <div class="deck">
   <div class="intro">
-    <p><b>Tony: left is where Katie landed, right is yours.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. Flip <b>show originals</b> up top (or the tag under any bubble) to see what we send today.</p>
-    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey line to correct when a text sends. Anything we never thought of, add it with <b>+ Add a text</b>, and drag any text by its ⠿ handle to move it to where it belongs.</p>
+    <p><b>Tony: left is Katie’s version plus the proposed texts, right is yours.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. Where a text is marked <b>rewritten</b>, tap “See what we currently send” to swap in the original.</p>
+    <p><b>Everything here is in.</b> Click the grey line to correct when a text sends, click a title to rename it, add anything we never thought of with <b>+ Add a text</b>, and drag any text by its ⠿ handle to move it to where it belongs. Notes under a text reach Julia with the Send pass.</p>
     <div class="introrow">
       <div class="legend">
         <span><i style="background:var(--green);"></i>sends today</span>
@@ -176,18 +173,9 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
         <span><i style="background:var(--accent);"></i>rewritten</span>
         <span><i style="background:var(--amber);"></i>added by you</span>
       </div>
-      <label class="chk"><input type="checkbox" id="hidecut"> hide the cut ones</label>
-    </div>
-    <div class="introrow">
-      <button class="ghostbtn" id="keepall">Mark everything live as “in”</button>
     </div>
   </div>
-  <div class="colhead">
-    <span>Katie’s version
-      <label class="origchk"><input type="checkbox" id="showorig"> show originals</label>
-    </span>
-    <span>Tony’s version</span>
-  </div>
+  <div class="colhead"><span>Katie’s version + proposed</span><span>Tony’s version</span></div>
   <div id="deckbody"></div>
 </div>
 
@@ -257,7 +245,7 @@ const MISSING = [
   "after": "MSG-02b",
   "nm": "Accepted confirmation",
   "when": "Sends 5 minutes after they accept the invite",
-  "copy": "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
+  "copy": "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
   "pri": "top 5",
   "wasWhen": "Sends the moment they accept the invite"
  },
@@ -268,7 +256,7 @@ const MISSING = [
   "after": "MSG-02b",
   "nm": "Invite expiry warning",
   "when": "Sends 48 hours after the initial invite, if they haven't answered",
-  "copy": "Heads up {name}, your {brand} invite expires tonight! You'll need to accept or decline today (takes less than 30 seconds), otherwise your invite will expire and we won't be able to send more collabs your way in the future! Reply here - https://benable.com/brand-collabs/invite",
+  "copy": "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
   "pri": null,
   "wasWhen": "Sends 6 hours before the invite expires, if they haven't answered"
  },
@@ -545,8 +533,7 @@ const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
 let editingRef = null;
 let dragRef = null;
 let lastMoved = null;
-const origShown = {};   // per-ref override of the global originals toggle
-let showOrig = false;   // global: left column shows the original/production text
+const origShown = {};   // per-ref: left bubble swapped to the original text
 
 function segInfo(text) {
   const n = text.length;
@@ -633,7 +620,6 @@ const stClass = st => st === "live" ? "live" : st === "missing" ? "missing" : st
 const textRows = () => buildDeck().filter(i => i.kind === "ladder" || i.kind === "extra" || i.kind === "custom");
 
 function render() {
-  const hideCut = !!S.hideCut;
   let html = "";
   let pendingSect = null;
   for (const it of buildDeck()) {
@@ -644,21 +630,18 @@ function render() {
       continue;
     }
     const ref = refOf(it);
-    const v = S.verdicts[ref] || "";
-    if (v === "cut" && hideCut) continue;
     if (pendingSect) { html += sectHTML(pendingSect); pendingSect = null; }
 
     const edit = S.reviewEdits[ref];
     const kv = (SEED.katie || {})[ref];
     const baseCopy = kv ? kv.copy : it.copy;
-    const flipped = kv && (origShown[ref] !== undefined ? origShown[ref] : showOrig);
-    const now = flipped ? it.copy : (edit ? edit.before : baseCopy);
+    const flipped = kv && origShown[ref];
+    const now = flipped ? it.copy : baseCopy;
     const idLabel = it.kind === "ladder" ? it.id : it.kind === "custom" ? "yours" : "proposed";
     const bcls = ["bubble"];
     if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
-    if (edit) bcls.push("was");
 
-    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v ? "v-" + v : ""} ${ref === lastMoved ? "justmoved" : ""}" data-ref="${esc(ref)}">
+    html += `<div class="item ${ref === lastMoved ? "justmoved" : ""}" data-ref="${esc(ref)}">
       <div class="meta">
         <span class="grip" draggable="true" title="Drag to move this text">⠿</span>
         <span class="mid">${esc(idLabel)}</span>
@@ -671,9 +654,9 @@ function render() {
       ${(S.whenEdits[ref] && S.whenEdits[ref] !== it.when) ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.when)}</div>` : (it.wasWhen ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.wasWhen)}</div>` : "")}
       <div class="cols">
         <div class="cell">
-          <div class="cap">${flipped ? "Original" : "Katie’s version"}</div>
+          <div class="cap">${flipped ? "What we currently send" : "Katie’s version"}</div>
           ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
-          ${kv ? `<div class="flipbar"><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s version" : (it.status === "live" ? "See what we currently send" : "See original")}</button></div>` : ""}
+          ${kv ? `<div class="flipbar"><span class="rwtag${flipped ? " isorig" : ""}">${flipped ? (it.status === "live" ? "currently sent" : "original") : "rewritten"}</span><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s version" : (it.status === "live" ? "See what we currently send" : "See the original draft")}</button></div>` : ""}
         </div>
         <div class="cell">
           <div class="cap">Tony’s version</div>`;
@@ -692,29 +675,19 @@ function render() {
       <div class="foot">
         <span class="why">${why}</span>
         ${it.kind === "custom" ? `<button class="mini danger" data-del="${esc(ref)}">Remove</button>` : ""}
-        <div class="verdict">
-          <button class="in ${v === "in" ? "on" : ""}" data-v="in" data-ref="${esc(ref)}">In</button>
-          <button class="later ${v === "later" ? "on" : ""}" data-v="later" data-ref="${esc(ref)}">Later</button>
-          <button class="cut ${v === "cut" ? "on" : ""}" data-v="cut" data-ref="${esc(ref)}">Cut</button>
-        </div>
       </div>
-      ${(v || S.katieNotes[ref]) ? `<input class="kn" data-note="${esc(ref)}" value="${esc(S.katieNotes[ref] || "")}" placeholder="Note for Julia (optional)">` : ""}
+      <input class="kn" data-note="${esc(ref)}" value="${esc(S.katieNotes[ref] || "")}" placeholder="Note for Julia (optional)">
     </div>`;
   }
   $("#deckbody").innerHTML = html;
 
-  const total = textRows().length;
-  const decided = textRows().filter(i => S.verdicts[refOf(i)]).length;
   const changes = Object.values(S.reviewEdits).filter(e => !e.sentAt).length;
-  $("#kcount").textContent = decided + " of " + total + " decided";
   $("#tcount").textContent = changes + (changes === 1 ? " rewrite" : " rewrites");
-  const newVerdicts = Object.entries(S.verdicts).filter(([r, v]) => ((SEED.verdicts || {})[r] || "") !== v).length;
   const seededMoves = JSON.stringify(SEED.moves || []);
   const newMoves = S.moves.filter(m => !seededMoves.includes(JSON.stringify(m))).length;
   const unsent = changes + Object.keys(S.whenEdits).length + Object.keys(S.nameEdits).length + newMoves
-    + Object.keys(S.katieNotes).length + S.customTexts.length + newVerdicts;
+    + Object.keys(S.katieNotes).length + S.customTexts.length;
   $("#sendpass").textContent = unsent ? "Send pass · " + unsent : "Send pass";
-  $("#hidecut").checked = !!S.hideCut;
   wire();
 }
 function sectHTML(it) {
@@ -726,19 +699,13 @@ function wire() {
   root.querySelectorAll("[data-when]").forEach(el => el.addEventListener("click", () => editWhen(el)));
   root.querySelectorAll("[data-name]").forEach(el => el.addEventListener("click", () => editName(el)));
   root.querySelectorAll("[data-addhere]").forEach(b => b.addEventListener("click", () => openAdd(b.dataset.addhere)));
-  root.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => {
-    const ref = b.dataset.ref;
-    if (S.verdicts[ref] === b.dataset.v) delete S.verdicts[ref];
-    else S.verdicts[ref] = b.dataset.v;
-    save(); render();
-  }));
   root.querySelectorAll("[data-note]").forEach(t => t.addEventListener("input", () => {
     const ref = t.dataset.note;
     if (t.value.trim()) S.katieNotes[ref] = t.value.trim(); else delete S.katieNotes[ref];
     save();
   }));
   root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeCustom(b.dataset.del)));
-  root.querySelectorAll("[data-flip]").forEach(b => b.addEventListener("click", () => { const r = b.dataset.flip; const cur = origShown[r] !== undefined ? origShown[r] : showOrig; origShown[r] = !cur; render(); }));
+  root.querySelectorAll("[data-flip]").forEach(b => b.addEventListener("click", () => { origShown[b.dataset.flip] = !origShown[b.dataset.flip]; render(); }));
   root.querySelectorAll("[data-edit]").forEach(b => {
     const open = () => {
       editingRef = b.dataset.edit; render();
@@ -940,17 +907,6 @@ $("#addsave").addEventListener("click", () => {
 });
 
 /* ---------------- toggles and export ---------------- */
-$("#hidecut").addEventListener("change", e => { S.hideCut = e.target.checked; save(); render(); });
-$("#showorig").addEventListener("change", e => { showOrig = e.target.checked; for (const k in origShown) delete origShown[k]; render(); });
-$("#keepall").addEventListener("click", () => {
-  let n = 0;
-  for (const it of buildDeck()) {
-    if (it.kind !== "ladder" || it.status !== "live") continue;
-    if (!S.verdicts[it.id]) { S.verdicts[it.id] = "in"; n++; }
-  }
-  save(); render();
-  toast(n ? n + " live texts marked in." : "Already done.");
-});
 
 function exportText() {
   const items = textRows();
@@ -959,7 +915,7 @@ function exportText() {
   const edits = allEdits.filter(([, e]) => !e.sentAt);
   const sentEdits = allEdits.filter(([, e]) => e.sentAt);
   out.push("SMS review pass");
-  out.push(edits.length + (edits.length === 1 ? " new rewrite" : " new rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
+  out.push(edits.length + (edits.length === 1 ? " new rewrite" : " new rewrites"));
   out.push("");
   const seededMv = JSON.stringify(SEED.moves || []);
   const newMv = S.moves.filter(m => !seededMv.includes(JSON.stringify(m)));
@@ -980,20 +936,13 @@ function exportText() {
     out.push("PREVIOUSLY SENT (" + sentEdits.length + " · already with Julia, here just in case)");
     for (const [ref, e] of sentEdits) out.push("  " + ref.toUpperCase() + " · " + e.name + "\n  WAS: " + e.before + "\n  NOW: " + e.after + "\n");
   }
-  for (const key of ["in", "later", "cut"]) {
-    const hits = items.filter(i => S.verdicts[refOf(i)] === key);
-    if (!hits.length) continue;
-    out.push(({ in: "IN", later: "LATER", cut: "CUT" })[key] + " (" + hits.length + ")");
-    for (const i of hits) {
-      const ref = refOf(i);
-      out.push("  · " + nameOf(i) + " [" + ref + "] · " + whenOf(i) + (S.katieNotes[ref] ? "\n      note: " + S.katieNotes[ref] : ""));
+  const noted = Object.keys(S.katieNotes);
+  if (noted.length) {
+    out.push("NOTES (" + noted.length + ")");
+    for (const ref of noted) {
+      const i = items.find(x => refOf(x) === ref);
+      out.push("  · " + (i ? nameOf(i) : ref) + " [" + ref + "]: " + S.katieNotes[ref]);
     }
-    out.push("");
-  }
-  const undecided = items.filter(i => !S.verdicts[refOf(i)]);
-  if (undecided.length) {
-    out.push("NOT DECIDED (" + undecided.length + ")");
-    for (const i of undecided) out.push("  · " + nameOf(i) + " [" + refOf(i) + "]");
     out.push("");
   }
   if (S.customTexts.length) {
@@ -1046,7 +995,7 @@ if (staleState) {
   const st = ensureDefaults(staleState);
   const hasWork = Object.values(st.reviewEdits).some(e => !e.sentAt) || Object.keys(st.whenEdits).length ||
     st.moves.length || Object.keys(st.katieNotes).length || st.customTexts.length ||
-    Object.keys(st.verdicts).length || Object.keys(st.extraCopy).length;
+    Object.keys(st.extraCopy).length;
   if (hasWork) {
     $("#rectext").value = exportForState(st);
     $("#recoverlay").hidden = false;

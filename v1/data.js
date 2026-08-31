@@ -894,34 +894,25 @@ const SEED = {
     "id": "MSG-01",
     "name": "Portal invite",
     "when": "Sends 1 day after we email the program invite, if they haven't joined yet. If they reply yes, the follow-up below carries the link",
-    "copy": "Hey {name}! It's Katie, Head of Brand Collabs at Benable. We've been running more collabs than ever, and my team put you on the shortlist for a couple collab opportunities! Can I send you the details?",
+    "copy": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions! https://benable.com/brand-collabs/invite",
     "status": "live",
-    "indent": 0,
-    "edited": true,
-    "editedBy": "tony-round-1",
-    "editedAt": "2026-08-29T12:00:00.000Z"
+    "indent": 0
    },
    {
     "id": "MSG-02",
     "name": "New collab invite",
     "when": "Sends 2 hours after the brand's invite goes out, if they haven't answered",
-    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}! Accepting takes less than 30 seconds, but you need to respond within 24 hours to keep your collab spot! https://benable.com/brand-collabs/invite",
+    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward! https://benable.com/brand-collabs/invite",
     "status": "live",
-    "indent": 0,
-    "edited": true,
-    "editedBy": "tony-round-1",
-    "editedAt": "2026-08-29T12:00:00.000Z"
+    "indent": 0
    },
    {
     "id": "MSG-02b",
     "name": "Campaign invite, final warning",
     "when": "Sends the next morning at 10am ET, if they still haven't answered the invite from the day before",
-    "copy": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
+    "copy": "Hi {name}, it's Katie from Benable! We sent you a new collab opportunity on Benable but haven't heard back from you. If you don't accept or reject the campaign in the next 12 hours using the link below, we will have to give your spot to someone else. The brand hand-picked you and is super excited to have you participate so we hope you consider! https://benable.com/brand-collabs/invite",
     "status": "live",
     "indent": 0,
-    "edited": true,
-    "editedBy": "tony-round-1",
-    "editedAt": "2026-08-29T12:00:00.000Z",
     "wasWhen": "Sends 26 hours after the invite, if they still haven't answered"
    },
    {
@@ -1151,34 +1142,8 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "sep1-r9",
- "reviewEdits": {
-  "MSG-01": {
-   "name": "Portal invite",
-   "before": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions! https://benable.com/brand-collabs/invite",
-   "after": "Hey {name}! It's Katie, Head of Brand Collabs at Benable. We've been running more collabs than ever, and my team put you on the shortlist for a couple collab opportunities! Can I send you the details?",
-   "at": "2026-08-29T12:00:00.000Z",
-   "by": "Tony · round 1",
-   "sentAt": "round 1"
-  },
-  "MSG-02": {
-   "name": "New collab invite",
-   "before": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward! https://benable.com/brand-collabs/invite",
-   "after": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}! Accepting takes less than 30 seconds, but you need to respond within 24 hours to keep your collab spot! https://benable.com/brand-collabs/invite",
-   "at": "2026-08-29T12:00:00.000Z",
-   "by": "Tony · round 1",
-   "sentAt": "round 1"
-  },
-  "MSG-02b": {
-   "name": "Campaign invite, final warning",
-   "before": "Hi {name}, it's Katie from Benable! We sent you a new collab opportunity on Benable but haven't heard back from you. If you don't accept or reject the campaign in the next 12 hours using the link below, we will have to give your spot to someone else. The brand hand-picked you and is super excited to have you participate so we hope you consider! https://benable.com/brand-collabs/invite",
-   "after": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
-   "at": "2026-08-29T12:00:00.000Z",
-   "by": "Tony · round 1",
-   "sentAt": "round 1"
-  }
- },
- "changelog": "Applied since your last visit: the 18 cut texts are gone from the deck. What remains is the 34 Katie kept, all marked in.",
+ "gen": "sep1-r10",
+ "changelog": "Layout per Julia: left is Katie's version plus the proposed texts (all her rounds, including the invite rewrites, now live there), right is Tony's and starts empty. In/Later/Cut removed, everything is in. Rewritten texts carry a tag that swaps in what we currently send.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
@@ -1283,43 +1248,27 @@ const SEED = {
   "first-sale": {
    "copy": "Yay {name}!! Your first sale just came through your {brand} affiliate link! Just sent you $50 via {payment method} to celebrate! Keep sharing the link to earn more commissions!",
    "at": "2026-09-01T09:00:00.000Z"
+  },
+  "accept-confirm": {
+   "copy": "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
+   "at": "2026-09-01T12:00:00.000Z"
+  },
+  "invite-expiry": {
+   "copy": "Heads up {name}, your {brand} invite expires tonight! You'll need to accept or decline today (takes less than 30 seconds), otherwise your invite will expire and we won't be able to send more collabs your way in the future! Reply here - https://benable.com/brand-collabs/invite",
+   "at": "2026-09-01T12:00:00.000Z"
+  },
+  "MSG-01": {
+   "copy": "Hey {name}! It's Katie, Head of Brand Collabs at Benable. We've been running more collabs than ever, and my team put you on the shortlist for a couple collab opportunities! Can I send you the details?",
+   "at": "2026-09-01T12:00:00.000Z"
+  },
+  "MSG-02": {
+   "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}! Accepting takes less than 30 seconds, but you need to respond within 24 hours to keep your collab spot! https://benable.com/brand-collabs/invite",
+   "at": "2026-09-01T12:00:00.000Z"
+  },
+  "MSG-02b": {
+   "copy": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
+   "at": "2026-09-01T12:00:00.000Z"
   }
- },
- "verdicts": {
-  "MSG-01": "in",
-  "portal-invite-yes": "in",
-  "MSG-02": "in",
-  "MSG-02b": "in",
-  "accept-confirm": "in",
-  "invite-expiry": "in",
-  "MSG-03": "in",
-  "order-placed": "in",
-  "MSG-04": "in",
-  "MSG-05": "in",
-  "MSG-06": "in",
-  "MSG-06b": "in",
-  "MSG-06c": "in",
-  "draft-received": "in",
-  "brand-reviewing": "in",
-  "MSG-08": "in",
-  "overdue-d4": "in",
-  "overdue-d6": "in",
-  "MSG-11a": "in",
-  "post-overdue-d1": "in",
-  "post-overdue-d6": "in",
-  "MSG-11b": "in",
-  "moderated-feedback": "in",
-  "resubmit-clock": "in",
-  "affiliate-link": "in",
-  "wrap-up": "in",
-  "MSG-L2": "in",
-  "visit-tomorrow": "in",
-  "MSG-L3": "in",
-  "payment-method-missing": "in",
-  "gift-card-sent": "in",
-  "payment-sent": "in",
-  "payment-failed": "in",
-  "first-sale": "in"
  },
  "moves": [
   {
