@@ -915,7 +915,7 @@ const SEED = {
    {
     "id": "MSG-02b",
     "name": "Campaign invite, final warning",
-    "when": "Sends 26 hours after the invite, if they still haven't answered",
+    "when": "Sends the next morning at 10am ET, if they still haven't answered the invite from the day before",
     "copy": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
     "status": "live",
     "indent": 0,
@@ -1165,7 +1165,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-tony-r1",
+ "gen": "aug29-tony-r2",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",

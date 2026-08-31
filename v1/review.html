@@ -55,6 +55,15 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .meta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; padding: 0 2px; flex-wrap: wrap; }
 .mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
 .mname { font-size: 13.5px; font-weight: 800; color: var(--ink); letter-spacing: -.15px; }
+.grip { cursor: grab; color: var(--ink-subtle); font-size: 14px; line-height: 1; padding: 2px 4px 2px 0; user-select: none; -webkit-user-drag: element; }
+.grip:hover { color: var(--accent); }
+.grip:active { cursor: grabbing; }
+.item.dragging { opacity: .35; }
+.item.drop-above { box-shadow: 0 -3px 0 0 var(--accent); border-radius: 4px; }
+.item.drop-below { box-shadow: 0 3px 0 0 var(--accent); border-radius: 4px; }
+.sect.drop-into { outline: 2px dashed var(--accent); outline-offset: 5px; border-radius: 6px; }
+.item.justmoved { animation: landed 1.2s ease; }
+@keyframes landed { 0% { background: var(--accent-bg); } 100% { background: transparent; } }
 .hand { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-med); background: #ECECEF; border-radius: 4px; padding: 2px 6px; }
 .sendline { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #4A4A50; background: #E9E9EF; border-radius: 8px; padding: 4px 11px 4px 9px; margin: 0 0 9px 2px; cursor: text; max-width: 100%; }
 .sendline:hover { background: #E1E1EA; color: var(--accent); }
@@ -152,7 +161,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 <div class="deck">
   <div class="intro">
     <p><b>Tony: left is what it says now, right is your version.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. The original stays put so you can see the swap.</p>
-    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey line to correct when a text sends. Anything we never thought of, add it with <b>+ Add a text</b>.</p>
+    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey line to correct when a text sends. Anything we never thought of, add it with <b>+ Add a text</b>, and drag any text by its ⠿ handle to move it to where it belongs.</p>
     <div class="introrow">
       <div class="legend">
         <span><i style="background:var(--green);"></i>sends today</span>
@@ -224,7 +233,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Accepted confirmation",
-  "when": "Sends the moment they accept the invite",
+  "when": "Sends 5 minutes after they accept the invite",
   "copy": "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
   "pri": "top 5"
  },
@@ -234,8 +243,8 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Invite expiry warning",
-  "when": "Sends 6 hours before the invite expires, if they haven't answered",
-  "copy": "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
+  "when": "Sends 48 hours after the initial invite, if they haven't answered",
+  "copy": "Heads up {name}, your {brand} invite expires tonight! You'll need to accept or decline today (takes less than 30 seconds), otherwise your invite will expire and we won't be able to send more collabs your way in the future! Reply here - https://benable.com/brand-collabs/invite",
   "pri": null
  },
  {
@@ -575,7 +584,7 @@ const MISSING = [
 const NOTES = {
  "accept-confirm": "Katie's highest-volume manual text today. Rewritten in the first review round: it now opens the relationship instead of asking for the next click.",
  "portal-invite-yes": "Added in the first review round. The invite text no longer carries the link, so this one delivers it after a yes. Nothing can fire it today: it is the first text that depends on the agent reading an inbound reply.",
- "invite-expiry": "Expiry is real here, so the urgency is honest.",
+ "invite-expiry": "Expiry is real here, so the urgency is honest. Copy and timing set by Tony in the first review round.",
  "spot-opened": "Pairs with the rolling-invite workstream (Des's manual routine).",
  "decline-ack": "Also the reply for the decline-by-text flag. Keeps the relationship warm.",
  "order-placed": "The duplicate-order lesson: confirm the order, catch wrong variants before a wrong \"shipped\".",
@@ -638,9 +647,12 @@ S.verdicts = S.verdicts || {};        // keep/cut call: { ref: "in" | "later" | 
 S.katieNotes = S.katieNotes || {};    // note per text
 S.whenEdits = S.whenEdits || {};      // corrected trigger line
 S.customTexts = S.customTexts || [];  // texts added in this tool
+S.moves = S.moves || [];              // manual reorders: [{ref, after}] where after is a ref or "sect:<section>"
 const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
 
 let editingRef = null;
+let dragRef = null;
+let lastMoved = null;
 
 function segInfo(text) {
   const n = text.length;
@@ -689,7 +701,34 @@ function buildDeck() {
     items.push({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
   }
   items.push(...customFor("other"));
+  applyMoves(items);
   return items;
+}
+
+/* Reorders from drag and drop. Each move pulls a row out and re-inserts it
+   after its anchor (a text ref, or "sect:<section>" for the top of a section).
+   Anchors that no longer exist are skipped, not fatal. */
+function applyMoves(items) {
+  const isRow = x => x.kind !== "sect" && x.kind !== "branch";
+  for (const mv of S.moves) {
+    const from = items.findIndex(x => isRow(x) && refOf(x) === mv.ref);
+    if (from < 0) continue;
+    const [it] = items.splice(from, 1);
+    let at = mv.after.startsWith("sect:")
+      ? items.findIndex(x => x.kind === "sect" && x.section === mv.after.slice(5))
+      : items.findIndex(x => isRow(x) && refOf(x) === mv.after);
+    if (at < 0) { items.splice(from, 0, it); continue; }
+    items.splice(at + 1, 0, it);
+  }
+}
+
+function recordMove(ref, after) {
+  if (after === ref) return;
+  S.moves = S.moves.filter(m => m.ref !== ref);
+  S.moves.push({ ref, after });
+  lastMoved = ref;
+  save(); render();
+  toast("Moved. It stays there for everyone who opens this review.");
 }
 
 const refOf = it => it.kind === "ladder" ? it.id : it.key;
@@ -721,8 +760,9 @@ function render() {
     if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
     if (edit) bcls.push("was");
 
-    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v ? "v-" + v : ""}" data-ref="${esc(ref)}">
+    html += `<div class="item ${v === "cut" ? "iscut" : ""} ${v ? "v-" + v : ""} ${ref === lastMoved ? "justmoved" : ""}" data-ref="${esc(ref)}">
       <div class="meta">
+        <span class="grip" draggable="true" title="Drag to move this text">⠿</span>
         <span class="mid">${esc(idLabel)}</span>
         <span class="mname">${esc(it.name)}</span>
         ${it.pri ? `<span class="pri">★ ${esc(it.pri)}</span>` : ""}
@@ -772,7 +812,7 @@ function render() {
   wire();
 }
 function sectHTML(it) {
-  return `<div class="sect"><h2>${esc(it.title)}</h2><span class="sub">${esc(it.sub)}</span><button class="addhere" data-addhere="${esc(it.section)}">+ Add a text here</button></div>`;
+  return `<div class="sect" data-section="${esc(it.section)}"><h2>${esc(it.title)}</h2><span class="sub">${esc(it.sub)}</span><button class="addhere" data-addhere="${esc(it.section)}">+ Add a text here</button></div>`;
 }
 
 function wire() {
@@ -804,6 +844,55 @@ function wire() {
   root.querySelectorAll("[data-cancel]").forEach(b => b.addEventListener("click", () => { editingRef = null; render(); }));
   root.querySelectorAll("[data-save]").forEach(b => b.addEventListener("click", () => saveEdit(b.dataset.save)));
   root.querySelectorAll("[data-revert]").forEach(b => b.addEventListener("click", () => revert(b.dataset.revert)));
+
+  /* drag and drop */
+  const clearDrop = () => root.querySelectorAll(".drop-above, .drop-below, .drop-into").forEach(el => el.classList.remove("drop-above", "drop-below", "drop-into"));
+  root.querySelectorAll(".grip").forEach(g => {
+    const item = g.closest(".item");
+    g.addEventListener("dragstart", e => {
+      dragRef = item.dataset.ref;
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", dragRef);
+      e.dataTransfer.setDragImage(item, 24, 24);
+      requestAnimationFrame(() => item.classList.add("dragging"));
+    });
+    g.addEventListener("dragend", () => { dragRef = null; clearDrop(); item.classList.remove("dragging"); });
+  });
+  const rows = [...root.querySelectorAll(".item")];
+  rows.forEach(el => {
+    el.addEventListener("dragover", e => {
+      if (!dragRef || el.dataset.ref === dragRef) return;
+      e.preventDefault(); e.dataTransfer.dropEffect = "move";
+      clearDrop();
+      const r = el.getBoundingClientRect();
+      el.classList.add(e.clientY < r.top + r.height / 2 ? "drop-above" : "drop-below");
+    });
+    el.addEventListener("dragleave", e => { if (!el.contains(e.relatedTarget)) el.classList.remove("drop-above", "drop-below"); });
+    el.addEventListener("drop", e => {
+      if (!dragRef) return;
+      e.preventDefault();
+      const above = el.classList.contains("drop-above");
+      clearDrop();
+      const ref = dragRef; dragRef = null;
+      if (!above) { recordMove(ref, el.dataset.ref); return; }
+      // dropping above a row = after whatever displayable thing precedes it
+      let prev = el.previousElementSibling;
+      while (prev && !prev.classList.contains("item") && !prev.classList.contains("sect")) prev = prev.previousElementSibling;
+      if (!prev) return;
+      if (prev.classList.contains("sect")) recordMove(ref, "sect:" + prev.dataset.section);
+      else if (prev.dataset.ref !== ref) recordMove(ref, prev.dataset.ref);
+    });
+  });
+  root.querySelectorAll(".sect").forEach(el => {
+    el.addEventListener("dragover", e => { if (!dragRef) return; e.preventDefault(); e.dataTransfer.dropEffect = "move"; clearDrop(); el.classList.add("drop-into"); });
+    el.addEventListener("dragleave", e => { if (!el.contains(e.relatedTarget)) el.classList.remove("drop-into"); });
+    el.addEventListener("drop", e => {
+      if (!dragRef) return;
+      e.preventDefault(); clearDrop();
+      const ref = dragRef; dragRef = null;
+      recordMove(ref, "sect:" + el.dataset.section);
+    });
+  });
 }
 
 function editWhen(el) {
@@ -899,6 +988,7 @@ function openAdd(section) {
 function removeCustom(ref) {
   S.customTexts = S.customTexts.filter(c => c.key !== ref);
   delete S.verdicts[ref]; delete S.katieNotes[ref]; delete S.whenEdits[ref]; delete S.reviewEdits[ref];
+  S.moves = S.moves.filter(m => m.ref !== ref && m.after !== ref);
   save(); render();
   toast("Removed.");
 }
@@ -940,6 +1030,15 @@ function exportText() {
   out.push("SMS review pass");
   out.push(edits.length + (edits.length === 1 ? " rewrite" : " rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
   out.push("");
+  if (S.moves.length) {
+    out.push("MOVED (" + S.moves.length + ")");
+    for (const mv of S.moves) {
+      const it = items.find(x => refOf(x) === mv.ref);
+      const dest = mv.after.startsWith("sect:") ? "top of " + mv.after.slice(5) : "after " + ((items.find(x => refOf(x) === mv.after) || {}).name || mv.after);
+      out.push("  · " + (it ? it.name : mv.ref) + " [" + mv.ref + "] → " + dest);
+    }
+    out.push("");
+  }
   if (edits.length) {
     out.push("COPY CHANGES");
     for (const [ref, e] of edits) out.push("  " + ref.toUpperCase() + " · " + e.name + "\n  WAS: " + e.before + "\n  NOW: " + e.after + "\n");
@@ -994,7 +1093,7 @@ window.addEventListener("storage", e => {
   S = loadState();
   S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});
   S.verdicts = S.verdicts || {}; S.katieNotes = S.katieNotes || {};
-  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || [];
+  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || [];
   editingRef = null; render();
 });
 
