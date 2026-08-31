@@ -54,7 +54,12 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .item.v-cut { border-left-color: var(--red); }
 .meta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; padding: 0 2px; flex-wrap: wrap; }
 .mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
-.mname { font-size: 11.5px; font-weight: 700; color: var(--ink-med); }
+.mname { font-size: 13.5px; font-weight: 800; color: var(--ink); letter-spacing: -.15px; }
+.hand { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-med); background: #ECECEF; border-radius: 4px; padding: 2px 6px; }
+.sendline { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: #4A4A50; background: #E9E9EF; border-radius: 8px; padding: 4px 11px 4px 9px; margin: 0 0 9px 2px; cursor: text; max-width: 100%; }
+.sendline:hover { background: #E1E1EA; color: var(--accent); }
+.sendline b { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-subtle); flex: none; }
+.sendline:hover b { background: var(--accent); }
 .pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
@@ -74,9 +79,6 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .bubble.was { opacity: .4; }
 .bubble.rw { background: var(--accent); max-width: 94%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
 .bubble.rw:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124,92,250,.3); }
-.when { font-size: 10.5px; color: var(--ink-subtle); text-align: right; margin: 4px 5px 0 0; cursor: text; }
-.when span { border-bottom: 1px dotted transparent; }
-.when:hover span { color: var(--accent); border-bottom-color: var(--accent); }
 .ghostcell { display: block; margin-left: auto; width: 94%; text-align: left; font: inherit; font-size: 13.5px; color: var(--ink-subtle); background: none; border: 1.5px dashed #D7D7DC; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; cursor: pointer; transition: transform .12s ease, border-color .12s ease, color .12s ease; }
 .ghostcell:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 .ghostcell.flat, .ghostcell.flat:hover { cursor: default; transform: none; border-color: #D7D7DC; color: var(--ink-subtle); }
@@ -150,7 +152,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 <div class="deck">
   <div class="intro">
     <p><b>Tony: left is what it says now, right is your version.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. The original stays put so you can see the swap.</p>
-    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey trigger line to fix when it fires. Anything we never thought of, add it with <b>+ Add a text</b>.</p>
+    <p><b>Katie: same page, one extra job.</b> Under each text, say whether it goes <b>in</b>, waits for <b>later</b>, or gets <b>cut</b>. Click the grey line to correct when a text sends. Anything we never thought of, add it with <b>+ Add a text</b>.</p>
     <div class="introrow">
       <div class="legend">
         <span><i style="background:var(--green);"></i>sends today</span>
@@ -212,7 +214,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Accepted confirmation",
-  "when": "on accept · instant",
+  "when": "Sends the moment they accept the invite",
   "copy": "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
   "pri": "top 5"
  },
@@ -222,7 +224,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Invite expiry warning",
-  "when": "invite window minus 6h, no response",
+  "when": "Sends 6 hours before the invite expires, if they haven't answered",
   "copy": "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
   "pri": null
  },
@@ -232,7 +234,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Spot opened re-offer",
-  "when": "waitlisted creator, spot frees up",
+  "when": "Sends when a spot frees up and they were next in line",
   "copy": "good news, a spot just opened up on {brand}! first come first serve. want it? i'll hold it while you accept in the portal",
   "pri": null
  },
@@ -242,7 +244,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Decline acknowledgment",
-  "when": "on decline, portal or by text",
+  "when": "Sends the moment they decline, in the portal or by text",
   "copy": "no prob at all, ty for letting me know!! i'll make sure the team sends you better fits. anything specific you'd love to see?",
   "pri": null
  },
@@ -252,7 +254,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-03",
   "nm": "Order placed",
-  "when": "on order creation, before fulfillment",
+  "when": "Sends when we place the order with the brand, before it ships",
   "copy": "your {brand} order is in!! i'll text you the tracking the second it ships. excited for this one",
   "pri": "top 5"
  },
@@ -262,7 +264,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-04",
   "nm": "Shipping problem",
-  "when": "carrier exception or no scan movement in 4d",
+  "when": "Sends when the carrier reports a problem, or the package hasn't moved in 4 days",
   "copy": "quick heads up: the carrier is being slow with your {brand} package. i'm on it. if it's not moving by {date} we'll reship it, promise. sorry for the wait!",
   "pri": null
  },
@@ -272,7 +274,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-08",
   "nm": "Overdue, day 1",
-  "when": "draft due +1d · text",
+  "when": "Sends 1 day after the draft was due",
   "copy": "hey {name}, your {brand} draft was due yesterday! no stress, things come up. can you get it in today? if you send it today i'll push it to the front of the review queue",
   "pri": "asked for"
  },
@@ -282,7 +284,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-08",
   "nm": "Overdue, day 2",
-  "when": "draft due +2d · text",
+  "when": "Sends 2 days after the draft was due",
   "copy": "{name} are you still good for this one? just need a yes or no! if something changed lmk and i'll sort it out, and if you're still in, today works perfect",
   "pri": "asked for"
  },
@@ -292,7 +294,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-08",
   "nm": "Overdue, day 4",
-  "when": "draft due +4d · text and email",
+  "when": "Sends 4 days after the draft was due, by text and email",
   "copy": "hi {name}, {brand} is asking me about your content and i'd love to tell them it's coming this week. can you get the draft in by {date}? that's all i need",
   "pri": "asked for"
  },
@@ -302,7 +304,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-08",
   "nm": "Overdue, day 6",
-  "when": "draft due +6d · whichever channel they answer on",
+  "when": "Sends 6 days after the draft was due, on whichever channel they answer",
   "copy": "{name}, i have to close out the {brand} campaign on {date}. get me the draft before then and you're still in it. if the timing just doesn't work anymore, tell me and i'll put you first on the next one",
   "pri": "asked for"
  },
@@ -312,7 +314,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-08",
   "nm": "Closed out",
-  "when": "draft due +9d, nothing received · text and email",
+  "when": "Sends 9 days after the draft was due, if we still have nothing",
   "copy": "closing out your {brand} collab today {name}, no hard feelings at all! if you want back in on the next round just reply and i'll keep you on the list",
   "pri": "asked for"
  },
@@ -322,7 +324,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-06c",
   "nm": "Draft received",
-  "when": "on draft upload · instant",
+  "when": "Sends the moment they upload their draft",
   "copy": "got your draft, ty!! review usually takes 2-3 days, i'll text you the moment it's back. nothing else needed from you",
   "pri": "top 5"
  },
@@ -332,7 +334,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post due tomorrow",
-  "when": "post due minus 1d",
+  "when": "Sends the day before their post is due",
   "copy": "heads up {name}, your {brand} post is due tomorrow! everything's approved so it's ready to go up. want me to resend the caption and tags?",
   "pri": "asked for"
  },
@@ -342,7 +344,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post due today",
-  "when": "post due date, morning of",
+  "when": "Sends on the day their post is due",
   "copy": "today's the day {name}! your {brand} post goes live today. post it and drop the link in the portal, takes 30 seconds and then you're wrapped",
   "pri": "asked for"
  },
@@ -352,7 +354,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post overdue, day 1",
-  "when": "post due +1d · text",
+  "when": "Sends 1 day after the post was due",
   "copy": "hey {name}, your {brand} post was due yesterday! all good, it happens. can you get it up today? the link goes in the portal and that's you finished",
   "pri": "asked for"
  },
@@ -362,7 +364,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post overdue, day 2",
-  "when": "post due +2d · text",
+  "when": "Sends 2 days after the post was due",
   "copy": "{name} is the post still happening? just need a yes or no! if you need a new date say the word and i'll move it, and if it's going up today even better",
   "pri": "asked for"
  },
@@ -372,7 +374,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post overdue, day 4",
-  "when": "post due +4d · text and email",
+  "when": "Sends 4 days after the post was due, by text and email",
   "copy": "hi {name}, {brand} is watching for your post to go live. can you get it up by {date}? i'll let them know it's coming",
   "pri": "asked for"
  },
@@ -382,7 +384,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post overdue, day 6",
-  "when": "post due +6d · whichever channel they answer on",
+  "when": "Sends 6 days after the post was due, on whichever channel they answer",
   "copy": "{name}, i need your {brand} post live by {date} to count it for the campaign. after that i have to close it out. if life got in the way tell me and i'll get you on the next one",
   "pri": "asked for"
  },
@@ -392,7 +394,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Post never went live",
-  "when": "post due +9d, nothing live · text and email",
+  "when": "Sends 9 days after the post was due, if it still isn't live",
   "copy": "closing out your {brand} collab today {name}. your content was approved and we loved it so it's a shame to end here! reply any time and i'll get you on the next round",
   "pri": "asked for"
  },
@@ -402,7 +404,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11b",
   "nm": "Revised draft reminder",
-  "when": "feedback given, no resubmit in 2d",
+  "when": "Sends 2 days after we send notes, if no new version has come in",
   "copy": "feedback for your {brand} draft is in the portal, small tweaks only! can you get the updated version in by {date}? i'll flag it for a fast re-review",
   "pri": null
  },
@@ -412,7 +414,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11a",
   "nm": "Final link nudge",
-  "when": "posted, link not submitted, +1d",
+  "when": "Sends the day after they post, if the link isn't in the portal",
   "copy": "last step for {brand}: drop your posted link in the portal so i can wrap you up! takes 30 sec, can you do it today?",
   "pri": null
  },
@@ -422,7 +424,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-13",
   "nm": "Wrap-up thank you",
-  "when": "all deliverables in and approved",
+  "when": "Sends when everything is in and approved",
   "copy": "that's a wrap on {brand}!! everything's in and approved, you crushed it. your next collab is already brewing, i'll text you when it's ready",
   "pri": null
  },
@@ -432,7 +434,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Payment blocked, no PayPal or Venmo",
-  "when": "paid campaign ready to pay, no method on file · stops once they add one",
+  "when": "Sends when a payment is ready but there's no PayPal or Venmo on file. Stops once they add one",
   "copy": "Hey {name}! Your {amount} payment for the {brand} collab is ready. Can you add your Venmo or PayPal using this link? Thanks! We'll get it paid once it's added. {link}",
   "pri": null,
   "status": "live"
@@ -443,7 +445,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Gift card sent",
-  "when": "gift-card reward campaigns, on send",
+  "when": "Sends when we email the gift card",
   "copy": "your {amount} {brand} gift card just landed in your email!! check spam if you don't see it. lmk when you've got it?",
   "pri": null
  },
@@ -453,7 +455,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Payment sent",
-  "when": "on payout sent via PayPal or Venmo",
+  "when": "Sends when the payment goes out by PayPal or Venmo",
   "copy": "Hey {name}, your {amount} payment for the {brand} collab was just sent to your {method}! It can take a few minutes to show up. Thank you for working with us — reply here if anything looks off.",
   "pri": null,
   "status": "live"
@@ -464,7 +466,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Payment failed",
-  "when": "payout enters failed state",
+  "when": "Sends when a payment bounces back to us",
   "copy": "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
   "pri": "top 5"
  },
@@ -474,7 +476,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Affiliate link delivery",
-  "when": "on content approval",
+  "when": "Sends when their content is approved, carrying their link",
   "copy": "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
   "pri": "top 5"
  },
@@ -484,7 +486,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "First tracked sale",
-  "when": "first attributed sale lands",
+  "when": "Sends when the first sale comes through their link",
   "copy": "{name}!! your first sale just came through your link, that's $50 to you. keep it pinned, it keeps paying. congrats!!",
   "pri": null
  },
@@ -494,7 +496,7 @@ const MISSING = [
   "lane": "local",
   "after": "MSG-L2",
   "nm": "Visit confirmed",
-  "when": "visit date recorded",
+  "when": "Sends when they book their visit date",
   "copy": "locked in!! your {brand} visit is {date} at {time}. i'll remind you the day before. they're excited to have you",
   "pri": null
  },
@@ -504,7 +506,7 @@ const MISSING = [
   "lane": "local",
   "after": "MSG-L2",
   "nm": "Day-before reminder",
-  "when": "visit date minus 1d",
+  "when": "Sends the day before the visit",
   "copy": "your {brand} visit is tomorrow at {time}!! they're expecting you. content is due {date} after, i'll remind you. have fun!",
   "pri": "top 5"
  },
@@ -514,7 +516,7 @@ const MISSING = [
   "lane": "local",
   "after": "MSG-L2",
   "nm": "No-show / reschedule",
-  "when": "visit date passed, no visit logged",
+  "when": "Sends the day after a visit they didn't make",
   "copy": "looks like the {brand} visit didn't happen, all good, life happens!! when works this week? i'll reset your dates",
   "pri": null
  },
@@ -524,7 +526,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-06c",
   "nm": "Brand is reviewing",
-  "when": "brand-review fork, on submit",
+  "when": "Sends when the draft goes to the brand for review",
   "copy": "{brand} is looking at your content right now!! usually takes 2-3 days. i'll text you their notes the second they're back",
   "pri": null
  },
@@ -534,7 +536,7 @@ const MISSING = [
   "lane": "product",
   "after": "MSG-11b",
   "nm": "Brand feedback, translated",
-  "when": "brand notes returned · put into creator-friendly language",
+  "when": "Sends when the brand's notes come back, once we've put them in creator-friendly language",
   "copy": "{brand} sent notes on your draft: {notes}. can you get the update in by {date}? i'll make sure they review it fast",
   "pri": null
  },
@@ -544,7 +546,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Collective accepted",
-  "when": "application approved",
+  "when": "Sends when their Collective application is approved",
   "copy": "you're IN the collective!! collabs start hitting your portal this week, first dibs goes fast so keep an eye out. so excited to have you",
   "pri": null
  },
@@ -554,7 +556,7 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Banked campaign re-invite",
-  "when": "wrap-up +2 weeks, campaign held",
+  "when": "Sends 2 weeks after they wrap, when we're holding a campaign for them",
   "copy": "we're holding your next campaign for you {name}!! want me to line it up for {month}? just say the word",
   "pri": null
  }
@@ -658,7 +660,7 @@ function buildDeck() {
     const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
     for (const r of rows) {
       if (r.status === "branch") { items.push({ kind: "branch", label: r.name }); continue; }
-      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status, note: null, pri: null });
+      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status, note: null, pri: null, hand: r.hand });
       for (const m of (pendingByAfter[r.id] || [])) items.push(extra(m));
     }
     for (const [after, ms] of Object.entries(pendingByAfter)) {
@@ -713,13 +715,14 @@ function render() {
         <span class="mid">${esc(idLabel)}</span>
         <span class="mname">${esc(it.name)}</span>
         ${it.pri ? `<span class="pri">★ ${esc(it.pri)}</span>` : ""}
+        ${it.hand ? `<span class="hand">sent by hand</span>` : ""}
         <span class="st ${stClass(it.status)}">${stLabel(it.status)}</span>
       </div>
+      <div class="sendline" data-when="${esc(ref)}" title="Click to correct when it sends"><b></b><span>${esc(whenOf(it))}</span></div>
       <div class="cols">
         <div class="cell">
           <div class="cap">What it says now</div>
           ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
-          <div class="when" data-when="${esc(ref)}" title="Click to fix when it fires"><span>${esc(whenOf(it))}</span></div>
         </div>
         <div class="cell">
           <div class="cap">Your version</div>`;
@@ -796,8 +799,8 @@ function editWhen(el) {
   const ref = el.dataset.when;
   const wasSet = S.whenEdits[ref];
   const input = document.createElement("input");
-  input.value = el.textContent.trim();
-  input.style.cssText = "font:inherit;font-size:10.5px;border:1px solid var(--accent);border-radius:6px;padding:1px 5px;min-width:230px;";
+  input.value = (el.querySelector("span") || el).textContent.trim();
+  input.style.cssText = "font:inherit;font-size:12.5px;font-weight:600;border:1px solid var(--accent);border-radius:8px;padding:3px 9px;min-width:min(430px,92%);margin-bottom:9px;";
   el.replaceWith(input);
   input.focus(); input.select();
   /* persist on every keystroke, so nothing is lost if the field never blurs */
