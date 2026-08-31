@@ -89,6 +89,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .bubblewrap { display: flex; justify-content: flex-end; }
 .bubble { background: var(--green); color: #fff; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14.5px; line-height: 1.45; max-width: 94%; overflow-wrap: anywhere; }
 .bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--accent); }
+.bubble.kbubble { background: var(--accent); color: #fff; }
 .bubble.was { opacity: .4; }
 .bubble.rw { background: var(--accent); max-width: 94%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
 .bubble.rw:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124,92,250,.3); }
@@ -163,14 +164,14 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 
 <div class="deck">
   <div class="intro">
-    <p><b>Tony: left is Katie’s version plus the proposed texts, right is yours.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. Where a text is marked <b>rewritten</b>, tap “See what we currently send” to swap in the original.</p>
+    <p><b>Tony: left is Katie’s version plus the proposed texts, right is yours.</b> Read down the left column in the order a creator lives it. Anything that reads weak, write your line on the right. Katie’s rewrites are purple; tap “See the version we send today” under one to swap in the original (green means it sends today as shown).</p>
     <p><b>Everything here is in.</b> Click the grey line to correct when a text sends, click a title to rename it, add anything we never thought of with <b>+ Add a text</b>, and drag any text by its ⠿ handle to move it to where it belongs. Notes under a text reach Julia with the Send pass.</p>
     <div class="introrow">
       <div class="legend">
-        <span><i style="background:var(--green);"></i>sends today</span>
+        <span><i style="background:var(--green);"></i>sends today as shown</span>
         <span><i style="background:#C9C9CE;"></i>draft, this week</span>
         <span><i style="background:#fff;border:1.5px dashed var(--accent);"></i>missing, proposed</span>
-        <span><i style="background:var(--accent);"></i>rewritten</span>
+        <span><i style="background:var(--accent);"></i>Katie’s version</span>
         <span><i style="background:var(--amber);"></i>added by you</span>
       </div>
     </div>
@@ -639,7 +640,8 @@ function render() {
     const now = flipped ? it.copy : baseCopy;
     const idLabel = it.kind === "ladder" ? it.id : it.kind === "custom" ? "yours" : "proposed";
     const bcls = ["bubble"];
-    if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
+    if (kv && !flipped) bcls.push("kbubble");
+    else if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
 
     html += `<div class="item ${ref === lastMoved ? "justmoved" : ""}" data-ref="${esc(ref)}">
       <div class="meta">
@@ -656,7 +658,7 @@ function render() {
         <div class="cell">
           <div class="cap">${flipped ? "What we currently send" : "Katie’s version"}</div>
           ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
-          ${kv ? `<div class="flipbar"><span class="rwtag${flipped ? " isorig" : ""}">${flipped ? (it.status === "live" ? "currently sent" : "original") : "rewritten"}</span><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s version" : (it.status === "live" ? "See what we currently send" : "See the original draft")}</button></div>` : ""}
+          ${kv ? `<div class="flipbar"><span class="rwtag${flipped ? " isorig" : ""}">${flipped ? (it.status === "live" ? "currently sent" : "original") : "rewritten"}</span><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s version" : (it.status === "live" ? "See the version we send today" : "See the original draft")}</button></div>` : ""}
         </div>
         <div class="cell">
           <div class="cap">Tony’s version</div>`;
