@@ -1168,7 +1168,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-r7",
+ "gen": "sep1-r8",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1195,15 +1195,15 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Katie's fourth pass. The approval and posting fork now carries her versions (approval text with tagging and affiliate instructions, one post reminder 2 days after approval, day-7 final), seven more texts cut, and brand-feedback moved next to feedback-given.",
+ "changelog": "Applied since your last visit: Katie's final pass. All 52 texts decided (34 in, 18 cut), her versions cover the visit and money lanes, and the affiliate text became a share-detection chase. The deck is ready for Tony.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
    "at": "2026-08-29T20:00:00.000Z"
   },
   "order-placed": {
-   "copy": "Your {brand} order has been placed!! I'll text you tracking updates as I have them!",
-   "at": "2026-08-29T20:00:00.000Z"
+   "copy": "Your {brand} order has been placed!! I'll text you tracking updates as soon as I have them!",
+   "at": "2026-09-01T09:00:00.000Z"
   },
   "MSG-04": {
    "copy": "Hi {name}, it's Katie from Benable! Quick update: your gifted product from {brand} has shipped and will arrive very soon! Can't wait for you to try out the product.",
@@ -1272,15 +1272,74 @@ const SEED = {
   "wrap-up": {
    "copy": "Thanks so much for your work on the collab with {brand}! Can't wait to send more collab opportunities your way soon!",
    "at": "2026-08-30T00:30:00.000Z"
+  },
+  "MSG-L2": {
+   "copy": "Hi {name}! Following up, did you get a chance to email {brand} to set up your visit? If so, let me know which date you're going in. Otherwise, please CC me (kscalzo@benable.com) on your email to the brand today to schedule!",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "visit-tomorrow": {
+   "copy": "Your {brand} visit is tomorrow!! Just a quick reminder that content must be submitted to the Benable portal 10 days after. Have fun!",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "payment-sent": {
+   "copy": "Hey {name}, your {amount} payment for the {brand} collab was just sent to your {method}! It can take a few minutes to show up. Thank you for completing this collab!!",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "payment-failed": {
+   "copy": "Hey {name}, your {brand} payment bounced back to us. Can you re-add your payment info (PayPal or Venmo) to the portal, and I'll try it again? https://benable.com/brand-collabs/invite",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "gift-card-sent": {
+   "copy": "Your {amount} {brand} gift card just landed in your email!! Let me know once you get it!",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "affiliate-link": {
+   "copy": "Hey {name}! Just a reminder to add a story with your affiliate link and add the affiliate link to your bio/link in bio tool to officially complete the campaign. Here's the affiliate link - {affiliate link}",
+   "at": "2026-09-01T09:00:00.000Z"
+  },
+  "first-sale": {
+   "copy": "Yay {name}!! Your first sale just came through your {brand} affiliate link! Just sent you $50 via {payment method} to celebrate! Keep sharing the link to earn more commissions!",
+   "at": "2026-09-01T09:00:00.000Z"
   }
  },
  "verdicts": {
+  "MSG-01": "in",
+  "portal-invite-yes": "in",
+  "MSG-02": "in",
+  "MSG-02b": "in",
   "accept-confirm": "in",
   "invite-expiry": "in",
+  "MSG-03": "in",
+  "order-placed": "in",
+  "MSG-04": "in",
+  "MSG-05": "in",
+  "MSG-06": "in",
+  "MSG-06b": "in",
+  "MSG-06c": "in",
+  "draft-received": "in",
+  "brand-reviewing": "in",
+  "MSG-08": "in",
+  "overdue-d4": "in",
+  "overdue-d6": "in",
+  "MSG-11a": "in",
+  "post-overdue-d1": "in",
+  "post-overdue-d6": "in",
+  "MSG-11b": "in",
+  "moderated-feedback": "in",
+  "resubmit-clock": "in",
+  "affiliate-link": "in",
+  "wrap-up": "in",
+  "MSG-L2": "in",
+  "visit-tomorrow": "in",
+  "MSG-L3": "in",
+  "payment-method-missing": "in",
+  "gift-card-sent": "in",
+  "payment-sent": "in",
+  "payment-failed": "in",
+  "first-sale": "in",
   "spot-opened": "cut",
   "decline-ack": "cut",
   "shipping-problem": "cut",
-  "portal-invite-yes": "in",
   "overdue-d1": "cut",
   "overdue-d2": "cut",
   "overdue-final": "cut",
@@ -1290,12 +1349,21 @@ const SEED = {
   "post-overdue-d4": "cut",
   "post-overdue-final": "cut",
   "final-link": "cut",
-  "MSG-13": "cut"
+  "MSG-13": "cut",
+  "MSG-L1": "cut",
+  "visit-booked": "cut",
+  "visit-reschedule": "cut",
+  "collective-accepted": "cut",
+  "banked-reinvite": "cut"
  },
  "moves": [
   {
    "ref": "moderated-feedback",
    "after": "MSG-11b"
+  },
+  {
+   "ref": "affiliate-link",
+   "after": "resubmit-clock"
   }
  ]
 };

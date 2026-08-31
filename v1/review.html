@@ -55,6 +55,8 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .meta { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; padding: 0 2px; flex-wrap: wrap; }
 .mid { font-family: ui-monospace, SFMono-Regular, monospace; font-size: 10px; font-weight: 700; color: var(--accent); }
 .mname { font-size: 13.5px; font-weight: 800; color: var(--ink); letter-spacing: -.15px; }
+.mname.editable { cursor: text; }
+.mname.editable:hover { color: var(--accent); }
 .grip { cursor: grab; color: var(--ink-subtle); font-size: 14px; line-height: 1; padding: 2px 4px 2px 0; user-select: none; -webkit-user-drag: element; }
 .grip:hover { color: var(--accent); }
 .grip:active { cursor: grabbing; }
@@ -514,9 +516,10 @@ const MISSING = [
   "lane": null,
   "after": null,
   "nm": "Affiliate link delivery",
-  "when": "Sends when their content is approved, carrying their link",
+  "when": "Sends when we detect the affiliate link hasn't been shared 24 hours after the link is submitted to the portal",
   "copy": "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
-  "pri": "top 5"
+  "pri": "top 5",
+  "wasWhen": "Sends when their content is approved, carrying their link"
  },
  {
   "key": "first-sale",
@@ -677,6 +680,7 @@ function ensureDefaults(st) {
   st.verdicts = st.verdicts || {};
   st.katieNotes = st.katieNotes || {};
   st.whenEdits = st.whenEdits || {};
+  st.nameEdits = st.nameEdits || {};
   st.customTexts = st.customTexts || [];
   st.moves = st.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);
   return st;
@@ -686,6 +690,7 @@ S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(S
 S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdicts)) : {});        // keep/cut call: { ref: "in" | "later" | "cut" }
 S.katieNotes = S.katieNotes || {};    // note per text
 S.whenEdits = S.whenEdits || {};      // corrected trigger line
+S.nameEdits = S.nameEdits || {};      // corrected titles
 S.customTexts = S.customTexts || [];  // texts added in this tool
 S.moves = S.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);              // manual reorders: [{ref, after}] where after is a ref or "sect:<section>"; baked moves ship in the seed
 const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
@@ -774,6 +779,7 @@ function recordMove(ref, after) {
 
 const refOf = it => it.kind === "ladder" ? it.id : it.key;
 const whenOf = it => S.whenEdits[refOf(it)] || it.when;
+const nameOf = it => S.nameEdits[refOf(it)] || it.name;
 const stLabel = st => st === "live" ? "live" : st === "missing" ? "missing" : st === "yours" ? "added by you" : "draft";
 const stClass = st => st === "live" ? "live" : st === "missing" ? "missing" : st === "yours" ? "yours" : "draft";
 const textRows = () => buildDeck().filter(i => i.kind === "ladder" || i.kind === "extra" || i.kind === "custom");
@@ -808,7 +814,7 @@ function render() {
       <div class="meta">
         <span class="grip" draggable="true" title="Drag to move this text">⠿</span>
         <span class="mid">${esc(idLabel)}</span>
-        <span class="mname">${esc(it.name)}</span>
+        <span class="mname editable" data-name="${esc(ref)}" title="Click to fix the title">${esc(nameOf(it))}</span>
         ${it.pri ? `<span class="pri">★ ${esc(it.pri)}</span>` : ""}
         ${it.hand ? `<span class="hand">sent by hand</span>` : ""}
         <span class="st ${stClass(it.status)}">${stLabel(it.status)}</span>
@@ -857,7 +863,7 @@ function render() {
   const newVerdicts = Object.entries(S.verdicts).filter(([r, v]) => ((SEED.verdicts || {})[r] || "") !== v).length;
   const seededMoves = JSON.stringify(SEED.moves || []);
   const newMoves = S.moves.filter(m => !seededMoves.includes(JSON.stringify(m))).length;
-  const unsent = changes + Object.keys(S.whenEdits).length + newMoves
+  const unsent = changes + Object.keys(S.whenEdits).length + Object.keys(S.nameEdits).length + newMoves
     + Object.keys(S.katieNotes).length + S.customTexts.length + newVerdicts;
   $("#sendpass").textContent = unsent ? "Send pass · " + unsent : "Send pass";
   $("#hidecut").checked = !!S.hideCut;
@@ -870,6 +876,7 @@ function sectHTML(it) {
 function wire() {
   const root = $("#deckbody");
   root.querySelectorAll("[data-when]").forEach(el => el.addEventListener("click", () => editWhen(el)));
+  root.querySelectorAll("[data-name]").forEach(el => el.addEventListener("click", () => editName(el)));
   root.querySelectorAll("[data-addhere]").forEach(b => b.addEventListener("click", () => openAdd(b.dataset.addhere)));
   root.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => {
     const ref = b.dataset.ref;
@@ -946,6 +953,23 @@ function wire() {
       recordMove(ref, "sect:" + el.dataset.section);
     });
   });
+}
+
+function editName(el) {
+  const ref = el.dataset.name;
+  const input = document.createElement("input");
+  input.value = el.textContent.trim();
+  input.style.cssText = "font:inherit;font-size:13.5px;font-weight:800;border:1px solid var(--accent);border-radius:8px;padding:2px 8px;min-width:min(300px,80%);";
+  el.replaceWith(input);
+  input.focus(); input.select();
+  const done = () => {
+    const val = input.value.trim();
+    const item = textRows().find(i => refOf(i) === ref);
+    if (!val || (item && val === item.name)) delete S.nameEdits[ref]; else S.nameEdits[ref] = val;
+    save(); render();
+  };
+  input.addEventListener("blur", done);
+  input.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); input.blur(); } if (e.key === "Escape") { input.removeEventListener("blur", done); render(); } });
 }
 
 function editWhen(el) {
@@ -1113,19 +1137,25 @@ function exportText() {
     out.push(({ in: "IN", later: "LATER", cut: "CUT" })[key] + " (" + hits.length + ")");
     for (const i of hits) {
       const ref = refOf(i);
-      out.push("  · " + i.name + " [" + ref + "] · " + whenOf(i) + (S.katieNotes[ref] ? "\n      note: " + S.katieNotes[ref] : ""));
+      out.push("  · " + nameOf(i) + " [" + ref + "] · " + whenOf(i) + (S.katieNotes[ref] ? "\n      note: " + S.katieNotes[ref] : ""));
     }
     out.push("");
   }
   const undecided = items.filter(i => !S.verdicts[refOf(i)]);
   if (undecided.length) {
     out.push("NOT DECIDED (" + undecided.length + ")");
-    for (const i of undecided) out.push("  · " + i.name + " [" + refOf(i) + "]");
+    for (const i of undecided) out.push("  · " + nameOf(i) + " [" + refOf(i) + "]");
     out.push("");
   }
   if (S.customTexts.length) {
     out.push("ADDED IN REVIEW (" + S.customTexts.length + ")");
     for (const c of S.customTexts) out.push("  · " + c.nm + " · " + (S.whenEdits[c.key] || c.when) + (c.copy ? "\n      draft: " + c.copy : "\n      no copy yet"));
+    out.push("");
+  }
+  const titles = Object.keys(S.nameEdits);
+  if (titles.length) {
+    out.push("TITLES CORRECTED (" + titles.length + ")");
+    for (const ref of titles) out.push("  · " + ref + " → " + S.nameEdits[ref]);
     out.push("");
   }
   const trig = Object.keys(S.whenEdits).filter(k => !k.startsWith("added-"));
@@ -1192,7 +1222,7 @@ window.addEventListener("storage", e => {
   S = loadState();
   S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});
   S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdicts)) : {}); S.katieNotes = S.katieNotes || {};
-  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);
+  S.whenEdits = S.whenEdits || {}; S.nameEdits = S.nameEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);
   editingRef = null; render();
 });
 

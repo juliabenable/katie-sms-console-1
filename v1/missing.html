@@ -287,7 +287,7 @@ const TREE = {
     { st: 'missing', key: 'payment-failed', lane: null, nm: 'Payment failed', when: 'Sends when a payment bounces back to us', pri: 'top 5',
       copy: "hey {name}, your {brand} payment bounced back to us (paypal details). it's a 30 second fix in the portal and i'll re-run it today. can you update it now?",
       note: 'Volume knob down, but keep the today-promise. Closes the failed-payout loop.' },
-    { st: 'missing', key: 'affiliate-link', lane: null, nm: 'Affiliate link delivery', when: 'Sends when their content is approved, carrying their link', pri: 'top 5',
+    { st: 'missing', key: 'affiliate-link', lane: null, nm: 'Affiliate link delivery', when: 'Sends when we detect the affiliate link hasn\'t been shared 24 hours after the link is submitted to the portal', wasWhen: 'Sends when their content is approved, carrying their link', pri: 'top 5',
       copy: "here's your {brand} link: {link} every sale through it pays you! pin it in your bio and stories, that's where it earns the most. want tips?",
       note: 'The link-sharing workstream\'s missing voice. Benefit first, then the placement coaching.' },
     { st: 'missing', key: 'first-sale', lane: null, nm: 'First tracked sale', when: 'Sends when the first sale comes through their link',
