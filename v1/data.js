@@ -1167,7 +1167,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-r4",
+ "gen": "aug29-r5",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1194,7 +1194,7 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Katie's first pass. Her versions now sit on the left (tap 'See what we currently send' to compare), plus her 5 keep/cut calls and the choose-your-product timing.",
+ "changelog": "Applied since your last visit: Katie's second pass. Her tightened deadline reminders (3 days, tomorrow, today) join her versions on the left, and 'Yes to the first invite text' is marked in.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
@@ -1211,6 +1211,18 @@ const SEED = {
   "MSG-05": {
    "copy": "Hi {name}! Exciting news, your {brand} gifted product was just delivered! Please start creating your content, and submit it for review in the portal within 10 days! You can review the content brief here - https://benable.com/brand-collabs/invite",
    "at": "2026-08-29T20:00:00.000Z"
+  },
+  "MSG-06": {
+   "copy": "Hey {name}, hope you're doing well! Quick reminder that your {brand} content is due {date}. Please submit it in the Benable Portal as soon as you can so it can be reviewed prior to you posting on your socials. Can you respond/like this message so I know you've seen it? https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T22:00:00.000Z"
+  },
+  "MSG-06b": {
+   "copy": "Hey {name}, quick reminder! Your content for {brand} must be submitted to the portal for review by TOMORROW at the latest! Respond or like this message so I know you've seen it! https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T22:00:00.000Z"
+  },
+  "MSG-06c": {
+   "copy": "Hey {name}, your content for {brand} must be submitted to the Benable portal for a quick review TODAY. Please respond to this text once you get it with an update on your content. https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T22:00:00.000Z"
   }
  },
  "verdicts": {
@@ -1218,6 +1230,7 @@ const SEED = {
   "invite-expiry": "in",
   "spot-opened": "cut",
   "decline-ack": "cut",
-  "shipping-problem": "cut"
+  "shipping-problem": "cut",
+  "portal-invite-yes": "in"
  }
 };
