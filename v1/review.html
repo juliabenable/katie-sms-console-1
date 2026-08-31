@@ -672,7 +672,7 @@ function render() {
     } else {
       html += `<button class="ghostcell" data-edit="${esc(ref)}">Rewrite this →</button>`;
     }
-    const why = it.note ? esc(it.note) : it.kind === "custom" ? "<em>Added in this review.</em>" : it.status === "live" ? "<em>Sending today.</em>" : "<em>Drafted, not live yet.</em>";
+    const why = it.note ? esc(it.note) : "";
     html += `</div></div>
       <div class="foot">
         <span class="why">${why}</span>
