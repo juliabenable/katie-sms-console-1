@@ -680,7 +680,7 @@ function ensureDefaults(st) {
 }
 S.extraCopy = S.extraCopy || {};      // edited copy for proposed texts
 S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});  // rewrites: { ref: {name, before, after, at} }; round 1 ships in the seed
-S.verdicts = S.verdicts || {};        // keep/cut call: { ref: "in" | "later" | "cut" }
+S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdicts)) : {});        // keep/cut call: { ref: "in" | "later" | "cut" }
 S.katieNotes = S.katieNotes || {};    // note per text
 S.whenEdits = S.whenEdits || {};      // corrected trigger line
 S.customTexts = S.customTexts || [];  // texts added in this tool
@@ -821,7 +821,7 @@ function render() {
         <div class="cell">
           <div class="cap">Your version</div>`;
     if (editingRef === ref) {
-      html += `<div class="editor"><textarea id="edta">${esc(edit ? edit.after : it.copy || "")}</textarea>
+      html += `<div class="editor"><textarea id="edta">${esc(edit ? edit.after : baseCopy || "")}</textarea>
         <div class="edmeta"><span class="seg" id="segline"></span>
         <div class="edbtns"><button class="btn cancel" data-cancel>Cancel</button><button class="btn save" data-save="${esc(ref)}">Save</button></div></div></div>`;
     } else if (edit) {
@@ -851,8 +851,9 @@ function render() {
   const changes = Object.values(S.reviewEdits).filter(e => !e.sentAt).length;
   $("#kcount").textContent = decided + " of " + total + " decided";
   $("#tcount").textContent = changes + (changes === 1 ? " rewrite" : " rewrites");
+  const newVerdicts = Object.entries(S.verdicts).filter(([r, v]) => ((SEED.verdicts || {})[r] || "") !== v).length;
   const unsent = changes + Object.keys(S.whenEdits).length + S.moves.length
-    + Object.keys(S.katieNotes).length + S.customTexts.length + decided;
+    + Object.keys(S.katieNotes).length + S.customTexts.length + newVerdicts;
   $("#sendpass").textContent = unsent ? "Send pass · " + unsent : "Send pass";
   $("#hidecut").checked = !!S.hideCut;
   wire();
@@ -995,7 +996,8 @@ function saveEdit(ref) {
   const target = findItem(ref);
   if (!target) return;
   const name = target.kind === "ladder" ? target.row.name : target.kind === "extra" ? target.m.nm : target.c.nm;
-  const current = target.kind === "ladder" ? target.row.copy : target.kind === "extra" ? (S.extraCopy[ref] || target.m.copy) : target.c.copy;
+  const kv = (SEED.katie || {})[ref];
+  const current = kv ? kv.copy : target.kind === "ladder" ? target.row.copy : target.kind === "extra" ? (S.extraCopy[ref] || target.m.copy) : target.c.copy;
   if (!S.reviewEdits[ref]) {
     if (text === current) { editingRef = null; render(); return; }
     S.reviewEdits[ref] = { name, before: current };
@@ -1003,7 +1005,8 @@ function saveEdit(ref) {
   if (S.reviewEdits[ref].after !== text) delete S.reviewEdits[ref].sentAt;
   S.reviewEdits[ref].after = text;
   S.reviewEdits[ref].at = new Date().toISOString();
-  if (target.kind === "ladder") { target.row.copy = text; target.row.edited = true; target.row.editedAt = S.reviewEdits[ref].at; }
+  if (kv) { /* Katie's version stays the canonical current; the rewrite lives only as the edit */ }
+  else if (target.kind === "ladder") { target.row.copy = text; target.row.edited = true; target.row.editedAt = S.reviewEdits[ref].at; }
   else if (target.kind === "extra") { S.extraCopy[ref] = text; }
   else { target.c.copy = text; }
   editingRef = null;
@@ -1014,7 +1017,7 @@ function saveEdit(ref) {
 function revert(ref) {
   const e = S.reviewEdits[ref]; if (!e) return;
   const target = findItem(ref);
-  if (target) {
+  if (target && !(SEED.katie || {})[ref]) {
     if (target.kind === "ladder") { target.row.copy = e.before; delete target.row.edited; delete target.row.editedAt; }
     else if (target.kind === "extra") { delete S.extraCopy[ref]; }
     else { target.c.copy = e.before; }
@@ -1181,7 +1184,7 @@ window.addEventListener("storage", e => {
   if (e.key !== LS_KEY) return;
   S = loadState();
   S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});
-  S.verdicts = S.verdicts || {}; S.katieNotes = S.katieNotes || {};
+  S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdicts)) : {}); S.katieNotes = S.katieNotes || {};
   S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || [];
   editingRef = null; render();
 });

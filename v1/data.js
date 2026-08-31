@@ -927,11 +927,12 @@ const SEED = {
    {
     "id": "MSG-03",
     "name": "Choose your product",
-    "when": "Sends the day after they accept, if they haven't picked their product",
+    "when": "Sends the day after they accept at 10am ET, if they haven't picked their product",
     "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks!",
     "status": "live",
     "indent": 0,
-    "hand": true
+    "hand": true,
+    "wasWhen": "Sends the day after they accept, if they haven't picked their product"
    },
    {
     "id": "MSG-04",
@@ -1166,7 +1167,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-r3",
+ "gen": "aug29-r4",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1193,6 +1194,30 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Tony's rounds 1 and 2 (6 rewrites, 1 new text, 3 timing changes), drag to reorder, and this update notice.",
- "katie": {}
+ "changelog": "Applied since your last visit: Katie's first pass. Her versions now sit on the left (tap 'See what we currently send' to compare), plus her 5 keep/cut calls and the choose-your-product timing.",
+ "katie": {
+  "MSG-03": {
+   "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T20:00:00.000Z"
+  },
+  "order-placed": {
+   "copy": "Your {brand} order has been placed!! I'll text you tracking updates as I have them!",
+   "at": "2026-08-29T20:00:00.000Z"
+  },
+  "MSG-04": {
+   "copy": "Hi {name}, it's Katie from Benable! Quick update: your gifted product from {brand} has shipped and will arrive very soon! Can't wait for you to try out the product.",
+   "at": "2026-08-29T20:00:00.000Z"
+  },
+  "MSG-05": {
+   "copy": "Hi {name}! Exciting news, your {brand} gifted product was just delivered! Please start creating your content, and submit it for review in the portal within 10 days! You can review the content brief here - https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T20:00:00.000Z"
+  }
+ },
+ "verdicts": {
+  "accept-confirm": "in",
+  "invite-expiry": "in",
+  "spot-opened": "cut",
+  "decline-ack": "cut",
+  "shipping-problem": "cut"
+ }
 };
