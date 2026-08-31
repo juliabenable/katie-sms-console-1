@@ -389,10 +389,11 @@ const MISSING = [
   "fork": "product",
   "lane": "product",
   "after": "MSG-11a",
-  "nm": "Post overdue, day 1",
-  "when": "Sends 1 day after the post was due",
+  "nm": "Post reminder",
+  "when": "Sends 2 days after the content-approved text",
   "copy": "hey {name}, your {brand} post was due yesterday! all good, it happens. can you get it up today? the link goes in the portal and that's you finished",
-  "pri": "asked for"
+  "pri": "asked for",
+  "wasWhen": "Sends 1 day after the post was due"
  },
  {
   "key": "post-overdue-d2",
@@ -419,10 +420,11 @@ const MISSING = [
   "fork": "product",
   "lane": "product",
   "after": "MSG-11a",
-  "nm": "Post overdue, day 6",
-  "when": "Sends 6 days after the post was due, on whichever channel they answer",
+  "nm": "Post overdue, day 7",
+  "when": "Sends 7 days after the post was due, on whichever channel they answer",
   "copy": "{name}, i need your {brand} post live by {date} to count it for the campaign. after that i have to close it out. if life got in the way tell me and i'll get you on the next one",
-  "pri": "asked for"
+  "pri": "asked for",
+  "wasWhen": "Sends 6 days after the post was due, on whichever channel they answer"
  },
  {
   "key": "post-overdue-final",
@@ -676,7 +678,7 @@ function ensureDefaults(st) {
   st.katieNotes = st.katieNotes || {};
   st.whenEdits = st.whenEdits || {};
   st.customTexts = st.customTexts || [];
-  st.moves = st.moves || [];
+  st.moves = st.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);
   return st;
 }
 S.extraCopy = S.extraCopy || {};      // edited copy for proposed texts
@@ -685,7 +687,7 @@ S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdi
 S.katieNotes = S.katieNotes || {};    // note per text
 S.whenEdits = S.whenEdits || {};      // corrected trigger line
 S.customTexts = S.customTexts || [];  // texts added in this tool
-S.moves = S.moves || [];              // manual reorders: [{ref, after}] where after is a ref or "sect:<section>"
+S.moves = S.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);              // manual reorders: [{ref, after}] where after is a ref or "sect:<section>"; baked moves ship in the seed
 const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
 
 let editingRef = null;
@@ -853,7 +855,9 @@ function render() {
   $("#kcount").textContent = decided + " of " + total + " decided";
   $("#tcount").textContent = changes + (changes === 1 ? " rewrite" : " rewrites");
   const newVerdicts = Object.entries(S.verdicts).filter(([r, v]) => ((SEED.verdicts || {})[r] || "") !== v).length;
-  const unsent = changes + Object.keys(S.whenEdits).length + S.moves.length
+  const seededMoves = JSON.stringify(SEED.moves || []);
+  const newMoves = S.moves.filter(m => !seededMoves.includes(JSON.stringify(m))).length;
+  const unsent = changes + Object.keys(S.whenEdits).length + newMoves
     + Object.keys(S.katieNotes).length + S.customTexts.length + newVerdicts;
   $("#sendpass").textContent = unsent ? "Send pass · " + unsent : "Send pass";
   $("#hidecut").checked = !!S.hideCut;
@@ -1084,9 +1088,11 @@ function exportText() {
   out.push("SMS review pass");
   out.push(edits.length + (edits.length === 1 ? " new rewrite" : " new rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
   out.push("");
-  if (S.moves.length) {
-    out.push("MOVED (" + S.moves.length + ")");
-    for (const mv of S.moves) {
+  const seededMv = JSON.stringify(SEED.moves || []);
+  const newMv = S.moves.filter(m => !seededMv.includes(JSON.stringify(m)));
+  if (newMv.length) {
+    out.push("MOVED (" + newMv.length + ")");
+    for (const mv of newMv) {
       const it = items.find(x => refOf(x) === mv.ref);
       const dest = mv.after.startsWith("sect:") ? "top of " + mv.after.slice(5) : "after " + ((items.find(x => refOf(x) === mv.after) || {}).name || mv.after);
       out.push("  · " + (it ? it.name : mv.ref) + " [" + mv.ref + "] → " + dest);
@@ -1186,7 +1192,7 @@ window.addEventListener("storage", e => {
   S = loadState();
   S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});
   S.verdicts = S.verdicts || (SEED.verdicts ? JSON.parse(JSON.stringify(SEED.verdicts)) : {}); S.katieNotes = S.katieNotes || {};
-  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || [];
+  S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || []; S.moves = S.moves || (SEED.moves ? JSON.parse(JSON.stringify(SEED.moves)) : []);
   editingRef = null; render();
 });
 

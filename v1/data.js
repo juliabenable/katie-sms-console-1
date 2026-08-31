@@ -1168,7 +1168,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-r6",
+ "gen": "aug29-r7",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1195,7 +1195,7 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Katie's third pass. Draft-received, brand-reviewing and the overdue ladder now carry her versions (day 6 becomes day 7 with the card-charge final warning), days 1, 2 and the close-out are cut, and two timings moved to 10am ET.",
+ "changelog": "Applied since your last visit: Katie's fourth pass. The approval and posting fork now carries her versions (approval text with tagging and affiliate instructions, one post reminder 2 days after approval, day-7 final), seven more texts cut, and brand-feedback moved next to feedback-given.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
@@ -1244,6 +1244,34 @@ const SEED = {
   "overdue-d6": {
    "copy": "{name}, {brand} wants to close their campaign since every other creator has submitted their content for this collab except you. Your content was due a week ago. Please text a quick update as soon as you see this. This is your final warning that your credit card will be charged {cost of product} if you do not respond.",
    "at": "2026-08-29T23:30:00.000Z"
+  },
+  "MSG-11a": {
+   "copy": "Your {brand} content is great and has been approved to post! 🎉 Submit your final link to the Benable Brand Portal once you do. Just make sure to also tag the brand in the post, not only the caption, and send a collaboration request. Please also share your affiliate link in a story and add it to your bio/link in bio tool. Here's the affiliate link - {affiliate links}. Excited to see your post!",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "MSG-11b": {
+   "copy": "Your {brand} content is great and has been approved to post! 🎉 Please {content feedback}. Submit your final link to the Benable Brand Portal once you do. Just make sure to also tag the brand in the post, not only the caption, and send a collaboration request. Please also share your affiliate link in a story and add it to your bio/link in bio tool. Here's the affiliate link - {affiliate links}. Excited to see your post!",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "post-overdue-d1": {
+   "copy": "Hey {name}, just a quick reminder to post your {brand} content and submit the final link to the portal TODAY! You can submit the link here - https://benable.com/brand-collabs/invite",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "post-overdue-d6": {
+   "copy": "{name}, your content for {brand} must be posted on your social account(s) today! It is a week overdue and the brand would like to close the campaign ASAP, but is waiting on the final piece of content from you. Please post and share the final link to the portal today, and text me as soon as you see this. https://benable.com/brand-collabs/invite",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "resubmit-clock": {
+   "copy": "Checking in! Can you submit your updated draft for {brand} based on the notes above today? https://benable.com/brand-collabs/invite",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "moderated-feedback": {
+   "copy": "Hey {name}! Thanks for submitting your content for {brand}. A few changes are needed. {Feedback). Once you make these changes, please resubmit to the portal for a quick, final review! https://benable.com/brand-collabs/invite",
+   "at": "2026-08-30T00:30:00.000Z"
+  },
+  "wrap-up": {
+   "copy": "Thanks so much for your work on the collab with {brand}! Can't wait to send more collab opportunities your way soon!",
+   "at": "2026-08-30T00:30:00.000Z"
   }
  },
  "verdicts": {
@@ -1255,6 +1283,19 @@ const SEED = {
   "portal-invite-yes": "in",
   "overdue-d1": "cut",
   "overdue-d2": "cut",
-  "overdue-final": "cut"
- }
+  "overdue-final": "cut",
+  "post-tomorrow": "cut",
+  "post-today": "cut",
+  "post-overdue-d2": "cut",
+  "post-overdue-d4": "cut",
+  "post-overdue-final": "cut",
+  "final-link": "cut",
+  "MSG-13": "cut"
+ },
+ "moves": [
+  {
+   "ref": "moderated-feedback",
+   "after": "MSG-11b"
+  }
+ ]
 };
