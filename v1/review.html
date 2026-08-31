@@ -209,13 +209,23 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 const LS_KEY = "katie-sms-console-v1-app";
 const MISSING = [
  {
+  "key": "portal-invite-yes",
+  "fork": "invite",
+  "lane": "product",
+  "after": "MSG-01",
+  "nm": "Yes to the first invite text",
+  "when": "Sends when they reply yes to the first invite text",
+  "copy": "Excited to hear you're interested! Join the collab portal to get access so brands can start sending you collabs! If you can join today, I'll have the team keep an eye out and prioritize your profile! Takes less than 5 min to get set up using this link! https://benable.com/brand-collabs/invite",
+  "pri": "round 1"
+ },
+ {
   "key": "accept-confirm",
   "fork": "invite",
   "lane": "product",
   "after": "MSG-02b",
   "nm": "Accepted confirmation",
   "when": "Sends the moment they accept the invite",
-  "copy": "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
+  "copy": "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
   "pri": "top 5"
  },
  {
@@ -563,7 +573,8 @@ const MISSING = [
 ];
 /* Why each proposed text exists. Shown under the row, next to the keep/cut call. */
 const NOTES = {
- "accept-confirm": "Katie's highest-volume manual text today. Pure automation win.",
+ "accept-confirm": "Katie's highest-volume manual text today. Rewritten in the first review round: it now opens the relationship instead of asking for the next click.",
+ "portal-invite-yes": "Added in the first review round. The invite text no longer carries the link, so this one delivers it after a yes. Nothing can fire it today: it is the first text that depends on the agent reading an inbound reply.",
  "invite-expiry": "Expiry is real here, so the urgency is honest.",
  "spot-opened": "Pairs with the rolling-invite workstream (Des's manual routine).",
  "decline-ack": "Also the reply for the decline-by-text flag. Keeps the relationship warm.",
@@ -622,7 +633,7 @@ function loadState() {
 }
 let S = loadState();
 S.extraCopy = S.extraCopy || {};      // edited copy for proposed texts
-S.reviewEdits = S.reviewEdits || {};  // rewrites: { ref: {name, before, after, at} }
+S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});  // rewrites: { ref: {name, before, after, at} }; round 1 ships in the seed
 S.verdicts = S.verdicts || {};        // keep/cut call: { ref: "in" | "later" | "cut" }
 S.katieNotes = S.katieNotes || {};    // note per text
 S.whenEdits = S.whenEdits || {};      // corrected trigger line
@@ -981,7 +992,7 @@ document.addEventListener("keydown", e => {
 window.addEventListener("storage", e => {
   if (e.key !== LS_KEY) return;
   S = loadState();
-  S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || {};
+  S.extraCopy = S.extraCopy || {}; S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});
   S.verdicts = S.verdicts || {}; S.katieNotes = S.katieNotes || {};
   S.whenEdits = S.whenEdits || {}; S.customTexts = S.customTexts || [];
   editingRef = null; render();

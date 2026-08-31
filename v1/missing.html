@@ -196,10 +196,13 @@ function nextMsgId(S, lane) {
 const TREE = {
   invite: [
     { st: 'live', nm: 'Portal invite', why: 'MSG-01, fires on brand invite' },
+    { st: 'missing', key: 'portal-invite-yes', lane: 'product', after: 'MSG-01', nm: 'Yes to the first invite text', when: 'Sends when they reply yes to the first invite text', pri: 'round 1',
+      copy: "Excited to hear you're interested! Join the collab portal to get access so brands can start sending you collabs! If you can join today, I'll have the team keep an eye out and prioritize your profile! Takes less than 5 min to get set up using this link! https://benable.com/brand-collabs/invite",
+      note: 'Added in the first review round. The invite text no longer carries the link, so this one delivers it after a yes. Nothing can fire it today: it is the first text that depends on the agent reading an inbound reply.' },
     { st: 'live', nm: 'New collab invite, 24h window', why: 'MSG-02' },
     { st: 'missing', key: 'accept-confirm', lane: 'product', after: 'MSG-02b', nm: 'Accepted confirmation', when: 'Sends the moment they accept the invite', pri: 'top 5',
-      copy: "amazing {name}, you're in for {brand}!! next step: pick your product in the portal so we can ship it out asap. can you do that today?",
-      note: "Katie's highest-volume manual text today. Reciprocity close." },
+      copy: "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
+      note: "Katie's highest-volume manual text today. Rewritten in the first review round: it now opens the relationship instead of asking for the next click." },
     { st: 'missing', key: 'invite-expiry', lane: 'product', after: 'MSG-02b', nm: 'Invite expiry warning', when: "Sends 6 hours before the invite expires, if they haven't answered",
       copy: "heads up {name}, your {brand} invite expires tonight! spots are almost gone. takes 1 min in the portal, can you grab yours today?",
       note: 'Expiry is real here, so the urgency is honest.' },

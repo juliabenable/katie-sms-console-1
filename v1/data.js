@@ -893,26 +893,35 @@ const SEED = {
    {
     "id": "MSG-01",
     "name": "Portal invite",
-    "when": "Sends 1 day after we email the program invite, if they haven't joined yet",
-    "copy": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions! https://benable.com/brand-collabs/invite",
+    "when": "Sends 1 day after we email the program invite, if they haven't joined yet. If they reply yes, the follow-up below carries the link",
+    "copy": "Hey {name}! It's Katie, Head of Brand Collabs at Benable. We've been running more collabs than ever, and my team put you on the shortlist for a couple collab opportunities! Can I send you the details?",
     "status": "live",
-    "indent": 0
+    "indent": 0,
+    "edited": true,
+    "editedBy": "tony-round-1",
+    "editedAt": "2026-08-29T12:00:00.000Z"
    },
    {
     "id": "MSG-02",
     "name": "New collab invite",
     "when": "Sends 2 hours after the brand's invite goes out, if they haven't answered",
-    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward! https://benable.com/brand-collabs/invite",
+    "copy": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}! Accepting takes less than 30 seconds, but you need to respond within 24 hours to keep your collab spot! https://benable.com/brand-collabs/invite",
     "status": "live",
-    "indent": 0
+    "indent": 0,
+    "edited": true,
+    "editedBy": "tony-round-1",
+    "editedAt": "2026-08-29T12:00:00.000Z"
    },
    {
     "id": "MSG-02b",
     "name": "Campaign invite, final warning",
     "when": "Sends 26 hours after the invite, if they still haven't answered",
-    "copy": "Hi {name}, it's Katie from Benable! We sent you a new collab opportunity on Benable but haven't heard back from you. If you don't accept or reject the campaign in the next 12 hours using the link below, we will have to give your spot to someone else. The brand hand-picked you and is super excited to have you participate so we hope you consider! https://benable.com/brand-collabs/invite",
+    "copy": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
     "status": "live",
-    "indent": 0
+    "indent": 0,
+    "edited": true,
+    "editedBy": "tony-round-1",
+    "editedAt": "2026-08-29T12:00:00.000Z"
    },
    {
     "id": "MSG-03",
@@ -1156,5 +1165,28 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug27-2"
+ "gen": "aug29-tony-r1",
+ "reviewEdits": {
+  "MSG-01": {
+   "name": "Portal invite",
+   "before": "Hey {name}, this is Katie from Benable! I just emailed you, but wanted to reach out here as well! We have a new brand portal on Benable where you can collab with our brands partners! We'd love for you to be part of it! Join below today to get started. Lmk if you have any questions! https://benable.com/brand-collabs/invite",
+   "after": "Hey {name}! It's Katie, Head of Brand Collabs at Benable. We've been running more collabs than ever, and my team put you on the shortlist for a couple collab opportunities! Can I send you the details?",
+   "at": "2026-08-29T12:00:00.000Z",
+   "by": "Tony · round 1"
+  },
+  "MSG-02": {
+   "name": "New collab invite",
+   "before": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}, but you need to respond to the campaign invite within 24 hours to keep your spot! Please use the link below to let me know ASAP if you're interested in moving forward! https://benable.com/brand-collabs/invite",
+   "after": "Hey {name}, you have a new brand collab opportunity in the Benable Brand Portal with {brand}! Accepting takes less than 30 seconds, but you need to respond within 24 hours to keep your collab spot! https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T12:00:00.000Z",
+   "by": "Tony · round 1"
+  },
+  "MSG-02b": {
+   "name": "Campaign invite, final warning",
+   "before": "Hi {name}, it's Katie from Benable! We sent you a new collab opportunity on Benable but haven't heard back from you. If you don't accept or reject the campaign in the next 12 hours using the link below, we will have to give your spot to someone else. The brand hand-picked you and is super excited to have you participate so we hope you consider! https://benable.com/brand-collabs/invite",
+   "after": "Hi {name}! {brand} hand-picked you for this collab and I'd hate for you to lose the spot. Please accept or decline the collab here: https://benable.com/brand-collabs/invite. If you don't respond to the collab, we won't be able to send more opportunities your way in the future!",
+   "at": "2026-08-29T12:00:00.000Z",
+   "by": "Tony · round 1"
+  }
+ }
 };
