@@ -77,7 +77,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
 .st.draft { background: #ECECEF; color: #7F7F7F; }
-.st.missing { background: var(--red-bg); color: var(--red); }
+.st.missing { background: var(--accent-soft); color: #5B3FD1; }
 .st.yours { background: var(--amber-bg); color: var(--amber-ink); }
 
 /* ---------- the two columns ---------- */
@@ -90,7 +90,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .cap { display: none; font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-subtle); margin-bottom: 4px; }
 .bubblewrap { display: flex; justify-content: flex-end; }
 .bubble { background: var(--green); color: #fff; border-radius: 17px; border-bottom-right-radius: 5px; padding: 9px 13px; font-size: 14.5px; line-height: 1.45; max-width: 94%; overflow-wrap: anywhere; }
-.bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--red); }
+.bubble.missingb { background: #fff; color: var(--ink); border: 1.5px dashed var(--accent); }
 .bubble.was { opacity: .4; }
 .bubble.rw { background: var(--accent); max-width: 94%; cursor: pointer; transition: transform .12s ease, box-shadow .12s ease; }
 .bubble.rw:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(124,92,250,.3); }
@@ -172,7 +172,7 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
       <div class="legend">
         <span><i style="background:var(--green);"></i>sends today</span>
         <span><i style="background:#C9C9CE;"></i>draft, this week</span>
-        <span><i style="background:#fff;border:1.5px dashed var(--red);"></i>missing, proposed</span>
+        <span><i style="background:#fff;border:1.5px dashed var(--accent);"></i>missing, proposed</span>
         <span><i style="background:var(--accent);"></i>rewritten</span>
         <span><i style="background:var(--amber);"></i>added by you</span>
       </div>
