@@ -69,6 +69,8 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
 .sendline:hover { background: #E1E1EA; color: var(--accent); }
 .sendline b { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--ink-subtle); flex: none; }
 .sendline:hover b { background: var(--accent); }
+.waswhen { font-size: 10.5px; color: var(--ink-subtle); margin: -5px 0 9px 4px; }
+.flipbar { display: flex; justify-content: flex-end; margin: 4px 5px 0 0; }
 .pri { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--amber-ink); background: var(--amber-bg); border-radius: 4px; padding: 2px 6px; }
 .st { font-size: 8.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; border-radius: 4px; padding: 2px 6px; margin-left: auto; }
 .st.live { background: var(--green-bg); color: var(--green-ink); }
@@ -191,6 +193,18 @@ body { font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans
   </div>
 </div>
 
+<div class="overlay" id="recoverlay" hidden>
+  <div class="sheet">
+    <h3>This deck was updated</h3>
+    <p class="hint">Julia applied a round since you last worked here, so the page is moving to the new version. Below is everything from your previous session, as a Send pass. Copy it to Julia first — nothing is lost either way, a backup is kept on this device.</p>
+    <textarea id="rectext" readonly style="width:100%;min-height:240px;font:12.5px/1.55 ui-monospace,SFMono-Regular,monospace;border:1px solid var(--line);border-radius:10px;padding:10px;resize:none;"></textarea>
+    <div class="row">
+      <button class="btn cancel" id="reccontinue">Continue with the new deck</button>
+      <button class="btn save" id="reccopy">Copy for Julia</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="addoverlay" hidden>
   <div class="sheet">
     <h3 id="addtitle">Add a text</h3>
@@ -235,7 +249,8 @@ const MISSING = [
   "nm": "Accepted confirmation",
   "when": "Sends 5 minutes after they accept the invite",
   "copy": "Yay! So excited you're going to collab with {brand}!! I'll reach out to you throughout the campaign, but don't hesitate to text me if you have any questions or feedback!",
-  "pri": "top 5"
+  "pri": "top 5",
+  "wasWhen": "Sends the moment they accept the invite"
  },
  {
   "key": "invite-expiry",
@@ -245,7 +260,8 @@ const MISSING = [
   "nm": "Invite expiry warning",
   "when": "Sends 48 hours after the initial invite, if they haven't answered",
   "copy": "Heads up {name}, your {brand} invite expires tonight! You'll need to accept or decline today (takes less than 30 seconds), otherwise your invite will expire and we won't be able to send more collabs your way in the future! Reply here - https://benable.com/brand-collabs/invite",
-  "pri": null
+  "pri": null,
+  "wasWhen": "Sends 6 hours before the invite expires, if they haven't answered"
  },
  {
   "key": "spot-opened",
@@ -624,11 +640,7 @@ const $ = s => document.querySelector(s);
 const esc = s => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 function toast(msg) { const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; $("#toasts").appendChild(t); setTimeout(() => t.remove(), 3200); }
 
-function loadState() {
-  try {
-    const s = JSON.parse(localStorage.getItem(LS_KEY));
-    if (s && s.v === 1 && s.gen === SEED.gen && s.matrix && s.sends7d && s.stats) return s;
-  } catch (e) {}
+function freshState() {
   return {
     v: 1, gen: SEED.gen,
     messages: JSON.parse(JSON.stringify(SEED.messages)),
@@ -640,7 +652,32 @@ function loadState() {
     simCount: 0,
   };
 }
+/* Never discard silently: a state from an older deck version is kept aside,
+   backed up, and offered back as a Send pass before the new deck takes over. */
+let staleState = null;
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    const s = JSON.parse(raw);
+    if (s && s.v === 1 && s.matrix && s.sends7d && s.stats) {
+      if (s.gen === SEED.gen) return s;
+      staleState = s;
+      try { localStorage.setItem(LS_KEY + "-backup-" + (s.gen || "old"), raw); } catch (e) {}
+    }
+  } catch (e) {}
+  return freshState();
+}
 let S = loadState();
+function ensureDefaults(st) {
+  st.extraCopy = st.extraCopy || {};
+  st.reviewEdits = st.reviewEdits || {};
+  st.verdicts = st.verdicts || {};
+  st.katieNotes = st.katieNotes || {};
+  st.whenEdits = st.whenEdits || {};
+  st.customTexts = st.customTexts || [];
+  st.moves = st.moves || [];
+  return st;
+}
 S.extraCopy = S.extraCopy || {};      // edited copy for proposed texts
 S.reviewEdits = S.reviewEdits || (SEED.reviewEdits ? JSON.parse(JSON.stringify(SEED.reviewEdits)) : {});  // rewrites: { ref: {name, before, after, at} }; round 1 ships in the seed
 S.verdicts = S.verdicts || {};        // keep/cut call: { ref: "in" | "later" | "cut" }
@@ -653,6 +690,7 @@ const save = () => localStorage.setItem(LS_KEY, JSON.stringify(S));
 let editingRef = null;
 let dragRef = null;
 let lastMoved = null;
+const origShown = {};   // per-ref: left bubble flipped to the pre-Katie text
 
 function segInfo(text) {
   const n = text.length;
@@ -680,10 +718,10 @@ function buildDeck() {
     for (const m of MISSING) {
       if (m.lane === lane && !added.has(m.key)) (pendingByAfter[m.after] = pendingByAfter[m.after] || []).push(m);
     }
-    const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
+    const extra = m => ({ kind: "extra", key: m.key, name: m.nm, when: m.when, wasWhen: m.wasWhen, copy: S.extraCopy[m.key] || m.copy, status: m.status || "missing", note: NOTES[m.key], pri: m.pri });
     for (const r of rows) {
       if (r.status === "branch") { items.push({ kind: "branch", label: r.name }); continue; }
-      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, copy: r.copy, status: r.status, note: null, pri: null, hand: r.hand });
+      items.push({ kind: "ladder", lane, id: r.id, name: r.name, when: r.when, wasWhen: r.wasWhen, copy: r.copy, status: r.status, note: null, pri: null, hand: r.hand });
       for (const m of (pendingByAfter[r.id] || [])) items.push(extra(m));
     }
     for (const [after, ms] of Object.entries(pendingByAfter)) {
@@ -754,7 +792,10 @@ function render() {
     if (pendingSect) { html += sectHTML(pendingSect); pendingSect = null; }
 
     const edit = S.reviewEdits[ref];
-    const now = edit ? edit.before : it.copy;
+    const kv = (SEED.katie || {})[ref];
+    const baseCopy = kv ? kv.copy : it.copy;
+    const flipped = kv && origShown[ref];
+    const now = flipped ? it.copy : (edit ? edit.before : baseCopy);
     const idLabel = it.kind === "ladder" ? it.id : it.kind === "custom" ? "yours" : "proposed";
     const bcls = ["bubble"];
     if (it.status === "missing" || it.status === "yours") bcls.push("missingb");
@@ -770,10 +811,12 @@ function render() {
         <span class="st ${stClass(it.status)}">${stLabel(it.status)}</span>
       </div>
       <div class="sendline" data-when="${esc(ref)}" title="Click to correct when it sends"><b></b><span>${esc(whenOf(it))}</span></div>
+      ${(S.whenEdits[ref] && S.whenEdits[ref] !== it.when) ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.when)}</div>` : (it.wasWhen ? `<div class="waswhen">${it.status === "live" ? "live today" : "was"}: ${esc(it.wasWhen)}</div>` : "")}
       <div class="cols">
         <div class="cell">
           <div class="cap">What it says now</div>
           ${now ? `<div class="bubblewrap"><div class="${bcls.join(" ")}">${esc(now)}</div></div>` : `<div class="ghostcell flat">No copy yet</div>`}
+          ${kv ? `<div class="flipbar"><button class="mini" data-flip="${esc(ref)}">${flipped ? "See Katie\u2019s rewrite" : (it.status === "live" ? "See what we currently send" : "See original")}</button></div>` : ""}
         </div>
         <div class="cell">
           <div class="cap">Your version</div>`;
@@ -805,9 +848,12 @@ function render() {
 
   const total = textRows().length;
   const decided = textRows().filter(i => S.verdicts[refOf(i)]).length;
-  const changes = Object.keys(S.reviewEdits).length;
+  const changes = Object.values(S.reviewEdits).filter(e => !e.sentAt).length;
   $("#kcount").textContent = decided + " of " + total + " decided";
   $("#tcount").textContent = changes + (changes === 1 ? " rewrite" : " rewrites");
+  const unsent = changes + Object.keys(S.whenEdits).length + S.moves.length
+    + Object.keys(S.katieNotes).length + S.customTexts.length + decided;
+  $("#sendpass").textContent = unsent ? "Send pass · " + unsent : "Send pass";
   $("#hidecut").checked = !!S.hideCut;
   wire();
 }
@@ -831,6 +877,7 @@ function wire() {
     save();
   }));
   root.querySelectorAll("[data-del]").forEach(b => b.addEventListener("click", () => removeCustom(b.dataset.del)));
+  root.querySelectorAll("[data-flip]").forEach(b => b.addEventListener("click", () => { origShown[b.dataset.flip] = !origShown[b.dataset.flip]; render(); }));
   root.querySelectorAll("[data-edit]").forEach(b => {
     const open = () => {
       editingRef = b.dataset.edit; render();
@@ -953,6 +1000,7 @@ function saveEdit(ref) {
     if (text === current) { editingRef = null; render(); return; }
     S.reviewEdits[ref] = { name, before: current };
   }
+  if (S.reviewEdits[ref].after !== text) delete S.reviewEdits[ref].sentAt;
   S.reviewEdits[ref].after = text;
   S.reviewEdits[ref].at = new Date().toISOString();
   if (target.kind === "ladder") { target.row.copy = text; target.row.edited = true; target.row.editedAt = S.reviewEdits[ref].at; }
@@ -1026,9 +1074,11 @@ $("#keepall").addEventListener("click", () => {
 function exportText() {
   const items = textRows();
   const out = [];
-  const edits = Object.entries(S.reviewEdits);
+  const allEdits = Object.entries(S.reviewEdits);
+  const edits = allEdits.filter(([, e]) => !e.sentAt);
+  const sentEdits = allEdits.filter(([, e]) => e.sentAt);
   out.push("SMS review pass");
-  out.push(edits.length + (edits.length === 1 ? " rewrite" : " rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
+  out.push(edits.length + (edits.length === 1 ? " new rewrite" : " new rewrites") + " · " + items.filter(i => S.verdicts[refOf(i)]).length + " of " + items.length + " decided");
   out.push("");
   if (S.moves.length) {
     out.push("MOVED (" + S.moves.length + ")");
@@ -1042,6 +1092,10 @@ function exportText() {
   if (edits.length) {
     out.push("COPY CHANGES");
     for (const [ref, e] of edits) out.push("  " + ref.toUpperCase() + " · " + e.name + "\n  WAS: " + e.before + "\n  NOW: " + e.after + "\n");
+  }
+  if (sentEdits.length) {
+    out.push("PREVIOUSLY SENT (" + sentEdits.length + " · already with Julia, here just in case)");
+    for (const [ref, e] of sentEdits) out.push("  " + ref.toUpperCase() + " · " + e.name + "\n  WAS: " + e.before + "\n  NOW: " + e.after + "\n");
   }
   for (const key of ["in", "later", "cut"]) {
     const hits = items.filter(i => S.verdicts[refOf(i)] === key);
@@ -1067,7 +1121,10 @@ function exportText() {
   const trig = Object.keys(S.whenEdits).filter(k => !k.startsWith("added-"));
   if (trig.length) {
     out.push("TRIGGERS CORRECTED (" + trig.length + ")");
-    for (const ref of trig) out.push("  · " + ref + " → " + S.whenEdits[ref]);
+    for (const ref of trig) {
+      const it = items.find(x => refOf(x) === ref);
+      out.push("  · " + ref + " → " + S.whenEdits[ref] + (it && it.when !== S.whenEdits[ref] ? "  (was: " + it.when + ")" : ""));
+    }
   }
   return out.join("\n").trim();
 }
@@ -1086,6 +1143,38 @@ document.addEventListener("keydown", e => {
   if (e.key !== "Escape") return;
   if (!$("#addoverlay").hidden) $("#addoverlay").hidden = true;
   else if (!$("#overlay").hidden) $("#overlay").hidden = true;
+});
+
+/* Old-version state: offer it back before the new deck takes over. */
+function exportForState(st) {
+  const saved = S;
+  S = ensureDefaults(st);
+  let text;
+  try { text = exportText(); } finally { S = saved; }
+  return text;
+}
+if (staleState) {
+  const st = ensureDefaults(staleState);
+  const hasWork = Object.values(st.reviewEdits).some(e => !e.sentAt) || Object.keys(st.whenEdits).length ||
+    st.moves.length || Object.keys(st.katieNotes).length || st.customTexts.length ||
+    Object.keys(st.verdicts).length || Object.keys(st.extraCopy).length;
+  if (hasWork) {
+    $("#rectext").value = exportForState(st);
+    $("#recoverlay").hidden = false;
+  } else if (SEED.changelog) {
+    toast(SEED.changelog);
+  }
+  staleState = null;
+}
+$("#reccopy").addEventListener("click", () => {
+  const ta = $("#rectext"); ta.select();
+  try { document.execCommand("copy"); toast("Copied. Paste it to Julia, then continue."); } catch (e) { toast("Select and copy the text above."); }
+  if (navigator.clipboard) navigator.clipboard.writeText(ta.value).catch(() => {});
+});
+$("#reccontinue").addEventListener("click", () => {
+  $("#recoverlay").hidden = true;
+  save();  // commit the new baseline so the offer doesn't repeat; the backup key keeps the old state
+  if (SEED.changelog) toast(SEED.changelog);
 });
 
 window.addEventListener("storage", e => {
