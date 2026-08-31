@@ -233,7 +233,7 @@ const TREE = {
     { st: 'missing', key: 'overdue-d4', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 4', when: 'Sends 4 days after the draft was due, by text and email', pri: 'asked for',
       copy: "hi {name}, {brand} is asking me about your content and i'd love to tell them it's coming this week. can you get the draft in by {date}? that's all i need",
       note: 'First step that names a consequence, and the first that goes out on two channels.' },
-    { st: 'missing', key: 'overdue-d6', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 6', when: 'Sends 6 days after the draft was due, on whichever channel they answer', pri: 'asked for',
+    { st: 'missing', key: 'overdue-d6', lane: 'product', after: 'MSG-08', nm: 'Overdue, day 7', when: 'Sends 7 days after the draft was due, on whichever channel they answer', wasWhen: 'Sends 6 days after the draft was due, on whichever channel they answer', pri: 'asked for',
       copy: "{name}, i have to close out the {brand} campaign on {date}. get me the draft before then and you're still in it. if the timing just doesn't work anymore, tell me and i'll put you first on the next one",
       note: 'The last real chance, with the door held open. Uses the channel the creator actually responds on.' },
     { st: 'missing', key: 'overdue-final', lane: 'product', after: 'MSG-08', nm: 'Closed out', when: 'Sends 9 days after the draft was due, if we still have nothing', pri: 'asked for',

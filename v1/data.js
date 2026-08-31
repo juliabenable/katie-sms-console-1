@@ -977,10 +977,11 @@ const SEED = {
    {
     "id": "MSG-08",
     "name": "Missed deadline",
-    "when": "Sends the day after the draft was due. Copy is still being written",
+    "when": "Sends the day after the draft was due at 10am ET",
     "copy": "Hi, checking in again on your {brand} content! Your draft is overdue and still needs to be submitted to the Benable Brand Portal. Please upload it by the end of the week. Please like or respond to this message to confirm you've seen it.",
     "status": "draft",
-    "indent": 0
+    "indent": 0,
+    "wasWhen": "Sends the day after the draft was due"
    },
    {
     "id": "BR-1",
@@ -1167,7 +1168,7 @@ const SEED = {
    "edited": 5
   }
  },
- "gen": "aug29-r5",
+ "gen": "aug29-r6",
  "reviewEdits": {
   "MSG-01": {
    "name": "Portal invite",
@@ -1194,7 +1195,7 @@ const SEED = {
    "sentAt": "round 1"
   }
  },
- "changelog": "Applied since your last visit: Katie's second pass. Her tightened deadline reminders (3 days, tomorrow, today) join her versions on the left, and 'Yes to the first invite text' is marked in.",
+ "changelog": "Applied since your last visit: Katie's third pass. Draft-received, brand-reviewing and the overdue ladder now carry her versions (day 6 becomes day 7 with the card-charge final warning), days 1, 2 and the close-out are cut, and two timings moved to 10am ET.",
  "katie": {
   "MSG-03": {
    "copy": "Hey! Thanks for accepting the collab with {brand}. Can you go in and choose your gifted product today so that your order can ship out ASAP? Lmk once you do, thanks! https://benable.com/brand-collabs/invite",
@@ -1223,6 +1224,26 @@ const SEED = {
   "MSG-06c": {
    "copy": "Hey {name}, your content for {brand} must be submitted to the Benable portal for a quick review TODAY. Please respond to this text once you get it with an update on your content. https://benable.com/brand-collabs/invite",
    "at": "2026-08-29T22:00:00.000Z"
+  },
+  "draft-received": {
+   "copy": "Thanks for submitting your content draft! Our team is reviewing it, and I'll text you as soon you can post on your social account(s)!",
+   "at": "2026-08-29T23:30:00.000Z"
+  },
+  "brand-reviewing": {
+   "copy": "Thanks for submitting your content draft! {brand} is reviewing it, which usually takes 2-3 days. I'll text you as soon as the review is done!",
+   "at": "2026-08-29T23:30:00.000Z"
+  },
+  "MSG-08": {
+   "copy": "Hi, checking in again on your {brand} content! Your draft is now PAST DUE and still needs to be submitted to the Benable Brand Portal by end of day tomorrow. Please text me an update as soon as you see this!",
+   "at": "2026-08-29T23:30:00.000Z"
+  },
+  "overdue-d4": {
+   "copy": "Hi {name}, {brand} is asking me about your content and I'd love to tell them it's coming this week. Can you submit the draft to the portal today or tomorrow? https://benable.com/brand-collabs/invite",
+   "at": "2026-08-29T23:30:00.000Z"
+  },
+  "overdue-d6": {
+   "copy": "{name}, {brand} wants to close their campaign since every other creator has submitted their content for this collab except you. Your content was due a week ago. Please text a quick update as soon as you see this. This is your final warning that your credit card will be charged {cost of product} if you do not respond.",
+   "at": "2026-08-29T23:30:00.000Z"
   }
  },
  "verdicts": {
@@ -1231,6 +1252,9 @@ const SEED = {
   "spot-opened": "cut",
   "decline-ack": "cut",
   "shipping-problem": "cut",
-  "portal-invite-yes": "in"
+  "portal-invite-yes": "in",
+  "overdue-d1": "cut",
+  "overdue-d2": "cut",
+  "overdue-final": "cut"
  }
 };
